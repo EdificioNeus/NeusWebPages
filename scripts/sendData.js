@@ -2,7 +2,7 @@ document.getElementById("registroForm").addEventListener("submit", function (e) 
     e.preventDefault(); // Prevenir el comportamiento predeterminado del formulario
     console.log("1. Evento 'submit' detectado. Preparando datos para enviar...");
 
-    const url = "https://script.google.com/macros/s/AKfycbz6vAst1KncZP17CzNJk9ksE1cXrtzXVsZAL2SBjmSrWXWYQjuEDt33PQXuz5_zjgJc/exec";
+    const url = "https://script.google.com/macros/s/AKfycbw8zMDGPzFlek4PSVQ8iO_CArfgi05Ilx-AW2EEDvzvfXfDe3xhv0pQOWSvOItfduoh/exec";
 
     // Extraer datos del formulario
     const data = {
