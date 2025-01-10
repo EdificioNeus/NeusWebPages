@@ -57,20 +57,6 @@ input, select, textarea {
     background-color: #005f73;
 }
 
-.progress-bar {
-    width: 100%;
-    background-color: #f4f4f4;
-    border-radius: 5px;
-    margin-bottom: 20px;
-    overflow: hidden;
-}
-
-.progress-bar div {
-    height: 10px;
-    background-color: #008cba;
-    width: 0%; /* Progreso inicial en 0% */
-}
-
 /* Ocultar todas las secciones por defecto */
 .section {
     display: none;
@@ -79,4 +65,81 @@ input, select, textarea {
 /* Mostrar solo la sección activa */
 .section.active {
     display: block;
+}
+
+
+/* Barra de progreso */
+.progress-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    margin: 40px 0;
+}
+
+.progress-bar {
+    position: relative;
+    display: flex;
+    justify-content: space-between; /* Distribuye los nodos equitativamente */
+    align-items: center;
+    width: 80%; /* Tamaño de la barra */
+    height: 4px;
+    background-color: #ccc; /* Línea inactiva */
+    border-radius: 2px;
+    margin: 0 auto; /* Centra la barra en la página */
+}
+
+
+#progress-line {
+    position: absolute;
+    height: 100%;
+    width: 0%; /* Anime.js actualizará esto */
+    background: linear-gradient(to right, #007bff, #00d4ff); /* Azul degradado */
+    border-radius: 2px;
+    transition: width 0.3s ease-in-out;
+}
+
+.progress-node {
+    position: relative;
+    width: 20px;
+    height: 20px;
+    background-color: #007bff; /* Nodo inactivo */
+    border: 2px solid;
+    border-radius: 50%;
+    z-index: 2;
+    margin: 0 10px; /* Espaciado entre nodos */
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+    cursor: pointer;
+    transition: transform 0.2s ease-in-out;
+}
+
+.progress-node:hover {
+    transform: scale(1.2); /* Agranda ligeramente el nodo al pasar el cursor */
+}
+
+.progress-node.active {
+    background-color: #00d4ff; /* Nodo activo con azul claro */
+    border-color: #00d4ff;
+}
+
+.progress-node::before {
+    content: attr(data-label);
+    position: absolute;
+    top: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 12px;
+    color: #333; /* Etiqueta en gris oscuro */
+    text-align: center;
+}
+
+/* boton enviar*/
+.submit-btn {
+    background-color: #28a745; /* Verde para enviar */
+    color: white;
+    font-weight: bold;
+}
+
+.submit-btn:hover {
+    background-color: #218838;
 }
