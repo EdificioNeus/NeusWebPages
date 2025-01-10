@@ -1,6 +1,6 @@
 document.getElementById("registroForm").addEventListener("submit", function (e) {
     e.preventDefault(); // Prevenir el comportamiento predeterminado del formulario
-    console.log("1. Evento 'submit' detectado. Preparando datos para enviar...");
+    console.log("Formulario enviado. Preparando datos...");
 
     const url = "https://script.google.com/macros/s/AKfycbw8zMDGPzFlek4PSVQ8iO_CArfgi05Ilx-AW2EEDvzvfXfDe3xhv0pQOWSvOItfduoh/exec";
 
@@ -16,43 +16,45 @@ document.getElementById("registroForm").addEventListener("submit", function (e) 
         parentesco: document.getElementById("parentesco")?.value.trim() || "",
     };
 
-    console.log("2. Datos preparados para enviar:", data);
+    console.log("Datos preparados para enviar:", data);
 
     // Validar que todos los campos obligatorios tengan valores
     if (!data.nombre || !data.rut || !data.departamento) {
         alert("Por favor, completa todos los campos obligatorios.");
-        console.error("3. Validación fallida. Faltan campos obligatorios:", data);
         return;
     }
 
-    console.log("3. Todos los campos obligatorios están completos. Enviando datos a:", url);
+    // Crear encabezados
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+
+    // Crear cuerpo de la solicitud
+    const raw = JSON.stringify(data);
+
+    // Configuración de la solicitud
+    const requestOptions = {
+        method: "POST",
+        headers: myHeaders,
+        body: raw,
+        redirect: "follow"
+    };
 
     // Enviar los datos al servidor
-    fetch(url, {
-        method: "POST",
-        body: JSON.stringify(data),
-        headers: {
-            "Content-Type": "application/json",
-        },
-    })
+    fetch(url, requestOptions)
         .then((response) => {
-            console.log("4. Respuesta completa del servidor recibida:", response);
+            console.log("Respuesta completa del servidor:", response);
             if (!response.ok) {
                 throw new Error(`Error en la respuesta del servidor: ${response.statusText}`);
             }
-            return response.json(); // Convertir respuesta a JSON
+            return response.text();
         })
-        .then((responseData) => {
-            console.log("5. Respuesta JSON procesada:", responseData);
-            if (responseData.status === "success") {
-                alert("Formulario enviado exitosamente.");
-                document.getElementById("registroForm").reset(); // Limpiar el formulario
-            } else {
-                throw new Error(responseData.message || "Error desconocido en la respuesta.");
-            }
+        .then((result) => {
+            console.log("Datos procesados:", result);
+            alert("Formulario enviado exitosamente.");
+            document.getElementById("registroForm").reset(); // Limpiar el formulario
         })
         .catch((error) => {
-            console.error("6. Error al enviar el formulario:", error);
+            console.error("Error al enviar el formulario:", error);
             alert(`Hubo un error al enviar el formulario. Detalles: ${error.message}`);
         });
 });
