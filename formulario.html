@@ -11,14 +11,9 @@
         <h1>Formulario por Secciones</h1>
     </header>
 
-    <!-- Barra de progreso -->
-    <div class="progress-bar">
-        <div id="progress"></div>
-    </div>
-
     <!-- Formulario dividido en secciones -->
     <form id="registroForm">
-        <!-- Secciones del formulario -->
+        <!-- Secciones -->
         <div class="section" id="section-1">
             <h2>Datos Personales</h2>
             <label for="nombre">Nombre</label>
@@ -62,7 +57,14 @@
         </div>
     </form>
 
+    <!-- Barra de progreso con nodos -->
+    <div class="progress-container">
+        <div class="progress" id="progress"></div>
+        <div class="step active">Etapa 1</div>
+        <div class="step">Etapa 2</div>
+        <div class="step">Etapa 3</div>
+    </div>
+
     <script src="scripts/navigation.js"></script>
-    <script src="scripts/sendData.js"></script>
 </body>
 </html>
