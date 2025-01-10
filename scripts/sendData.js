@@ -26,7 +26,8 @@ document.getElementById("registroForm").addEventListener("submit", function (e) 
 
     // Crear encabezados
     const myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
+    //myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("Content-Type", "text/plain;charset=utf-8");
 
     // Crear cuerpo de la solicitud
     const raw = JSON.stringify(data);
