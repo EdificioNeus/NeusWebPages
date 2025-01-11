@@ -23,18 +23,27 @@ form {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-label {
-    display: block;
-    margin-top: 15px;
-    font-weight: bold;
-}
-
 input, select, textarea {
-    width: 100%;
+    width: 100%; /* Ajusta el ancho a ocupar el 100% del contenedor */
     padding: 10px;
     margin-top: 5px;
-    border: 1px solid #ccc;
+    margin-bottom: 10px; /* Añade un margen inferior para separar campos */
+    border: 1px solid #050505;
     border-radius: 5px;
+    box-sizing: border-box; /* Asegura que el padding no afecte el ancho total */
+}
+
+input {
+    background-color: rgba(255, 255, 255, 0.5); /* Hacer semitransparente */
+    z-index: 1; /* Asegúrate de que tenga una prioridad menor */
+}
+
+
+/* Ajuste adicional para los labels */
+label {
+    display: block; /* Asegura que cada label ocupe una línea completa */
+    margin-bottom: 5px; /* Añade espacio entre el label y el campo */
+    font-weight: bold; /* Resalta el texto del label */
 }
 
 .nav-buttons {
@@ -74,63 +83,77 @@ input, select, textarea {
     justify-content: center;
     align-items: center;
     padding: 20px;
-    margin: 40px 0;
+    margin: 60px 0; /* Espacio superior e inferior */
+    position: relative;
+    top: 30px; /* Mueve la barra hacia abajo */
 }
 
 .progress-bar {
     position: relative;
     display: flex;
-    justify-content: space-between; /* Distribuye los nodos equitativamente */
+    justify-content: space-between;
     align-items: center;
-    width: 80%; /* Tamaño de la barra */
-    height: 4px;
-    background-color: #ccc; /* Línea inactiva */
-    border-radius: 2px;
-    margin: 0 auto; /* Centra la barra en la página */
+    width: 80%;
+    height: 5px; /* Incrementa un poco el grosor */
+    background: linear-gradient(to right, #f3f4f6, #d1d5db); /* Gris claro degradado */
+    border-radius: 3px;
+    margin: 0 auto;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Sombra ligera */
 }
-
 
 #progress-line {
     position: absolute;
     height: 100%;
-    width: 0%; /* Anime.js actualizará esto */
-    background: linear-gradient(to right, #007bff, #00d4ff); /* Azul degradado */
-    border-radius: 2px;
+    width: 0%; /* Anime.js se encargará de actualizar */
+    background: linear-gradient(to right, #3b82f6, #0ea5e9); /* Degradado azul */
+    border-radius: 3px;
     transition: width 0.3s ease-in-out;
 }
 
+/* Nodo de progreso */
 .progress-node {
     position: relative;
-    width: 20px;
-    height: 20px;
-    background-color: #007bff; /* Nodo inactivo */
-    border: 2px solid;
+    width: 25px; /* Tamaño del nodo */
+    height: 25px;
+    background-color: #f3f4f6; /* Nodo inactivo */
+    border: 2px solid #d1d5db; /* Borde gris claro */
     border-radius: 50%;
     z-index: 2;
-    margin: 0 10px; /* Espaciado entre nodos */
-    transition: background-color 0.3s ease, border-color 0.3s ease;
+    transition: background-color 0.3s ease, border-color 0.3s ease, transform 0.2s ease-in-out;
     cursor: pointer;
-    transition: transform 0.2s ease-in-out;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Sombra ligera */
 }
 
+/* Hover sobre el nodo */
 .progress-node:hover {
-    transform: scale(1.2); /* Agranda ligeramente el nodo al pasar el cursor */
+    transform: scale(1.3); /* Aumenta el tamaño */
 }
 
+/* Nodo activo */
 .progress-node.active {
-    background-color: #00d4ff; /* Nodo activo con azul claro */
-    border-color: #00d4ff;
+    background: linear-gradient(to right, #3b82f6, #0ea5e9); /* Azul degradado */
+    border-color: #0ea5e9;
+    transform: scale(1.2); /* Aumenta ligeramente el tamaño */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Sombra más prominente */
 }
 
+/* Etiquetas de los nodos */
 .progress-node::before {
-    content: attr(data-label);
+    content: attr(data-label); /* Muestra el texto de la etiqueta */
     position: absolute;
-    top: -30px;
+    top: 40px; /* Mueve la etiqueta hacia abajo */
     left: 50%;
     transform: translateX(-50%);
-    font-size: 12px;
-    color: #333; /* Etiqueta en gris oscuro */
-    text-align: center;
+    font-size: 14px; /* Tamaño de la fuente */
+    font-weight: bold;
+    color: #374151; /* Texto gris oscuro */
+    white-space: nowrap;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2); /* Sombra para mejorar la legibilidad */
+}
+
+/* Hover sobre las etiquetas */
+.progress-node:hover::before {
+    color: #0ea5e9; /* Cambia el color de la etiqueta al pasar el cursor */
 }
 
 /* boton enviar*/
@@ -144,28 +167,75 @@ input, select, textarea {
     background-color: #218838;
 }
 
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Fondo semitransparente */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
 /* Spinner */
-#spinner {
+.spinner {
+    width: 14.4px;
+    height: 14.4px;
+    animation: spinner-o824ag 1.4s infinite linear;
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    border: 8px solid #f3f3f3;
+    z-index: 9999; /* Asegura que esté encima de otros elementos */
+ }
+ 
+ .spinner div {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: #008cba; /* Color del spinner */
     border-radius: 50%;
-    border-top: 8px solid #3498db;
-    width: 50px;
-    height: 50px;
-    animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-
-.hidden {
+    animation: spinner-vse6n7 1.75s infinite ease;
+ }
+ 
+ .spinner div:nth-child(1) {
+    --rotation: 90;
+ }
+ 
+ .spinner div:nth-child(2) {
+    --rotation: 180;
+ }
+ 
+ .spinner div:nth-child(3) {
+    --rotation: 270;
+ }
+ 
+ .spinner div:nth-child(4) {
+    --rotation: 360;
+ }
+ 
+ @keyframes spinner-vse6n7 {
+    0%, 100% {
+       transform: rotate(calc(var(--rotation) * 1deg)) translateY(0);
+    }
+ 
+    50% {
+       transform: rotate(calc(var(--rotation) * 1deg)) translateY(300%);
+    }
+ }
+ 
+ @keyframes spinner-o824ag {
+    to {
+       transform: rotate(360deg);
+    }
+ }
+ 
+ .hidden {
     display: none;
-}
+ }
 
 /* Mensaje de confirmación */
 #confirmationMessage {
@@ -184,4 +254,90 @@ input, select, textarea {
 
 #confirmationMessage.error {
     background-color: #dc3545;
+}
+
+/* Campo con error */
+.input-error {
+    border: 2px solid #dc3545; /* Borde rojo */
+    background-color: #ffe6e6; /* Fondo ligeramente rosado */
+}
+
+.input-container {
+    position: relative; /* Contenedor relativo para posicionar el error */
+    margin-bottom: 20px; /* Espaciado entre campos */
+}
+
+.error-message {
+    position: absolute;
+    top: -1px; /* Ajusta la posición sobre el input */
+    left: 15%; /* Alinea con el borde izquierdo del input */
+    background-color: #ff4d4d; /* Fondo del mensaje */
+    color: white; /* Texto blanco */
+    padding: 5px 10px; /* Espaciado interno */
+    border-radius: 5px; /* Bordes redondeados */
+    font-size: 12px; /* Tamaño del texto */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Sombra */
+    z-index: 10; /* Asegura que esté por encima de otros elementos */
+    white-space: nowrap; /* Evita que el texto se divida */
+    display: none; /* Oculto por defecto */
+}
+
+/* Flecha debajo del mensaje */
+.error-message::after {
+    content: "";
+    position: absolute;
+    top: 100%; /* Coloca la flecha justo debajo del mensaje */
+    left: 10px; /* Ajusta para centrar con el mensaje */
+    border-width: 5px;
+    border-style: solid;
+    border-color: #ff4d4d transparent transparent transparent; /* Flecha del mismo color que el fondo */
+}
+
+.radio-group {
+    display: flex;
+    gap: 20px; /* Espacio entre los radio buttons */
+    justify-content: flex-start; /* Alinear a la izquierda */
+    align-items: center; /* Centrar verticalmente */
+    margin-bottom: 20px;
+}
+
+.radio-group label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 16px;
+    color: #333;
+}
+
+.radio-group input[type="radio"] {
+    accent-color: #007bff; /* Cambiar el color del radio button */
+    margin-right: 5px; /* Separar ligeramente el botón del texto */
+}
+
+
+.radio-group-docs {
+    display: flex;
+    gap: 0px; /* Espaciado entre los botones */
+    justify-content: flex-start; /* Alineación a la izquierda */
+    align-items: left; /* Centrado verticalmente */
+    margin-bottom: 20px;
+}
+
+.radio-group-docs label {
+    display: inline-flex; /* Cambia a inline-flex para mantener el texto junto al botón */
+    align-items: center;
+    font-size: 16px; /* Tamaño de fuente */
+    color: #333;
+    margin: 0; /* Sin márgenes adicionales */
+}
+
+.radio-group-docs input[type="radio"] {
+    margin-right: 5px; /* Espacio mínimo entre el botón y el texto */
+    accent-color: #007bff; /* Cambiar color del botón */
+}
+
+p {
+    margin: 0 0 10px; /* Separar el párrafo de la pregunta */
+    font-weight: bold;
+    font-size: 16px;
 }
