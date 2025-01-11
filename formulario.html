@@ -14,58 +14,202 @@
     <!-- Formulario dividido en secciones -->
     <form id="registroForm" action="">
         <!-- Secciones -->
-        <div class="section" id="section-1">
-            <h2>Datos Personales</h2>
-            <label for="nombre">Nombre</label>
-            <input type="text" id="nombre" name="nombre" required>
-            
-            <label for="rut">RUT/DNI</label>
-            <input type="text" id="rut" name="rut" required>
-            
-            <label for="nacionalidad">Nacionalidad</label>
-            <input type="text" id="nacionalidad" name="nacionalidad">
-        </div>
+        <div class="section" id="Contacto-Principal">
+            <h2>Datos de Contacto Principal</h2>
+            <div class="input-container">
+                <label for="Nombres">Nombres</label>
+                <input type="text" id="Nombres" name="Nombres" required>
+                <span class="error-message">Este campo es requerido</span>
+            </div>
 
-        <div class="section" id="section-2">
-            <h2>Datos de Residencia</h2>
-            <label for="departamento">Número de Departamento</label>
-            <input type="text" id="departamento" name="departamento" required>
+            <div class="input-container">
+                <label for="Apellidos">Apellidos</label>
+                <input type="text" id="Apellidos" name="Apellidos" required>
+                <span class="error-message">Este campo es requerido</span>
+            </div>
+        
+            <div class="input-container">
+                <label>¿Qué documento desea ingresar?</label>
+                <div class="radio-group-docs">
+                    <label for="tipoRut">
+                        <input type="radio" id="tipoRut" name="documentType" value="RUT" checked> RUT
+                    </label>
+                    <label for="tipoDni">
+                        <input type="radio" id="tipoDni" name="documentType" value="DNI"> DNI
+                    </label>
+                </div>
+            </div>
             
-            <label for="contacto">Número de Contacto</label>
-            <input type="text" id="contacto" name="contacto">
+            <!-- Campo para RUT -->
+            <div class="input-container" id="rutContainer">
+                <label for="rut">RUT</label>
+                <input type="text" id="rut" name="rut" placeholder="Rut sin puntos y con guión: 12345678-9" required>
+                <span class="error-message">Este campo es requerido</span>
+            </div>
             
-            <label for="email">Correo Electrónico</label>
-            <input type="email" id="email" name="email">
-        </div>
+            <!-- Campo para DNI -->
+            <div class="input-container hidden" id="dniContainer">
+                <label for="dni">DNI</label>
+                <input type="text" id="dni" name="dni" placeholder="Ingrese su DNI">
+                <span class="error-message">Este campo es requerido</span>
+            </div>
+            
+            <div class="input-container">
+                <label for="contacto">Número de Contacto</label>
+                <input 
+                    type="tel" 
+                    id="contacto" 
+                    name="contacto" 
+                    placeholder="Ej: +56912345678" 
+                    required 
+                    pattern="^\+?[0-9]{1,3}?[0-9]{9}$"
+                >
+                <span class="error-message">Ingrese un número válido</span>
+            </div>
+            
+            
+            <div class="input-container">
+                <label for="email">Correo Electrónico</label>
+                <input 
+                    type="email" 
+                    id="email" 
+                    name="email" 
+                    placeholder="ejemplo@correo.com" 
+                    required
+                >
+                <span class="error-message">Este campo es requerido</span>
+            </div>
 
-        <div class="section" id="section-3">
+            <div class="input-container">
+                <label for="nacionalidad">Nacionalidad</label>
+                <select id="nacionalidad" name="nacionalidad">
+                    <option value="" disabled selected>Cargando opciones...</option>
+                </select>
+            </div>
+            
+            <p>¿Registrado en Edipro?</p>
+            <div class="radio-group">
+                <label>
+                    <input type="radio" id="tieneRegistroEdiproSi" name="tieneEdipro" value="si">
+                    Sí
+                </label>
+                <label>
+                    <input type="radio" id="tieneRegistroEdiproNo" name="tieneEdipro" value="no" checked>
+                    No
+                </label>
+            </div>
+
+        </div>        
+
+        <div class="section" id="DatosDepartamento">
+            <h2>Datos del Departamento</h2>
+        
+            <div class="input-container">
+                <label for="departamento">Número de Departamento</label>
+                <select id="departamento" name="departamento" required>
+                    <option value="" disabled selected>Cargando...</option>
+                </select>
+                <span class="error-message">Este campo es requerido</span>
+            </div>
+        
+            <p>¿Tiene Estacionamiento?</p>
+            <div class="radio-group">
+                <label>
+                    <input type="radio" id="tieneEstacionamientoSi" name="tieneEstacionamiento" value="si">
+                    Sí
+                </label>
+                <label>
+                    <input type="radio" id="tieneEstacionamientoNo" name="tieneEstacionamiento" value="no" checked>
+                    No
+                </label>
+            </div>
+        
+            <!-- Número de estacionamientos (se oculta inicialmente) -->
+            <div id="datosEstacionamiento" class="hidden">
+                <label for="cantidadEstacionamientos">¿Cuántos estacionamientos?</label>
+                <input type="number" id="cantidadEstacionamientos" name="cantidadEstacionamientos" min="1" max="10" value="1" required>
+                <span class="error-message">Ingrese una cantidad válida</span>
+        
+                <!-- Contenedor dinámico para los campos de estacionamientos -->
+                <div id="camposEstacionamientos"></div>
+            </div>
+        
+            <p>¿Tiene Bodega?</p>
+            <div class="radio-group">
+                <label>
+                    <input type="radio" id="tieneBodegaSi" name="tieneBodega" value="si">
+                    Sí
+                </label>
+                <label>
+                    <input type="radio" id="tieneBodegaNo" name="tieneBodega" value="no" checked>
+                    No
+                </label>
+            </div>
+        
+            <!-- Número de bodegas (se oculta inicialmente) -->
+            <div id="datosBodega" class="hidden">
+                <label for="cantidadBodegas">¿Cuántas bodegas?</label>
+                <input type="number" id="cantidadBodegas" name="cantidadBodegas" min="1" max="10" value="1" required>
+                <span class="error-message">Ingrese una cantidad válida</span>
+        
+                <!-- Contenedor dinámico para los campos de bodegas -->
+                <div id="camposBodegas"></div>
+            </div>
+        
+            <p>¿Es Propietario o Arrendatario?</p>
+            <div class="radio-group">
+                <label>
+                    <input type="radio" id="esPropietario" name="tipoPropietario" value="propietario" checked>
+                    Propietario
+                </label>
+                <label>
+                    <input type="radio" id="esArrendatario" name="tipoPropietario" value="arrendatario">
+                    Arrendatario
+                </label>
+            </div>
+        
+            <!-- Campo para cargar contrato de arriendo (se oculta inicialmente) -->
+            <div id="contratoArriendo" class="hidden">
+                <label for="contrato">Cargar Contrato de Arriendo</label>
+                <input type="file" id="contrato" name="contrato" accept=".pdf,.doc,.docx,.jpg,.png" required>
+                <span class="error-message">Debe cargar un archivo válido</span>
+            </div>
+        </div>       
+
+        <div class="section" id="section-vehiculos">
             <h2>Datos de Vehículos</h2>
-            <label for="vehiculo">Marca y Modelo</label>
-            <input type="text" id="vehiculo" name="vehiculo">
-            
-            <label for="placa">Placa</label>
-            <input type="text" id="placa" name="placa">
-            
-            <label for="estacionamiento">Número de Estacionamiento</label>
-            <input type="text" id="estacionamiento" name="estacionamiento">
-        </div>
+            <p>¿Tiene auto?</p>
+            <div class="radio-group">
+                <label>
+                    <input type="radio" id="tieneAutoSi" name="tieneAuto" value="si">
+                    Sí
+                </label>
+                <label>
+                    <input type="radio" id="tieneAutoNo" name="tieneAuto" value="no" checked>
+                    No
+                </label>
+            </div>
+        
+            <!-- Número de autos (se oculta inicialmente) -->
+            <div id="datosAutos" class="hidden">
+                <label for="cantidadAutos">¿Cuántos autos?</label>
+                <input type="number" id="cantidadAutos" name="cantidadAutos" min="1" max="10" value="1" required>
+                <span class="error-message">Ingrese una cantidad válida</span>
 
+                <!-- Contenedor dinámico para los autos -->
+                <div id="camposAutos"></div>
+            </div>
+
+        </div>
+        
+        
         <!-- Botones de navegación -->
         <div class="nav-buttons">
             <button type="button" id="prevBtn">Anterior</button>
             <button type="button" id="nextBtn">Siguiente</button>
         </div>
     </form>
-
-    <div id="spinner" class="spinner hidden">
-        <div></div>   
-        <div></div>    
-        <div></div>    
-        <div></div>    
-      </div>
       
-    <div id="confirmationMessage" class="hidden"></div>
-
     <!-- Barra de progreso con nodos -->
     <div class="progress-container">
         <div class="progress-bar">
@@ -76,8 +220,26 @@
         </div>
     </div>
 
+    <div id="overlay" class="overlay hidden">
+        <!-- Spinner dentro del overlay -->
+        <div id="spinner" class="spinner hidden">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    
+        <!-- Mensaje de confirmación dentro del overlay -->
+        <div id="confirmationMessage" class="hidden"></div>
+    </div>    
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="scripts/validaRut.js"></script>
+    <script src="scripts/validador.js"></script>
+    <script src="scripts/nacionalidades.js"></script>
+    <script src="scripts/departamentos.js"></script>
     <script src="scripts/navigation.js"></script>
+    <script src="scripts/conditionalSections.js"></script>
     <script src="scripts/sendData.js"></script>
 </body>
 </html>
