@@ -12,7 +12,7 @@ document.getElementById("registroForm").addEventListener("submit", function (e) 
     spinner.classList.remove("hidden");
     confirmationMessage.classList.add("hidden");
 
-    const url = "https://script.google.com/macros/s/AKfycbxVkN6yA5wx1ydemNCe99AEUAj33maoCZCReRS7lb5QvUssVc7ktC8JOPQf7of62og/exec";
+    const url = "https://script.google.com/macros/s/AKfycbyDGCaCQtEsn09UV5oolKmChuR6CjYV3TGX85wgYcfg5v0MbZkcZuHtUrYEVAzY_d6_/exec";
 
     // Construir el JSON principal
     const jsonData = {
@@ -39,7 +39,11 @@ document.getElementById("registroForm").addEventListener("submit", function (e) 
             ContratoDeArriendo: "", // Este campo será asignado más adelante si hay archivo
             TieneAuto: document.querySelector('input[name="tieneAuto"]:checked')?.value || "no",
             CantidadDeAutos: parseInt(document.getElementById("cantidadAutos")?.value, 10) || 0,
+            CantidadDeMascotas: parseInt(document.getElementById("cantidadMascotas")?.value, 10) || 0,
+            CantidadDeResidentes: parseInt(document.getElementById("cantidadResidentes")?.value, 10) || 0,
             Autos: [],
+            Mascotas: [],
+            Residentes: [],
         },
     };
 
@@ -76,23 +80,70 @@ document.getElementById("registroForm").addEventListener("submit", function (e) 
         }
     }
 
+    // 4. Mascotas
+    const cantidadMascotas = jsonData.ContactoPrincipal.CantidadDeMascotas;
+    for (let i = 1; i <= cantidadMascotas; i++) {
+        const mascota = {
+            Raza: document.getElementById(`razaMascota${i}`)?.value.trim() || "",
+            Nombre: document.getElementById(`nombreMascota${i}`)?.value.trim() || "",
+        };
+        if (mascota.Raza || mascota.Nombre) {
+            jsonData.ContactoPrincipal.Mascotas.push(mascota);
+        }
+    }
+
+    // 5. Residentes
+    const cantidadResidentes = jsonData.ContactoPrincipal.CantidadDeResidentes;
+    for (let i = 1; i <= cantidadResidentes; i++) {
+        const residente = {
+            Nombre: document.getElementById(`nombreResidente${i}`)?.value.trim() || "",
+            Apellido: document.getElementById(`apellidoResidente${i}`)?.value.trim() || "",
+            Identificacion: document.getElementById(`identificacionResidente${i}`)?.value.trim() || "",
+            Telefono: document.getElementById(`telefonoResidente${i}`)?.value.trim() || "",
+            Correo: document.getElementById(`correoResidente${i}`)?.value.trim() || "",
+            Parentesco: document.getElementById(`parentescoResidente${i}`)?.value.trim() || "",
+        };
+        if ((residente.Nombre && residente.Apellido && residente.Identificacion)) {
+            jsonData.ContactoPrincipal.Residentes.push(residente);
+        }
+    }
+
     // Revisar si hay un contrato de arriendo adjunto
     const contratoInput = document.getElementById("contrato");
     const hasContrato = contratoInput && contratoInput.files && contratoInput.files.length > 0;
 
-    console.log
     // Construir solicitud HTTP dependiendo si hay contrato o no
     let fetchOptions;
 
-    if (hasContrato) {
-        console.log("Se detectó un archivo adjunto. Enviando con FormData...");
-        const formData = new FormData();
-        formData.append("data", JSON.stringify(jsonData)); // Enviar datos como JSON en un campo separado
-        formData.append("contrato", contratoInput.files[0]); // Agregar archivo
-        fetchOptions = {
-            method: "POST",
-            body: formData, // Enviar como FormData
+    if (hasContrato) 
+    {
+        console.log("Se detectó un archivo adjunto. Enviando como JSON con Base64...");
+        
+        // Convertir el archivo a Base64
+        const reader = new FileReader();
+        reader.onload = function () {
+            const base64File = reader.result.split(",")[1]; // Obtener solo el contenido Base64
+            jsonData.ContactoPrincipal.ContratoDeArriendo = base64File;
+            jsonData.ContactoPrincipal.NombreArchivo = contratoInput.files[0].name;
+    
+            // Enviar datos como texto plano
+            fetchOptions = {
+                method: "POST",
+                headers: { "Content-Type": "text/plain;charset=utf-8" },
+                body: JSON.stringify(jsonData),
+            };
+    
+            console.log("fetchOptions (request enviado):", fetchOptions);
+    
+            // Enviar los datos al servidor
+            enviarDatos(fetchOptions);
         };
+    
+        reader.onerror = function (error) {
+            console.error("Error al leer el archivo:", error);
+        };
+    
+        reader.readAsDataURL(contratoInput.files[0]);
     } 
     else 
     {
@@ -102,52 +153,47 @@ document.getElementById("registroForm").addEventListener("submit", function (e) 
             headers: { "Content-Type": "text/plain;charset=utf-8" },
             body: JSON.stringify(jsonData),
         };
-    }
+    
+        enviarDatos(fetchOptions);
+    }    
 
     // Imprimir el JSON completo
-    console.log("JSON completo a enviar:", JSON.stringify(jsonData, null, 2));
+    //console.log("JSON completo a enviar:", JSON.stringify(jsonData, null, 2));
+    console.log("fetchOptions (request enviado):", fetchOptions);
 
-    // Enviar los datos al servidor
-    fetch(url, fetchOptions)
-        .then((response) => {
-            if (!response.ok) {
-                throw new Error(`Error en la respuesta del servidor: ${response.statusText}`);
-            }
-            return response.text();
-        })
-        .then((result) => {
-            console.log("Datos procesados:", result);
-
-            // Ocultar spinner, mostrar mensaje de éxito
-            spinner.classList.add("hidden");
-            confirmationMessage.innerHTML = `
-                <h2>¡Gracias por tu respuesta!</h2>
-                <p>Tu información ha sido registrada correctamente.</p>
-            `;
-            confirmationMessage.classList.remove("hidden");
-
-            // Ocultar overlay y reiniciar formulario después de un tiempo
-            setTimeout(() => {
-                overlay.classList.add("hidden");
-                document.getElementById("registroForm").reset();
-                window.location.href = "index.html"; // Redirección al index
-            }, 3000);
-        })
-        .catch((error) => {
-            console.error("Error al enviar el formulario:", error);
-
-            // Ocultar spinner, mostrar mensaje de error
-            spinner.classList.add("hidden");
-            confirmationMessage.innerHTML = `
-                <h2>Error al enviar</h2>
-                <p>Hubo un problema al enviar tu información: ${error.message}</p>
-            `;
-            confirmationMessage.classList.remove("hidden");
-            confirmationMessage.classList.add("error");
-
-            // Ocultar overlay después de un tiempo
-            setTimeout(() => {
-                overlay.classList.add("hidden");
-            }, 5000);
-        });
+    function enviarDatos(fetchOptions) {
+        fetch(url, fetchOptions)
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error(`Error en la respuesta del servidor: ${response.statusText}`);
+                }
+                return response.text();
+            })
+            .then((result) => {
+                console.log("Datos procesados:", result);
+                
+                // Ocultar spinner
+                spinner.classList.add("hidden");
+    
+                // Mostrar mensaje de éxito
+                showConfirmationMessage("¡Gracias por tu respuesta! Tu información ha sido registrada correctamente.", "success");
+    
+                // Redirigir después de 3 segundos
+                setTimeout(() => {
+                    overlay.classList.add("hidden");
+                    document.getElementById("registroForm").reset();
+                    window.location.href = "index.html";
+                }, 3000);
+            })
+            .catch((error) => {
+                console.error("Error al enviar el formulario:", error);
+                
+                // Ocultar spinner
+                spinner.classList.add("hidden");
+    
+                // Mostrar mensaje de error
+                showConfirmationMessage(`Hubo un problema al enviar tu información: ${error.message}`, "error");
+            });
+    }    
+    
 });

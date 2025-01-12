@@ -181,6 +181,72 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
+    // Eventos para alternar la sección de datos de residentes
+    document.querySelectorAll('input[name="tieneResidente"]').forEach((radio) => {
+        radio.addEventListener("change", function () {
+            console.log(`Radio cambiado: tieneResidente, valor: ${this.value}`);
+            if (this.value === "si") {
+                toggleConditionalInputs(this.value, {
+                    showContainerId: "datosResidentes",
+                    showFields: ["cantidadResidentes"],
+                    hideFields: [],
+                });
+
+                // Obtener el campo cantidadResidentes y asignar valor predeterminado
+                const cantidadResidentes = document.getElementById("cantidadResidentes");
+                if (cantidadResidentes) {
+                    if (!cantidadResidentes.value || cantidadResidentes.value === "0") {
+                        cantidadResidentes.value = "1"; // Asignar el valor predeterminado
+                    }
+                    cantidadResidentes.dispatchEvent(new Event("input")); // Disparar evento para generar campos
+                }
+            } else if (this.value === "no") {
+                toggleConditionalInputs(this.value, {
+                    hideContainerId: "datosResidentes",
+                    hideFields: ["cantidadResidentes"],
+                    showFields: [],
+                });
+                const camposResidentes = document.getElementById("camposResidentes");
+                if (camposResidentes) {
+                    camposResidentes.innerHTML = ""; // Limpiar campos dinámicos de autos
+                }
+            }
+        });
+    });
+
+    // Eventos para alternar la sección de datos de Mascotas
+    document.querySelectorAll('input[name="tieneMascota"]').forEach((radio) => {
+        radio.addEventListener("change", function () {
+            console.log(`Radio cambiado: tieneMascota, valor: ${this.value}`);
+            if (this.value === "si") {
+                toggleConditionalInputs(this.value, {
+                    showContainerId: "datosMascotas",
+                    showFields: ["cantidadMascotas"],
+                    hideFields: [],
+                });
+
+                // Obtener el campo cantidadAutos y asignar valor predeterminado
+                const cantidadMascotas = document.getElementById("cantidadMascotas");
+                if (cantidadMascotas) {
+                    if (!cantidadMascotas.value || cantidadMascotas.value === "0") {
+                        cantidadMascotas.value = "1"; // Asignar el valor predeterminado
+                    }
+                    cantidadMascotas.dispatchEvent(new Event("input")); // Disparar evento para generar campos
+                }
+            } else if (this.value === "no") {
+                toggleConditionalInputs(this.value, {
+                    hideContainerId: "datosMascotas",
+                    hideFields: ["cantidadMascotas"],
+                    showFields: [],
+                });
+                const camposMascotas = document.getElementById("camposMascotas");
+                if (camposMascotas) {
+                    camposMascotas.innerHTML = ""; // Limpiar campos dinámicos de autos
+                }
+            }
+        });
+    });
+
     // Eventos para alternar entre Propietario y Arrendatario
     document.querySelectorAll('input[name="tipoPropietario"]').forEach((radio) => {
         radio.addEventListener("change", function () {
@@ -211,7 +277,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (cantidad > 0 && cantidad <= 10) {
             for (let i = 1; i <= cantidad; i++) {
-                const bodegaContainer = createDynamicField(i, "Bodega", "numeroBodega");
+                const bodegaContainer = document.createElement("div");
+                bodegaContainer.classList.add("bodega-container");
+            
+                // Agregar título para cada bodega
+                const title = document.createElement("h3");
+                title.textContent = `Bodega ${i}`;
+                bodegaContainer.appendChild(title);
+            
+                const bodegaField = createDynamicField(i, "Número de Bodega", "numeroBodega",true);
+                bodegaContainer.appendChild(bodegaField);
+            
                 camposBodegas.appendChild(bodegaContainer);
             }
         }
@@ -227,7 +303,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (cantidad > 0 && cantidad <= 10) {
             for (let i = 1; i <= cantidad; i++) {
-                const estacionamientoContainer = createDynamicField(i, "Estacionamiento", "numeroEstacionamiento");
+                const estacionamientoContainer = document.createElement("div");
+                estacionamientoContainer.classList.add("estacionamiento-container");
+            
+                // Agregar título para cada estacionamiento
+                const title = document.createElement("h3");
+                title.textContent = `Estacionamiento ${i}`;
+                estacionamientoContainer.appendChild(title);
+            
+                const estacionamientoField = createDynamicField(i, "Número de Estacionamiento", "numeroEstacionamiento",true);
+                estacionamientoContainer.appendChild(estacionamientoField);
+            
                 camposEstacionamientos.appendChild(estacionamientoContainer);
             }
         }
@@ -253,10 +339,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 autoContainer.appendChild(title);
 
                 // Crear campos dinámicos: Marca, Modelo, Color, Patente
-                const marcaField = createDynamicField(i, "Marca", "marcaAuto");
-                const modeloField = createDynamicField(i, "Modelo", "modeloAuto");
-                const colorField = createDynamicField(i, "Color", "colorAuto");
-                const patenteField = createDynamicField(i, "Patente", "patenteAuto");
+                const marcaField = createDynamicField(i, "Marca", "marcaAuto",false);
+                const modeloField = createDynamicField(i, "Modelo", "modeloAuto",false);
+                const colorField = createDynamicField(i, "Color", "colorAuto",false);
+                const patenteField = createDynamicField(i, "Patente", "patenteAuto",true);
 
                 // Agregar los campos al contenedor del auto
                 autoContainer.appendChild(marcaField);
@@ -272,6 +358,90 @@ document.addEventListener("DOMContentLoaded", () => {
             error.textContent = "Máximo 10 autos permitidos";
             error.style.color = "red";
             camposAutos.appendChild(error);
+        }
+    });
+
+    // Generar dinámicamente los campos de residentes según la cantidad ingresada
+    document.getElementById("cantidadResidentes").addEventListener("input", function () {
+        const cantidad = parseInt(this.value, 10) || 0;
+        const camposResidentes = document.getElementById("camposResidentes");
+        console.log(`Generando campos para ${cantidad} Residentes.`);
+
+        camposResidentes.innerHTML = "";
+
+        if (cantidad > 0 && cantidad <= 10) {
+            for (let i = 1; i <= cantidad; i++) {
+                // Crear contenedor para cada auto
+                const residenteContainer = document.createElement("div");
+                residenteContainer.classList.add("residente-container");
+
+                // Agregar el título del auto
+                const title = document.createElement("h3");
+                title.textContent = `Residente ${i}`;
+                residenteContainer.appendChild(title);
+
+                // Crear campos dinámicos: Marca, Modelo, Color, Patente
+                const nombresField = createDynamicField(i, "Nombres", "nombreResidente",true);
+                const apellidosField = createDynamicField(i, "Apellidos", "apellidoResidente",true);
+                const identificacionField = createDynamicField(i, "Nº identificación", "identificacionResidente",true);
+                const telefonoField = createDynamicField(i, "Telefono", "telefonoResidente",true, "tel");
+                const correoField = createDynamicField(i, "Correo", "correoResidente","email");
+                const parentescoField = createDynamicField(i, "Parentesco", "parentescoResidente", false);
+
+                // Agregar los campos al contenedor del auto
+                residenteContainer.appendChild(nombresField);
+                residenteContainer.appendChild(apellidosField);
+                residenteContainer.appendChild(identificacionField);
+                residenteContainer.appendChild(telefonoField);
+                residenteContainer.appendChild(correoField);
+                residenteContainer.appendChild(parentescoField);
+
+                // Añadir el contenedor completo al DOM
+                camposResidentes.appendChild(residenteContainer);
+            }
+        } else if (cantidad > 10) {
+            const error = document.createElement("p");
+            error.textContent = "Máximo 10 autos permitidos";
+            error.style.color = "red";
+            camposResidentes.appendChild(error);
+        }
+    });
+
+    // Generar dinámicamente los campos de Mascotas según la cantidad ingresada
+    document.getElementById("cantidadMascotas").addEventListener("input", function () {
+        const cantidad = parseInt(this.value, 10) || 0;
+        const camposMascotas = document.getElementById("camposMascotas");
+        console.log(`Generando campos para ${cantidad} Mascotas.`);
+
+        camposMascotas.innerHTML = "";
+
+        if (cantidad > 0 && cantidad <= 10) {
+            for (let i = 1; i <= cantidad; i++) {
+                // Crear contenedor para cada auto
+                const mascotaContainer = document.createElement("div");
+                mascotaContainer.classList.add("mascota-container");
+
+                // Agregar el título del Mascota
+                const title = document.createElement("h3");
+                title.textContent = `Mascota ${i}`;
+                mascotaContainer.appendChild(title);
+
+                // Crear campos dinámicos: Marca, Modelo, Color, Patente
+                const razaField = createDynamicField(i, "Raza", "razaMascota",true);
+                const nombreField = createDynamicField(i, "Nombre", "nombreMascota",false);
+
+                // Agregar los campos al contenedor del Mascota
+                mascotaContainer.appendChild(razaField);
+                mascotaContainer.appendChild(nombreField);
+
+                // Añadir el contenedor completo al DOM
+                camposMascotas.appendChild(mascotaContainer);
+            }
+        } else if (cantidad > 10) {
+            const error = document.createElement("p");
+            error.textContent = "Máximo 10 mascotas permitidos";
+            error.style.color = "red";
+            camposMascotas.appendChild(error);
         }
     });
 
@@ -303,9 +473,28 @@ document.addEventListener("DOMContentLoaded", () => {
         console.warn("El campo cantidadAutos no se encontró en el DOM.");
     }
 
+    const cantidadResidentes = document.getElementById("cantidadResidentes");
+    if (cantidadResidentes) {
+        if (!cantidadResidentes.value || cantidadResidentes.value === "0") {
+            cantidadResidentes.value = "1"; // Establecer valor predeterminado si no está definido
+        }
+        cantidadResidentes.dispatchEvent(new Event("input"));
+    } else {
+        console.warn("El campo cantidadResidentes no se encontró en el DOM.");
+    }
+
+    const cantidadMascotas = document.getElementById("cantidadMascotas");
+    if (cantidadMascotas) {
+        if (!cantidadMascotas.value || cantidadMascotas.value === "0") {
+            cantidadMascotas.value = "1"; // Establecer valor predeterminado si no está definido
+        }
+        cantidadMascotas.dispatchEvent(new Event("input"));
+    } else {
+        console.warn("El campo cantidadMascotas no se encontró en el DOM.");
+    }
 
     // Inicializar estado inicial de las secciones
-    document.querySelectorAll('input[name="documentType"]:checked, input[name="tieneBodega"]:checked, input[name="tieneEstacionamiento"]:checked, input[name="tieneAuto"]:checked')
+    document.querySelectorAll('input[name="documentType"]:checked, input[name="tieneBodega"]:checked, input[name="tieneEstacionamiento"]:checked, input[name="tieneAuto"]:checked, input[name="tieneMascota"]:checked, , input[name="tieneResidente"]:checked')
         .forEach(option => {
             console.log(`Inicializando opción seleccionada: ${option.name} - ${option.value}`);
             option.dispatchEvent(new Event("change"));
@@ -313,7 +502,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 // Función para crear un campo dinámico reutilizable
-function createDynamicField(index, labelName, idPrefix) {
+function createDynamicField(index, labelName, idPrefix, required = true, type = "Text") {
     const container = document.createElement("div");
     container.classList.add("input-container");
 
@@ -322,10 +511,16 @@ function createDynamicField(index, labelName, idPrefix) {
     label.textContent = `${labelName}`;
 
     const input = document.createElement("input");
-    input.setAttribute("type", "text");
+    input.setAttribute("type", type);
     input.setAttribute("id", `${idPrefix}${index}`);
     input.setAttribute("name", `${idPrefix}${index}`);
-    input.setAttribute("required", "true");
+    
+    // Aplicar el atributo required si está configurado como true
+    if (required) {
+        input.setAttribute("required", "true");
+    } else {
+        input.removeAttribute("required");
+    }
 
     const errorMessage = document.createElement("span");
     errorMessage.classList.add("error-message");
@@ -337,4 +532,3 @@ function createDynamicField(index, labelName, idPrefix) {
 
     return container;
 }
-

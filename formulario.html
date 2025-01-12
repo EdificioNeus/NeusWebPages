@@ -16,6 +16,15 @@
         <!-- Secciones -->
         <div class="section" id="Contacto-Principal">
             <h2>Datos de Contacto Principal</h2>
+
+            <div class="input-container">
+                <label for="departamento">Número de Departamento</label>
+                <select id="departamento" name="departamento" required>
+                    <option value="" disabled selected>Cargando...</option>
+                </select>
+                <span class="error-message">Este campo es requerido</span>
+            </div>
+
             <div class="input-container">
                 <label for="Nombres">Nombres</label>
                 <input type="text" id="Nombres" name="Nombres" required>
@@ -103,15 +112,26 @@
 
         <div class="section" id="DatosDepartamento">
             <h2>Datos del Departamento</h2>
-        
-            <div class="input-container">
-                <label for="departamento">Número de Departamento</label>
-                <select id="departamento" name="departamento" required>
-                    <option value="" disabled selected>Cargando...</option>
-                </select>
-                <span class="error-message">Este campo es requerido</span>
+
+            <p>¿Es Propietario o Arrendatario?</p>
+            <div class="radio-group">
+                <label>
+                    <input type="radio" id="esPropietario" name="tipoPropietario" value="propietario" checked>
+                    Propietario
+                </label>
+                <label>
+                    <input type="radio" id="esArrendatario" name="tipoPropietario" value="arrendatario">
+                    Arrendatario
+                </label>
             </div>
         
+            <!-- Campo para cargar contrato de arriendo (se oculta inicialmente) -->
+            <div id="contratoArriendo" class="hidden">
+                <label for="contrato">Cargar Contrato de Arriendo</label>
+                <input type="file" id="contrato" name="contrato" accept=".pdf,.doc,.docx,.jpg,.png" required>
+                <span class="error-message">Debe cargar un archivo válido</span>
+            </div>
+
             <p>¿Tiene Estacionamiento?</p>
             <div class="radio-group">
                 <label>
@@ -155,25 +175,7 @@
                 <!-- Contenedor dinámico para los campos de bodegas -->
                 <div id="camposBodegas"></div>
             </div>
-        
-            <p>¿Es Propietario o Arrendatario?</p>
-            <div class="radio-group">
-                <label>
-                    <input type="radio" id="esPropietario" name="tipoPropietario" value="propietario" checked>
-                    Propietario
-                </label>
-                <label>
-                    <input type="radio" id="esArrendatario" name="tipoPropietario" value="arrendatario">
-                    Arrendatario
-                </label>
-            </div>
-        
-            <!-- Campo para cargar contrato de arriendo (se oculta inicialmente) -->
-            <div id="contratoArriendo" class="hidden">
-                <label for="contrato">Cargar Contrato de Arriendo</label>
-                <input type="file" id="contrato" name="contrato" accept=".pdf,.doc,.docx,.jpg,.png" required>
-                <span class="error-message">Debe cargar un archivo válido</span>
-            </div>
+
         </div>       
 
         <div class="section" id="section-vehiculos">
@@ -199,9 +201,57 @@
                 <!-- Contenedor dinámico para los autos -->
                 <div id="camposAutos"></div>
             </div>
-
         </div>
+
+        <div class="section" id="section-residentes">
+            <h2>Datos de otros Residentes</h2>
+            <p>¿Residen mas personas en el depto?</p>
+            <div class="radio-group">
+                <label>
+                    <input type="radio" id="tieneResidenteSi" name="tieneResidente" value="si">
+                    Sí
+                </label>
+                <label>
+                    <input type="radio" id="tieneResidenteNo" name="tieneResidente" value="no" checked>
+                    No
+                </label>
+            </div>
         
+            <!-- Número de autos (se oculta inicialmente) -->
+            <div id="datosResidentes" class="hidden">
+                <label for="cantidadResidentes">¿Cuántos residentes adicionales?</label>
+                <input type="number" id="cantidadResidentes" name="cantidadResidentes" min="1" max="5" value="1" required>
+                <span class="error-message">Ingrese una cantidad válida</span>
+
+                <!-- Contenedor dinámico para los autos -->
+                <div id="camposResidentes"></div>
+            </div>
+        </div>
+
+        <div class="section" id="section-mascotas">
+            <h2>Datos de Mascotas</h2>
+            <p>¿Tiene Mascotas?</p>
+            <div class="radio-group">
+                <label>
+                    <input type="radio" id="tieneMascotaSi" name="tieneMascota" value="si">
+                    Sí
+                </label>
+                <label>
+                    <input type="radio" id="tieneMascotaNo" name="tieneMascota" value="no" checked>
+                    No
+                </label>
+            </div>
+        
+            <!-- Número de Mascotas (se oculta inicialmente) -->
+            <div id="datosMascotas" class="hidden">
+                <label for="cantidadMascotas">¿Cuántas Mascotas?</label>
+                <input type="number" id="cantidadMascotas" name="cantidadMascotas" min="1" max="10" value="1" required>
+                <span class="error-message">Ingrese una cantidad válida</span>
+
+                <!-- Contenedor dinámico para los Mascotas -->
+                <div id="camposMascotas"></div>
+            </div>
+        </div>
         
         <!-- Botones de navegación -->
         <div class="nav-buttons">
@@ -215,8 +265,12 @@
         <div class="progress-bar">
             <div id="progress-line"></div>
             <div class="progress-node" data-label="Datos Contacto Principal"></div>
-            <div class="progress-node" data-label="Etapa 2"></div>
-            <div class="progress-node" data-label="Etapa 3"></div>
+            <div class="progress-node" data-label="Datos Departamento"></div>
+            <div class="progress-node" data-label="Datos Autos"></div>
+            <div class="progress-node" data-label="Residentes"></div>
+            <div class="progress-node" data-label="Datos Mascotas"></div>
+            <div class="progress-node" data-label="Datos Bicicletas"></div>
+            <div class="progress-node" data-label="Necesidades Especiales"></div>
         </div>
     </div>
 
