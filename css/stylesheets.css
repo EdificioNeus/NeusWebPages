@@ -25,9 +25,9 @@ form {
 
 input, select, textarea {
     width: 100%; /* Ajusta el ancho a ocupar el 100% del contenedor */
-    padding: 10px;
-    margin-top: 5px;
-    margin-bottom: 10px; /* Añade un margen inferior para separar campos */
+    padding: 6px;
+    margin-top: 0px;
+    margin-bottom: 0px; /* Añade un margen inferior para separar campos */
     border: 1px solid #050505;
     border-radius: 5px;
     box-sizing: border-box; /* Asegura que el padding no afecte el ancho total */
@@ -38,6 +38,9 @@ input {
     z-index: 1; /* Asegúrate de que tenga una prioridad menor */
 }
 
+#contratoArriendo {
+    margin-bottom: 20px; /* Ajusta el valor según el espacio que necesites */
+}
 
 /* Ajuste adicional para los labels */
 label {
@@ -240,20 +243,22 @@ label {
 /* Mensaje de confirmación */
 #confirmationMessage {
     position: fixed;
-    top: 30%;
+    top: 20%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background-color: #28a745;
-    color: white;
     padding: 20px;
-    border-radius: 10px;
-    font-size: 18px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
     text-align: center;
+    z-index: 1000;
 }
-
+#confirmationMessage.success {
+    background-color: #d4edda;
+    color: #155724;
+}
 #confirmationMessage.error {
-    background-color: #dc3545;
+    background-color: #f8d7da;
+    color: #721c24;
 }
 
 /* Campo con error */
@@ -269,8 +274,8 @@ label {
 
 .error-message {
     position: absolute;
-    top: -1px; /* Ajusta la posición sobre el input */
-    left: 15%; /* Alinea con el borde izquierdo del input */
+    top: -6px; /* Ajusta la posición sobre el input */
+    left: 20%; /* Alinea con el borde izquierdo del input */
     background-color: #ff4d4d; /* Fondo del mensaje */
     color: white; /* Texto blanco */
     padding: 5px 10px; /* Espaciado interno */

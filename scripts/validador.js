@@ -90,6 +90,28 @@ function validateCurrentSection() {
     return isValid;
 }
 
+function showConfirmationMessage(message, type = 'success') {
+    const overlay = document.getElementById('overlay');
+    const spinner = document.getElementById('spinner');
+    const confirmationMessage = document.getElementById('confirmationMessage');
+
+    // Mostrar el overlay y ocultar el spinner
+    overlay.classList.remove('hidden');
+    spinner.classList.add('hidden');
+
+    // Configurar el mensaje
+    confirmationMessage.innerHTML = `<h2>${type === 'success' ? 'Éxito' : 'Error'}</h2><p>${message}</p>`;
+    confirmationMessage.classList.remove('hidden');
+    confirmationMessage.classList.remove('success', 'error');
+    confirmationMessage.classList.add(type); // Aplicar estilo basado en tipo
+
+    // Opción: Ocultar automáticamente después de unos segundos
+    setTimeout(() => {
+        overlay.classList.add('hidden');
+        confirmationMessage.classList.add('hidden');
+    }, 5000);
+}
+
 // Hacer que validateCurrentSection sea accesible globalmente
 window.validateSection = validateCurrentSection;
 
