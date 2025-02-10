@@ -1,12 +1,46 @@
+
 /* Estilos básicos */
 body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f4f4f4;
-    color: #333;
+    background-color: #121212;
+    color: #ffffff;
+    transition: background 0.3s, color 0.3s;
 }
 
+/* Light Mode */
+body.light-mode {
+    background-color: #ffffff;
+    color: #121212;
+}
+
+/* Botón de cambio de tema */
+.theme-toggle {
+    background: none;
+    border: none;
+    font-size: 1.8rem;
+    cursor: pointer;
+    position: fixed;
+    top: 15px;
+    right: 20px;
+    z-index: 1000;
+    transition: transform 0.3s;
+}
+
+.theme-toggle:hover {
+    transform: scale(1.2);
+}
+
+body.light-mode .theme-toggle i {
+    color: #121212;
+}
+
+body .theme-toggle i {
+    color: #ffffff;
+}
+
+/* Encabezado */
 header {
     background-color: #008cba;
     color: white;
@@ -14,41 +48,76 @@ header {
     text-align: center;
 }
 
+/* Formulario */
 form {
     max-width: 600px;
     margin: 20px auto;
     padding: 20px;
-    background: white;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background: #1e1e1e;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+    color: #ffffff;
 }
 
+/* Modo Claro */
+body.light-mode form {
+    background: #f5f5f5; /* Fondo más claro */
+    color: #121212; /* Texto oscuro */
+}
+
+/* Inputs y Selects */
 input, select, textarea {
-    width: 100%; /* Ajusta el ancho a ocupar el 100% del contenedor */
-    padding: 6px;
-    margin-top: 0px;
-    margin-bottom: 0px; /* Añade un margen inferior para separar campos */
-    border: 1px solid #050505;
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    margin-bottom: 15px;
+    border: 1px solid #444;
     border-radius: 5px;
-    box-sizing: border-box; /* Asegura que el padding no afecte el ancho total */
+    box-sizing: border-box;
+    background-color: #383838;
+    color: #e0e0e0;
 }
 
-input {
-    background-color: rgba(255, 255, 255, 0.5); /* Hacer semitransparente */
-    z-index: 1; /* Asegúrate de que tenga una prioridad menor */
+/* Placeholder */
+input::placeholder, textarea::placeholder {
+    color: rgba(200, 200, 200, 0.7);
+    opacity: 1;
 }
 
-#contratoArriendo {
-    margin-bottom: 20px; /* Ajusta el valor según el espacio que necesites */
+/* Labels y textos */
+label, p, .radio-group-docs label {
+    color: rgba(220, 220, 220, 0.9);
 }
 
-/* Ajuste adicional para los labels */
-label {
-    display: block; /* Asegura que cada label ocupe una línea completa */
-    margin-bottom: 5px; /* Añade espacio entre el label y el campo */
-    font-weight: bold; /* Resalta el texto del label */
+/* Cambiar a color oscuro en Light Mode */
+body.light-mode label,
+body.light-mode p,
+body.light-mode .radio-group-docs label {
+    color: #121212; /* Negro en Light Mode */
 }
 
+/* Light Mode */
+body.light-mode input,
+body.light-mode select,
+body.light-mode textarea {
+    background-color: #ffffff;
+    color: #121212;
+    border: 1px solid #ccc;
+}
+
+body.light-mode input::placeholder,
+body.light-mode textarea::placeholder {
+    color: rgba(80, 80, 80, 0.7);
+}
+
+/* Foco */
+input:focus, textarea:focus, select:focus {
+    outline: none;
+    border: 1px solid #008cba;
+    background-color: #444;
+}
+
+/* Botones de navegación */
 .nav-buttons {
     display: flex;
     justify-content: space-between;
@@ -69,99 +138,79 @@ label {
     background-color: #005f73;
 }
 
-/* Ocultar todas las secciones por defecto */
+/* Secciones */
 .section {
     display: none;
 }
 
-/* Mostrar solo la sección activa */
 .section.active {
     display: block;
 }
 
-
 /* Barra de progreso */
 .progress-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
-    margin: 60px 0; /* Espacio superior e inferior */
+    width: 60%;
+    max-width: 500px;
+    height: 20px;
+    background-color: #333;
+    border-radius: 10px;
     position: relative;
-    top: 30px; /* Mueve la barra hacia abajo */
+    margin: 20px auto;
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
 }
 
-.progress-bar {
-    position: relative;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 80%;
-    height: 5px; /* Incrementa un poco el grosor */
-    background: linear-gradient(to right, #f3f4f6, #d1d5db); /* Gris claro degradado */
-    border-radius: 3px;
-    margin: 0 auto;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Sombra ligera */
+/* Barra de progreso en Light Mode */
+body.light-mode .progress-container {
+    background-color: #ddd; /* Fondo gris claro */
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.1); /* Sombra más sutil */
 }
 
 #progress-line {
-    position: absolute;
     height: 100%;
-    width: 0%; /* Anime.js se encargará de actualizar */
-    background: linear-gradient(to right, #3b82f6, #0ea5e9); /* Degradado azul */
-    border-radius: 3px;
-    transition: width 0.3s ease-in-out;
+    width: 0%;
+    background: linear-gradient(90deg, #007bff, #00c3ff);
+    transition: width 0.4s ease-in-out;
+    border-radius: 10px;
 }
 
-/* Nodo de progreso */
-.progress-node {
-    position: relative;
-    width: 25px; /* Tamaño del nodo */
-    height: 25px;
-    background-color: #f3f4f6; /* Nodo inactivo */
-    border: 2px solid #d1d5db; /* Borde gris claro */
-    border-radius: 50%;
-    z-index: 2;
-    transition: background-color 0.3s ease, border-color 0.3s ease, transform 0.2s ease-in-out;
-    cursor: pointer;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Sombra ligera */
-}
-
-/* Hover sobre el nodo */
-.progress-node:hover {
-    transform: scale(1.3); /* Aumenta el tamaño */
-}
-
-/* Nodo activo */
-.progress-node.active {
-    background: linear-gradient(to right, #3b82f6, #0ea5e9); /* Azul degradado */
-    border-color: #0ea5e9;
-    transform: scale(1.2); /* Aumenta ligeramente el tamaño */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Sombra más prominente */
-}
-
-/* Etiquetas de los nodos */
-.progress-node::before {
-    content: attr(data-label); /* Muestra el texto de la etiqueta */
+/* Ajuste del porcentaje dentro de la barra */
+#progress-percentage {
     position: absolute;
-    top: 40px; /* Mueve la etiqueta hacia abajo */
+    top: 50%;
     left: 50%;
-    transform: translateX(-50%);
-    font-size: 14px; /* Tamaño de la fuente */
+    transform: translate(-50%, -50%);
     font-weight: bold;
-    color: #374151; /* Texto gris oscuro */
-    white-space: nowrap;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2); /* Sombra para mejorar la legibilidad */
+    font-size: 14px;
+    color: white; /* Por defecto en modo oscuro */
+    transition: color 0.3s ease-in-out;
 }
 
-/* Hover sobre las etiquetas */
-.progress-node:hover::before {
-    color: #0ea5e9; /* Cambia el color de la etiqueta al pasar el cursor */
+/* Light Mode: Ajustar color del porcentaje */
+body.light-mode #progress-percentage {
+    color: #333; /* Color oscuro para contrastar con el fondo */
 }
 
-/* boton enviar*/
+/* Cuando el progreso es 0%, en Light Mode */
+body.light-mode #progress-percentage.low-contrast {
+    color: #555 !important; /* Color más oscuro para que sea visible */
+    background: none !important; /* Elimina cualquier fondo gris */
+    box-shadow: none !important; /* Asegura que no haya sombra */
+    padding: 0 !important; /* Evita cualquier padding extra */
+    border-radius: 0 !important; /* Remueve bordes innecesarios */
+}
+
+/* Cuando el progreso es 0%, fondo oscuro en Light Mode */
+body.light-mode #progress-percentage.low-contrast {
+    color: #ffffff; /* Texto blanco para mejor visibilidad */
+    background-color: rgba(0, 0, 0, 0.5); /* Fondo oscuro leve */
+    padding: 2px 8px;
+    border-radius: 5px;
+}
+
+/* Botón enviar */
 .submit-btn {
-    background-color: #28a745; /* Verde para enviar */
+    background-color: #28a745;
     color: white;
     font-weight: bold;
 }
@@ -170,13 +219,14 @@ label {
     background-color: #218838;
 }
 
+/* Overlay y Spinner */
 .overlay {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.5); /* Fondo semitransparente */
+    background: rgba(0, 0, 0, 0.5);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -184,61 +234,86 @@ label {
 }
 
 /* Spinner */
+/* Contenedor del spinner */
 .spinner {
-    width: 14.4px;
-    height: 14.4px;
-    animation: spinner-o824ag 1.4s infinite linear;
-    position: fixed;
+    position: relative;
+    width: 110px;
+    height: 110px;
+    margin: auto;
+  }
+
+  /* Estilo base para cada engranaje */
+  .gear {
+    width: 60px;
+    height: 60px;
+    color: #008CBA;
+    background: radial-gradient(
+      farthest-side,
+      currentColor calc(100% - 6.7px),
+      transparent calc(100% - 5.6px) 0
+    );
+    -webkit-mask: radial-gradient(
+      farthest-side,
+      transparent calc(100% - 14.6px),
+      currentColor calc(100% - 13.4px)
+    );
+    border-radius: 50%;
+    position: absolute;
+    transform-origin: center;
+  }
+
+  /* Dibujo de los "dientes" del engranaje */
+  .gear::before,
+  .gear::after {
+    content: "";
+    position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 9999; /* Asegura que esté encima de otros elementos */
- }
-
- .spinner div {
-    position: absolute;
     width: 100%;
     height: 100%;
-    background: #008cba; /* Color del spinner */
-    border-radius: 50%;
-    animation: spinner-vse6n7 1.75s infinite ease;
- }
+    background: linear-gradient(currentColor 0 0) center,
+                linear-gradient(currentColor 0 0) center;
+    background-size: 100% 11.2px, 11.2px 100%;
+    background-repeat: no-repeat;
+    transform: translate(-50%, -50%);
+  }
 
- .spinner div:nth-child(1) {
-    --rotation: 90;
- }
+  .gear::after {
+    transform: translate(-50%, -50%) rotate(45deg);
+  }
 
- .spinner div:nth-child(2) {
-    --rotation: 180;
- }
+  /* Posicionamiento y animación de cada engranaje */
+  .gear1 {
+    left: 0;
+    top: 0;
+    animation: rotateCW 2s linear infinite;
+  }
 
- .spinner div:nth-child(3) {
-    --rotation: 270;
- }
+  .gear2 {
+    left: 50px;
+    top: 0;
+    animation: rotateCCW 2s linear infinite;
+  }
 
- .spinner div:nth-child(4) {
-    --rotation: 360;
- }
+  /* Se separa el engranaje inferior del derecho modificando su posición horizontal */
+  .gear3 {
+    left: 0px; /* Valor modificado para aumentar la separación respecto al engranaje de la derecha */
+    top: 50px;
+    animation: rotateCCW 2s linear infinite;
+  }
 
- @keyframes spinner-vse6n7 {
-    0%, 100% {
-       transform: rotate(calc(var(--rotation) * 1deg)) translateY(0);
-    }
+  /* Definición de las animaciones de giro */
+  @keyframes rotateCW {
+    100% { transform: rotate(360deg); }
+  }
 
-    50% {
-       transform: rotate(calc(var(--rotation) * 1deg)) translateY(300%);
-    }
- }
+  @keyframes rotateCCW {
+    100% { transform: rotate(-360deg); }
+  }
 
- @keyframes spinner-o824ag {
-    to {
-       transform: rotate(360deg);
-    }
- }
-
- .hidden {
+.hidden {
     display: none;
- }
+}
 
 /* Mensaje de confirmación */
 #confirmationMessage {
@@ -252,39 +327,59 @@ label {
     text-align: center;
     z-index: 1000;
 }
+
 #confirmationMessage.success {
     background-color: #d4edda;
     color: #155724;
 }
+
 #confirmationMessage.error {
     background-color: #f8d7da;
     color: #721c24;
 }
 
-/* Campo con error */
+/* Estilo para campos con error */
 .input-error {
-    border: 2px solid #dc3545; /* Borde rojo */
-    background-color: #ffe6e6; /* Fondo ligeramente rosado */
+    border: 2px solid #ff4d4d; /* Rojo oscuro más consistente */
+    background-color: #2a1a1a; /* Fondo ligeramente rojizo oscuro */
+    color: #ffb3b3; /* Texto rojo claro */
 }
 
+/* Ajustar placeholders en modo error */
+.input-error::placeholder {
+    color: rgba(255, 179, 179, 0.8); /* Rojo claro para el placeholder */
+}
+
+/* Modo claro - mantener consistencia */
+body.light-mode .input-error {
+    border: 2px solid #ff4d4d;
+    background-color: #ffe6e6;
+    color: #721c24;
+}
+
+body.light-mode .input-error::placeholder {
+    color: rgba(114, 28, 36, 0.7);
+}
+
+/* Ajustar la posición del mensaje de error relativo al campo */
 .input-container {
-    position: relative; /* Contenedor relativo para posicionar el error */
-    margin-bottom: 20px; /* Espaciado entre campos */
+    position: relative;
 }
 
+/* Mensaje de error */
 .error-message {
     position: absolute;
-    top: -6px; /* Ajusta la posición sobre el input */
-    left: 20%; /* Alinea con el borde izquierdo del input */
-    background-color: #ff4d4d; /* Fondo del mensaje */
-    color: white; /* Texto blanco */
-    padding: 5px 10px; /* Espaciado interno */
-    border-radius: 5px; /* Bordes redondeados */
-    font-size: 12px; /* Tamaño del texto */
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Sombra */
-    z-index: 10; /* Asegura que esté por encima de otros elementos */
-    white-space: nowrap; /* Evita que el texto se divida */
+    top: -8px; /* Eleva el mensaje sobre el campo */
+    left: 35%; /* Alinea a la izquierda */
+    background-color: #d32f2f; /* Rojo oscuro */
+    color: white;
+    padding: 6px 12px;
+    border-radius: 5px;
+    font-size: 12px;
+    white-space: nowrap;
+    box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.2);
     display: none; /* Oculto por defecto */
+    z-index: 10; /* Asegura que esté por encima de otros elementos */
 }
 
 /* Flecha debajo del mensaje */
@@ -295,78 +390,50 @@ label {
     left: 10px; /* Ajusta para centrar con el mensaje */
     border-width: 5px;
     border-style: solid;
-    border-color: #ff4d4d transparent transparent transparent; /* Flecha del mismo color que el fondo */
+    border-color: #d32f2f transparent transparent transparent;
 }
 
-.radio-group {
-    display: flex;
-    gap: 20px; /* Espacio entre los radio buttons */
-    justify-content: flex-start; /* Alinear a la izquierda */
-    align-items: center; /* Centrar verticalmente */
-    margin-bottom: 20px;
+/* Asegurar que cada input muestra su mensaje */
+.input-container .input-error ~ .error-message {
+    display: block;
 }
 
-.radio-group label {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 16px;
-    color: #333;
-}
-
-.radio-group input[type="radio"] {
-    accent-color: #007bff; /* Cambiar el color del radio button */
-    margin-right: 5px; /* Separar ligeramente el botón del texto */
-}
-
-
-.radio-group-docs {
-    display: flex;
-    gap: 0px; /* Espaciado entre los botones */
-    justify-content: flex-start; /* Alineación a la izquierda */
-    align-items: left; /* Centrado verticalmente */
-    margin-bottom: 20px;
-}
-
-.radio-group-docs label {
-    display: inline-flex; /* Cambia a inline-flex para mantener el texto junto al botón */
-    align-items: center;
-    font-size: 16px; /* Tamaño de fuente */
-    color: #333;
-    margin: 0; /* Sin márgenes adicionales */
-}
-
-.radio-group-docs input[type="radio"] {
-    margin-right: 5px; /* Espacio mínimo entre el botón y el texto */
-    accent-color: #007bff; /* Cambiar color del botón */
-}
-
-p {
-    margin: 0 0 10px; /* Separar el párrafo de la pregunta */
-    font-weight: bold;
-    font-size: 16px;
-}
-
-.checkbox-group {
-    display: flex;
-    flex-direction: column;
-    gap: 8px; /* Espacio entre cada opción */
-}
-
-.checkbox-group div {
-    display: flex;
-    align-items: center;
-    gap: 8px; /* Espaciado entre el checkbox y el label */
-}
-
-.checkbox-group input[type="checkbox"] {
-    width: 18px;
-    height: 18px;
-    margin-right: 5px;
-}
-
+/* Responsivo */
 @media (max-width: 768px) {
-    .progress-node span {
-        display: none; /* Oculta los textos en pantallas pequeñas */
+    .progress-container {
+        width: 80%;
+        height: 15px;
     }
+    #progress-percentage {
+        font-size: 12px;
+    }
+}
+
+.radio-group, .radio-group-docs {
+    display: flex;
+    align-items: center;
+    gap: 15px; /* Espacio uniforme */
+    margin-bottom: 10px; /* Agrega espacio debajo del grupo */
+    margin-top: 10px; /* Agrega espacio debajo del grupo */
+}
+
+.radio-group label, .radio-group-docs label {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 16px;
+    color: #ffffff; /* Para modo oscuro */
+}
+
+body.light-mode .radio-group label,
+body.light-mode .radio-group-docs label {
+    color: #121212; /* Para modo claro */
+}
+
+.radio-group input[type="radio"],
+.radio-group-docs input[type="radio"] {
+    margin: 0;
+    width: 16px;
+    height: 16px;
+    accent-color: #007bff;
 }
