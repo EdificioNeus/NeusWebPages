@@ -124,14 +124,17 @@ document.addEventListener("DOMContentLoaded", () => {
     document.querySelectorAll('input[name="tieneEstacionamiento"]').forEach((radio) => {
         radio.addEventListener("change", function () {
             console.log(`Radio cambiado: tieneEstacionamiento, valor: ${this.value}`);
+            const cantidadEstacionamientos = document.getElementById("cantidadEstacionamientos");
+
             if (this.value === "si") {
                 toggleConditionalInputs(this.value, {
                     showContainerId: "datosEstacionamiento",
                     showFields: ["cantidadEstacionamientos"],
                     hideFields: [],
                 });
-                const cantidadEstacionamientos = document.getElementById("cantidadEstacionamientos");
+
                 if (cantidadEstacionamientos) {
+                    cantidadEstacionamientos.value = cantidadEstacionamientos.value || "1"; // Establecer 1 por defecto
                     cantidadEstacionamientos.dispatchEvent(new Event("input"));
                 }
             } else if (this.value === "no") {
@@ -140,6 +143,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     hideFields: ["cantidadEstacionamientos"],
                     showFields: [],
                 });
+
                 const camposEstacionamientos = document.getElementById("camposEstacionamientos");
                 if (camposEstacionamientos) {
                     camposEstacionamientos.innerHTML = "";
@@ -247,6 +251,40 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
+    // Eventos para alternar la sección de datos de Bicicletas
+    document.querySelectorAll('input[name="tieneBicicleta"]').forEach((radio) => {
+        radio.addEventListener("change", function () {
+            console.log(`Radio cambiado: tieneBicicleta, valor: ${this.value}`);
+            if (this.value === "si") {
+                toggleConditionalInputs(this.value, {
+                    showContainerId: "datosBicicletas",
+                    showFields: ["cantidadBicicletas"],
+                    hideFields: [],
+                });
+
+                // Obtener el campo cantidadBicicletas y asignar valor predeterminado
+                const cantidadBicicletas = document.getElementById("cantidadBicicletas");
+                if (cantidadBicicletas) {
+                    if (!cantidadBicicletas.value || cantidadBicicletas.value === "0") {
+                        cantidadBicicletas.value = "1"; // Asignar el valor predeterminado
+                    }
+                    cantidadBicicletas.dispatchEvent(new Event("input")); // Disparar evento para generar campos
+                }
+            } else if (this.value === "no") {
+                toggleConditionalInputs(this.value, {
+                    hideContainerId: "datosBicicletas",
+                    hideFields: ["cantidadBicicletas"],
+                    showFields: [],
+                });
+                const camposBicicletas = document.getElementById("camposBicicletas");
+                if (camposBicicletas)
+                {
+                    camposBicicletas.innerHTML = ""; // Limpiar campos dinámicos de autos
+                }
+            }
+        });
+    });
+
     // Eventos para alternar entre Propietario y Arrendatario
     document.querySelectorAll('input[name="tipoPropietario"]').forEach((radio) => {
         radio.addEventListener("change", function () {
@@ -279,15 +317,15 @@ document.addEventListener("DOMContentLoaded", () => {
             for (let i = 1; i <= cantidad; i++) {
                 const bodegaContainer = document.createElement("div");
                 bodegaContainer.classList.add("bodega-container");
-            
+
                 // Agregar título para cada bodega
                 const title = document.createElement("h3");
                 title.textContent = `Bodega ${i}`;
                 bodegaContainer.appendChild(title);
-            
+
                 const bodegaField = createDynamicField(i, "Número de Bodega", "numeroBodega",true);
                 bodegaContainer.appendChild(bodegaField);
-            
+
                 camposBodegas.appendChild(bodegaContainer);
             }
         }
@@ -297,25 +335,48 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("cantidadEstacionamientos").addEventListener("input", function () {
         const cantidad = parseInt(this.value, 10) || 0;
         const camposEstacionamientos = document.getElementById("camposEstacionamientos");
+
         console.log(`Generando campos para ${cantidad} estacionamientos.`);
+
+        // Verifica si ya se han generado los campos para evitar duplicación
+        if (camposEstacionamientos.children.length === cantidad) {
+            console.log("Los campos ya están generados, evitando duplicación.");
+            return;
+        }
 
         camposEstacionamientos.innerHTML = "";
 
         if (cantidad > 0 && cantidad <= 10) {
-            for (let i = 1; i <= cantidad; i++) {
-                const estacionamientoContainer = document.createElement("div");
-                estacionamientoContainer.classList.add("estacionamiento-container");
-            
-                // Agregar título para cada estacionamiento
-                const title = document.createElement("h3");
-                title.textContent = `Estacionamiento ${i}`;
-                estacionamientoContainer.appendChild(title);
-            
-                const estacionamientoField = createDynamicField(i, "Número de Estacionamiento", "numeroEstacionamiento",true);
-                estacionamientoContainer.appendChild(estacionamientoField);
-            
-                camposEstacionamientos.appendChild(estacionamientoContainer);
-            }
+            fetch('files/estacionamientos.json')
+                .then(response => response.json())
+                .then(estacionamientosDisponibles => {
+                    for (let i = 1; i <= cantidad; i++) {
+                        const estacionamientoContainer = document.createElement("div");
+                        estacionamientoContainer.classList.add("estacionamiento-container");
+
+                        // Agregar título para cada estacionamiento
+                        const title = document.createElement("h3");
+                        title.textContent = `Estacionamiento ${i}`;
+                        estacionamientoContainer.appendChild(title);
+
+                        // Crear el select de estacionamientos con opciones desde el JSON
+                        const estacionamientoField = createDynamicField(i, "Número de Estacionamiento", "numeroEstacionamiento", true, "select", estacionamientosDisponibles);
+
+                        // Crear el radio button de "¿Tiene Control Portón?"
+                        const tieneControlPorton = createDynamicRadioGroup(i, "¿Tiene Control Portón?", "controlPorton", [
+                            { value: "si", label: "Sí" },
+                            { value: "no", label: "No", checked: true }
+                        ], true);
+
+                        estacionamientoContainer.appendChild(estacionamientoField);
+                        estacionamientoContainer.appendChild(tieneControlPorton);
+
+                        camposEstacionamientos.appendChild(estacionamientoContainer);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error cargando los estacionamientos:', error);
+                });
         }
     });
 
@@ -335,7 +396,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 // Agregar el título del auto
                 const title = document.createElement("h3");
-                title.textContent = `Auto ${i}`;
+                title.textContent = `Vehiculo ${i}`;
                 autoContainer.appendChild(title);
 
                 // Crear campos dinámicos: Marca, Modelo, Color, Patente
@@ -345,6 +406,11 @@ document.addEventListener("DOMContentLoaded", () => {
                 const patenteField = createDynamicField(i, "Patente", "patenteAuto",true);
 
                 // Agregar los campos al contenedor del auto
+                const tipoRadioGroup = createDynamicRadioGroup(i, "¿Tipo de vehiculo?", "tipoVehiculo", [
+                    { value: "auto", label: "Auto" },
+                    { value: "moto", label: "Moto" }
+                ], true);
+                autoContainer.appendChild(tipoRadioGroup);
                 autoContainer.appendChild(marcaField);
                 autoContainer.appendChild(modeloField);
                 autoContainer.appendChild(colorField);
@@ -371,37 +437,91 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (cantidad > 0 && cantidad <= 10) {
             for (let i = 1; i <= cantidad; i++) {
-                // Crear contenedor para cada auto
                 const residenteContainer = document.createElement("div");
                 residenteContainer.classList.add("residente-container");
 
-                // Agregar el título del auto
+                // Título del residente
                 const title = document.createElement("h3");
                 title.textContent = `Residente ${i}`;
                 residenteContainer.appendChild(title);
 
-                // Crear campos dinámicos: Marca, Modelo, Color, Patente
-                const nombresField = createDynamicField(i, "Nombres", "nombreResidente",true);
-                const apellidosField = createDynamicField(i, "Apellidos", "apellidoResidente",true);
-                const identificacionField = createDynamicField(i, "Nº identificación", "identificacionResidente",true);
-                const telefonoField = createDynamicField(i, "Telefono", "telefonoResidente",true, "tel");
-                const correoField = createDynamicField(i, "Correo", "correoResidente","email");
+                // Campos básicos
+                const nombresField = createDynamicField(i, "Nombres", "nombreResidente", true);
+                const apellidosField = createDynamicField(i, "Apellidos", "apellidoResidente", true);
+                const edadField = createDynamicField(i, "Edad", "edadResidente", true, "number", "0", "99");
+                const identificacionField = createDynamicField(i, "Nº identificación", "identificacionResidente", true);
+                const registroBiometrico = createDynamicRadioGroup(i, "¿Registro en Huellero?", "registroHuellero", [
+                    { value: "si", label: "Sí" },
+                    { value: "no", label: "No" }
+                ], true);
+                const telefonoField = createDynamicField(i, "Teléfono", "telefonoResidente", true, "tel");
+                const correoField = createDynamicField(i, "Correo", "correoResidente", "email");
                 const parentescoField = createDynamicField(i, "Parentesco", "parentescoResidente", false);
 
-                // Agregar los campos al contenedor del auto
+                // Pregunta sobre necesidades especiales
+                const necesitaAdaptacionContainer = document.createElement("div");
+                necesitaAdaptacionContainer.classList.add("input-container");
+
+                const necesitaAdaptacionLabel = document.createElement("label");
+                necesitaAdaptacionLabel.textContent = "¿Requiere alguna adaptación o asistencia especial?";
+
+                const necesitaAdaptacionRadios = createDynamicRadioGroup(i, "", `necesitaAdaptacion_${i}`, [
+                    { value: "si", label: "Sí" },
+                    { value: "no", label: "No", checked: true }
+                ], true);
+
+                necesitaAdaptacionContainer.appendChild(necesitaAdaptacionLabel);
+                necesitaAdaptacionContainer.appendChild(necesitaAdaptacionRadios);
+
+                // Contenedor de necesidades especiales (oculto por defecto)
+                const necesidadesContainer = document.createElement("div");
+                necesidadesContainer.id = `necesidadesEspecialesContainer_${i}`;
+                necesidadesContainer.classList.add("hidden");
+
+                const necesidadesCheckbox = createDynamicCheckboxGroup(i, "Seleccione las necesidades especiales:", `necesidadesResidente_${i}`, [
+                    { value: "discapacidad_visual", label: "Discapacidad visual" },
+                    { value: "discapacidad_auditiva", label: "Discapacidad auditiva" },
+                    { value: "discapacidad_motriz", label: "Discapacidad motriz" },
+                    { value: "discapacidad_cognitiva", label: "Discapacidad cognitiva" },
+                    { value: "trastorno_habla", label: "Trastorno del habla" },
+                    { value: "condicion_medica", label: "Condición médica crónica" },
+                    { value: "condicion_psiquiatrica", label: "Condición psiquiátrica" },
+                    { value: "alergias_severas", label: "Alergias severas" },
+                    { value: "sensibilidad_ambiental", label: "Sensibilidad ambiental" },
+                    { value: "otras", label: "Otras (especificar en comentarios)" }
+                ]);
+
+                necesidadesContainer.appendChild(necesidadesCheckbox);
+
+                // Evento para mostrar u ocultar necesidades especiales
+                necesitaAdaptacionRadios.querySelectorAll("input").forEach(radio => {
+                    radio.addEventListener("change", function () {
+                        if (this.value === "si") {
+                            necesidadesContainer.classList.remove("hidden");
+                        } else {
+                            necesidadesContainer.classList.add("hidden");
+                        }
+                    });
+                });
+
+                // Agregar los elementos al contenedor del residente
                 residenteContainer.appendChild(nombresField);
                 residenteContainer.appendChild(apellidosField);
+                residenteContainer.appendChild(edadField);
                 residenteContainer.appendChild(identificacionField);
+                residenteContainer.appendChild(registroBiometrico);
                 residenteContainer.appendChild(telefonoField);
                 residenteContainer.appendChild(correoField);
                 residenteContainer.appendChild(parentescoField);
+                residenteContainer.appendChild(necesitaAdaptacionContainer);
+                residenteContainer.appendChild(necesidadesContainer);
 
-                // Añadir el contenedor completo al DOM
+                // Agregar el contenedor completo
                 camposResidentes.appendChild(residenteContainer);
             }
         } else if (cantidad > 10) {
             const error = document.createElement("p");
-            error.textContent = "Máximo 10 autos permitidos";
+            error.textContent = "Máximo 10 residentes permitidos";
             error.style.color = "red";
             camposResidentes.appendChild(error);
         }
@@ -429,10 +549,15 @@ document.addEventListener("DOMContentLoaded", () => {
                 // Crear campos dinámicos: Marca, Modelo, Color, Patente
                 const razaField = createDynamicField(i, "Raza", "razaMascota",true);
                 const nombreField = createDynamicField(i, "Nombre", "nombreMascota",false);
+                const vacunasRadioGroup = createDynamicRadioGroup(i, "¿Tiene vacunas al día?", "vacunasMascota", [
+                    { value: "si", label: "Sí" },
+                    { value: "no", label: "No" }
+                ], true);
 
                 // Agregar los campos al contenedor del Mascota
                 mascotaContainer.appendChild(razaField);
                 mascotaContainer.appendChild(nombreField);
+                mascotaContainer.appendChild(vacunasRadioGroup);
 
                 // Añadir el contenedor completo al DOM
                 camposMascotas.appendChild(mascotaContainer);
@@ -442,6 +567,42 @@ document.addEventListener("DOMContentLoaded", () => {
             error.textContent = "Máximo 10 mascotas permitidos";
             error.style.color = "red";
             camposMascotas.appendChild(error);
+        }
+    });
+
+    // Generar dinámicamente los campos de Bicicletas según la cantidad ingresada
+    document.getElementById("cantidadBicicletas").addEventListener("input", function () {
+        const cantidad = parseInt(this.value, 10) || 0;
+        const camposBicicletas = document.getElementById("camposBicicletas");
+        console.log(`Generando campos para ${cantidad} Bicicletas.`);
+
+        camposBicicletas.innerHTML = "";
+
+        if (cantidad > 0 && cantidad <= 10) {
+            for (let i = 1; i <= cantidad; i++) {
+
+                const bicicletaContainer = document.createElement("div");
+                bicicletaContainer.classList.add("bicicleta-container");
+
+                const title = document.createElement("h3");
+                title.textContent = `Bicicleta ${i}`;
+                bicicletaContainer.appendChild(title);
+
+                const marcaBicicleta = createDynamicField(i, "Marca", "marcaBicicleta",true);
+                const colorBicicleta = createDynamicField(i, "Color", "colorBicicleta",false);
+                const numBicicletero = createDynamicField(i, "Bicicletero", "bicicleteroBicicleta",false, "number", "1", "10");
+
+                bicicletaContainer.appendChild(marcaBicicleta);
+                bicicletaContainer.appendChild(colorBicicleta);
+                bicicletaContainer.appendChild(numBicicletero);
+
+                camposBicicletas.appendChild(bicicletaContainer);
+            }
+        } else if (cantidad > 10) {
+            const error = document.createElement("p");
+            error.textContent = "Máximo 10 bicicletas permitidos";
+            error.style.color = "red";
+            camposBicicletas.appendChild(error);
         }
     });
 
@@ -493,8 +654,18 @@ document.addEventListener("DOMContentLoaded", () => {
         console.warn("El campo cantidadMascotas no se encontró en el DOM.");
     }
 
+    const cantidadBicicletas = document.getElementById("cantidadBicicletas");
+    if (cantidadBicicletas) {
+        if (!cantidadBicicletas.value || cantidadBicicletas.value === "0") {
+            cantidadBicicletas.value = "1"; // Establecer valor predeterminado si no está definido
+        }
+        cantidadBicicletas.dispatchEvent(new Event("input"));
+    } else {
+        console.warn("El campo cantidadBicicletas no se encontró en el DOM.");
+    }
+
     // Inicializar estado inicial de las secciones
-    document.querySelectorAll('input[name="documentType"]:checked, input[name="tieneBodega"]:checked, input[name="tieneEstacionamiento"]:checked, input[name="tieneAuto"]:checked, input[name="tieneMascota"]:checked, , input[name="tieneResidente"]:checked')
+    document.querySelectorAll('input[name="documentType"]:checked, input[name="tieneBodega"]:checked, input[name="tieneEstacionamiento"]:checked, input[name="tieneAuto"]:checked, input[name="tieneMascota"]:checked, input[name="tieneResidente"]:checked, input[name="tieneBicicleta"]:checked' )
         .forEach(option => {
             console.log(`Inicializando opción seleccionada: ${option.name} - ${option.value}`);
             option.dispatchEvent(new Event("change"));
@@ -502,7 +673,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 // Función para crear un campo dinámico reutilizable
-function createDynamicField(index, labelName, idPrefix, required = true, type = "Text") {
+function createDynamicField(index, labelName, idPrefix, required = true, type = "text", options = null) {
     const container = document.createElement("div");
     container.classList.add("input-container");
 
@@ -510,16 +681,39 @@ function createDynamicField(index, labelName, idPrefix, required = true, type = 
     label.setAttribute("for", `${idPrefix}${index}`);
     label.textContent = `${labelName}`;
 
-    const input = document.createElement("input");
-    input.setAttribute("type", type);
-    input.setAttribute("id", `${idPrefix}${index}`);
-    input.setAttribute("name", `${idPrefix}${index}`);
-    
-    // Aplicar el atributo required si está configurado como true
+    let input;
+
+    if (options && type === "select") {
+        // Si hay opciones, crear un <select>
+        input = document.createElement("select");
+        input.setAttribute("id", `${idPrefix}${index}`);
+        input.setAttribute("name", `${idPrefix}${index}`);
+
+        // Opción por defecto
+        const defaultOption = document.createElement("option");
+        defaultOption.value = "";
+        defaultOption.textContent = `Seleccione ${labelName}`;
+        defaultOption.disabled = true;
+        defaultOption.selected = true;
+        input.appendChild(defaultOption);
+
+        // Agregar opciones del JSON
+        options.forEach(optionValue => {
+            const option = document.createElement("option");
+            option.value = optionValue;
+            option.textContent = optionValue;
+            input.appendChild(option);
+        });
+    } else {
+        // Si no hay opciones, crear un <input>
+        input = document.createElement("input");
+        input.setAttribute("type", type);
+        input.setAttribute("id", `${idPrefix}${index}`);
+        input.setAttribute("name", `${idPrefix}${index}`);
+    }
+
     if (required) {
         input.setAttribute("required", "true");
-    } else {
-        input.removeAttribute("required");
     }
 
     const errorMessage = document.createElement("span");
@@ -529,6 +723,136 @@ function createDynamicField(index, labelName, idPrefix, required = true, type = 
     container.appendChild(label);
     container.appendChild(input);
     container.appendChild(errorMessage);
+
+    return container;
+}
+
+function createDynamicRadioGroup(index, labelName, idPrefix, options, required = true) {
+    const container = document.createElement("div");
+    container.classList.add("input-container");
+
+    const label = document.createElement("label");
+    label.textContent = labelName;
+
+    const radioGroup = document.createElement("div");
+    radioGroup.classList.add("radio-group");
+
+    options.forEach((option, idx) => {
+        const radioContainer = document.createElement("div");
+
+        const input = document.createElement("input");
+        input.setAttribute("type", "radio");
+        input.setAttribute("id", `${idPrefix}_${index}_${idx}`);
+        input.setAttribute("name", `${idPrefix}_${index}`);
+        input.setAttribute("value", option.value);
+
+        // Verificar si la opción tiene `checked: true`, si no hay ninguna, marcar la primera por defecto
+        if (option.checked === true) {
+            input.checked = true;
+        } else if (!options.some(opt => opt.checked) && idx === 0) {
+            input.checked = true; // Si ninguna opción tiene `checked`, marcar la primera por defecto
+        }
+
+        if (required) {
+            input.setAttribute("required", "true");
+        }
+
+        const radioLabel = document.createElement("label");
+        radioLabel.setAttribute("for", `${idPrefix}_${index}_${idx}`);
+        radioLabel.textContent = option.label;
+
+        radioContainer.appendChild(input);
+        radioContainer.appendChild(radioLabel);
+        radioGroup.appendChild(radioContainer);
+    });
+
+    container.appendChild(label);
+    container.appendChild(radioGroup);
+
+    return container;
+}
+
+function createDynamicCheckboxGroup(index, labelName, idPrefix, options) {
+    const container = document.createElement("div");
+    container.classList.add("input-container");
+
+    const label = document.createElement("label");
+    label.textContent = labelName;
+
+    const checkboxGroup = document.createElement("div");
+    checkboxGroup.classList.add("checkbox-group");
+
+    let otrasCheckboxId = `${idPrefix}_${index}_otras`; // ID único para "Otras"
+    let otrasInputId = `${idPrefix}_${index}_comentario`; // ID del input de texto
+
+    options.forEach((option, idx) => {
+        const checkboxContainer = document.createElement("div");
+        checkboxContainer.classList.add("checkbox-item");
+
+        const input = document.createElement("input");
+        input.setAttribute("type", "checkbox");
+        input.setAttribute("id", `${idPrefix}_${index}_${idx}`);
+        input.setAttribute("name", `${idPrefix}_${index}[]`);
+        input.setAttribute("value", option.value);
+
+        // Si esta opción es "Otras", asignamos el ID específico
+        if (option.value === "otras") {
+            input.setAttribute("id", otrasCheckboxId);
+        }
+
+        const checkboxLabel = document.createElement("label");
+        checkboxLabel.setAttribute("for", `${idPrefix}_${index}_${idx}`);
+        checkboxLabel.textContent = option.label;
+
+        checkboxContainer.appendChild(input);
+        checkboxContainer.appendChild(checkboxLabel);
+        checkboxGroup.appendChild(checkboxContainer);
+    });
+
+    // Campo de entrada para "Otras"
+    const otrasContainer = document.createElement("div");
+    otrasContainer.classList.add("otras-container", "hidden"); // Se oculta por defecto
+
+    const otrasInputLabel = document.createElement("label");
+    otrasInputLabel.setAttribute("for", otrasInputId);
+    otrasInputLabel.textContent = "Especifique otra necesidad";
+
+    const otrasInput = document.createElement("input");
+    otrasInput.setAttribute("type", "text");
+    otrasInput.setAttribute("id", otrasInputId);
+    otrasInput.setAttribute("name", otrasInputId);
+    otrasInput.setAttribute("placeholder", "Ingrese la necesidad...");
+    otrasInput.setAttribute("disabled", "true"); // Inicialmente deshabilitado
+
+    otrasContainer.appendChild(otrasInputLabel);
+    otrasContainer.appendChild(otrasInput);
+    checkboxGroup.appendChild(otrasContainer);
+
+    container.appendChild(label);
+    container.appendChild(checkboxGroup);
+
+    // Aseguramos que el evento se agregue correctamente
+    setTimeout(() => {
+        const otrasCheckbox = document.getElementById(otrasCheckboxId);
+        const otrasTextInput = document.getElementById(otrasInputId);
+
+        if (otrasCheckbox && otrasTextInput) {
+            otrasCheckbox.addEventListener("change", function () {
+                if (this.checked) {
+                    otrasContainer.classList.remove("hidden");
+                    otrasTextInput.removeAttribute("disabled"); // Habilitar input
+                    otrasTextInput.setAttribute("required", "true"); // Hacerlo requerido
+                } else {
+                    otrasContainer.classList.add("hidden");
+                    otrasTextInput.setAttribute("disabled", "true"); // Deshabilitar input
+                    otrasTextInput.removeAttribute("required"); // Quitar requerimiento
+                    otrasTextInput.value = ""; // Limpiar el campo si se deselecciona
+                }
+            });
+        } else {
+            console.warn("No se encontró el checkbox de 'Otras' o el campo de texto.");
+        }
+    }, 100); // Retrasa la ejecución para asegurar que los elementos existan en el DOM
 
     return container;
 }
