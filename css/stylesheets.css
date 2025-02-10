@@ -194,7 +194,7 @@ label {
     transform: translate(-50%, -50%);
     z-index: 9999; /* Asegura que esté encima de otros elementos */
  }
- 
+
  .spinner div {
     position: absolute;
     width: 100%;
@@ -203,39 +203,39 @@ label {
     border-radius: 50%;
     animation: spinner-vse6n7 1.75s infinite ease;
  }
- 
+
  .spinner div:nth-child(1) {
     --rotation: 90;
  }
- 
+
  .spinner div:nth-child(2) {
     --rotation: 180;
  }
- 
+
  .spinner div:nth-child(3) {
     --rotation: 270;
  }
- 
+
  .spinner div:nth-child(4) {
     --rotation: 360;
  }
- 
+
  @keyframes spinner-vse6n7 {
     0%, 100% {
        transform: rotate(calc(var(--rotation) * 1deg)) translateY(0);
     }
- 
+
     50% {
        transform: rotate(calc(var(--rotation) * 1deg)) translateY(300%);
     }
  }
- 
+
  @keyframes spinner-o824ag {
     to {
        transform: rotate(360deg);
     }
  }
- 
+
  .hidden {
     display: none;
  }
@@ -345,4 +345,22 @@ p {
     margin: 0 0 10px; /* Separar el párrafo de la pregunta */
     font-weight: bold;
     font-size: 16px;
+}
+
+.checkbox-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px; /* Espacio entre cada opción */
+}
+
+.checkbox-group div {
+    display: flex;
+    align-items: center;
+    gap: 8px; /* Espaciado entre el checkbox y el label */
+}
+
+.checkbox-group input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    margin-right: 5px;
 }

@@ -85,9 +85,17 @@ prevButton.addEventListener('click', () => {
 // Habilitar clic en los nodos de la barra de progreso
 progressNodes.forEach((node, index) => {
     node.addEventListener('click', () => {
-        if (index !== currentStep) {
+        if (index < currentStep) {
+            // Permitir regresar a secciones anteriores
             currentStep = index;
             showSection(currentStep);
+        } else if (index > currentStep) {
+            // Intentando avanzar, validar la sección actual primero
+            let isValid = window.validateSection();
+            if (isValid) {
+                currentStep = index;
+                showSection(currentStep);
+            }
         }
     });
 });

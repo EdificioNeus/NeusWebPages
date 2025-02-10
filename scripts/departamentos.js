@@ -93,31 +93,31 @@ document.addEventListener('DOMContentLoaded', () => {
     departamentoSelect.addEventListener('change', () => {
         const selectedDepartamento = departamentoSelect.value;
         console.log(`Departamento seleccionado: ${selectedDepartamento}`);
-    
+
         if (selectedDepartamento) {
             const overlay = document.getElementById('overlay');
             const spinner = document.getElementById('spinner');
-    
+
             // Mostrar spinner
             console.log('Mostrando overlay y spinner...');
             overlay.classList.remove('hidden');
             spinner.classList.remove('hidden');
-    
+
             // Consulta al App Script para verificar el departamento
-            fetch(`https://script.google.com/macros/s/AKfycbyDGCaCQtEsn09UV5oolKmChuR6CjYV3TGX85wgYcfg5v0MbZkcZuHtUrYEVAzY_d6_/exec?departamento=${encodeURIComponent(selectedDepartamento)}`)
+            fetch(`https://script.google.com/macros/s/AKfycbzeEjm52NQSz-4aatvdS5Rlr9RBfcypJwVtXLX0Kb25a5YirKwxBhUoacyUJL2g6Qy7/exec?departamento=${encodeURIComponent(selectedDepartamento)}`)
                 .then((response) => {
                     console.log('Respuesta recibida del servidor:', response);
                     return response.json();
                 })
                 .then((data) => {
                     console.log('Datos procesados:', data);
-    
+
                     // Ocultar spinner
                     console.log('Ocultando overlay y spinner...');
                     overlay.classList.add('hidden');
                     spinner.classList.add('hidden');
-    
-                    if (data.status === 'success' && data.exists) 
+
+                    if (data.status === 'success' && data.exists)
                         {
                         console.log(`El departamento ${selectedDepartamento} ya tiene datos registrados.`);
                         showConfirmationMessage(`El departamento ${selectedDepartamento} ya tiene datos registrados.`,'error');
@@ -136,6 +136,6 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log('No se seleccionó ningún departamento.');
         }
     });
-    
+
 });
 

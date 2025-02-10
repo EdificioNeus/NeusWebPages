@@ -51,9 +51,14 @@ function validateField(event) {
     }
 
     // 5. Validar RUT (solo si tiene el atributo data-validation="rut")
-    if (isValid && field.dataset.validation === "rut" && typeof Fn !== "undefined" && !Fn.validaRut(field.value.trim())) {
-        isValid = false;
-        message = "RUT inválido";
+    if (isValid && field.dataset.validation === "rut" && typeof Fn !== "undefined") {
+        // Normalizar el RUT (eliminar puntos y mayúsculas en la K final)
+        let normalizedRut = field.value.replace(/\./g, '').replace(/-/g, '-').toLowerCase();
+
+        if (!Fn.validaRut(normalizedRut)) {
+            isValid = false;
+            message = "RUT inválido";
+        }
     }
 
     // Mostrar/ocultar mensajes de error
