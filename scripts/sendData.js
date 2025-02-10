@@ -206,7 +206,7 @@ document.getElementById("registroForm").addEventListener("submit", function (e) 
 
     function enviarDatos(fetchOptions) {
 
-        try {
+        /*try {
             const jsonData = JSON.parse(fetchOptions.body);
             localStorage.setItem("debug_last_sent_json", JSON.stringify(jsonData, null, 2));
             console.log("JSON guardado en localStorage para depuración.");
@@ -215,7 +215,7 @@ document.getElementById("registroForm").addEventListener("submit", function (e) 
         }
 
         // También permitir la descarga del JSON como un archivo para depuración
-        guardarJSONComoArchivo(fetchOptions.body);
+        guardarJSONComoArchivo(fetchOptions.body);*/
 
         fetch(url, fetchOptions)
             .then((response) => {
