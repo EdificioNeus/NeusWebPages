@@ -577,3 +577,57 @@ body.light-mode .radio-group-docs label {
         font-size: 1.2rem; /* Reduce aún más en móviles */
     }
 }
+
+/* Contenedor de checkboxes */
+.checkbox-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px; /* Espaciado uniforme */
+    margin-top: 10px;
+}
+
+/* Cada checkbox con su respectiva etiqueta */
+.checkbox-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 16px;
+}
+
+/* Tamaño del checkbox */
+.checkbox-item input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: #008cba; /* Azul */
+    cursor: pointer;
+}
+
+/* Etiquetas alineadas correctamente */
+.checkbox-item label {
+    color: #ffffff; /* Texto blanco para modo oscuro */
+}
+
+/* Light Mode */
+body.light-mode .checkbox-item label {
+    color: #121212; /* Texto oscuro para modo claro */
+}
+
+/* Estilos para el input de "Otras" */
+.otras-container {
+    margin-left: 25px; /* Alineación con los otros checkboxes */
+}
+
+/* Ocultar campo de "Otras" por defecto */
+.hidden {
+    display: none;
+}
+
+/* Asegurar que el campo de texto para "Otras" sea consistente */
+.otras-container input {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
