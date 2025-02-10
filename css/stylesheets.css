@@ -364,3 +364,9 @@ p {
     height: 18px;
     margin-right: 5px;
 }
+
+@media (max-width: 768px) {
+    .progress-node span {
+        display: none; /* Oculta los textos en pantallas pequeñas */
+    }
+}
