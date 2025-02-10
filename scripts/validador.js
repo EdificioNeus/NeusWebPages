@@ -50,10 +50,10 @@ function validateField(event) {
         }
     }
 
-    // 5. Validar RUT (solo si tiene el atributo data-validation="rut")
+    // Validar RUT (solo si tiene el atributo data-validation="rut")
     if (isValid && field.dataset.validation === "rut" && typeof Fn !== "undefined") {
-        // Normalizar el RUT (eliminar puntos y mayúsculas en la K final)
         let normalizedRut = field.value.replace(/\./g, '').replace(/-/g, '-').toLowerCase();
+        console.log("Validando RUT:", normalizedRut); // <-- Agregar este log para depuración
 
         if (!Fn.validaRut(normalizedRut)) {
             isValid = false;

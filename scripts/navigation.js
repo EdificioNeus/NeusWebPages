@@ -2,28 +2,22 @@
 let currentStep = 0; // Inicialmente en la primera etapa
 const sections = document.querySelectorAll('.section');
 const progressLine = document.getElementById('progress-line');
-const progressNodes = document.querySelectorAll('.progress-node');
+const progressPercentage = document.getElementById('progress-percentage'); // Texto del porcentaje
 const nextButton = document.getElementById('nextBtn');
 const prevButton = document.getElementById('prevBtn');
 
 // Función para mostrar la sección actual
 function showSection(index) {
     sections.forEach((section, i) => {
-        section.classList.toggle("active", i === index); // Mostrar la sección activa
+        section.classList.toggle("active", i === index);
     });
 
-    updateProgress(index); // Actualizar la barra de progreso
+    updateProgress(index); // Actualizar barra de progreso
 
-    // Limpiar errores de validación al cambiar de sección
-    const currentSection = sections[index];
-    const errorFields = currentSection.querySelectorAll(".input-error");
-    errorFields.forEach((field) => {
-        field.classList.remove("input-error");
-        const errorMessage = field.nextElementSibling;
-        if (errorMessage) errorMessage.style.display = "none";
-    });
+    // Ocultar el botón "Anterior" en la primera sección
+    prevButton.style.display = index === 0 ? "none" : "block";
 
-    // Cambiar el texto y la acción del botón en la última sección
+    // Cambiar el texto del botón "Siguiente" en la última sección
     if (index === sections.length - 1) {
         nextButton.textContent = "Enviar datos";
         nextButton.dataset.action = "submit";
@@ -31,29 +25,38 @@ function showSection(index) {
         nextButton.textContent = "Siguiente";
         nextButton.dataset.action = "next";
     }
-
-    // Mostrar/Ocultar botón "Anterior"
-    prevButton.style.display = index === 0 ? "none" : "block";
 }
 
-// Actualizar la barra de progreso
 function updateProgress(step) {
-    const progressPercentage = (step / (progressNodes.length - 1)) * 100;
+    const totalSteps = sections.length - 1;
+    if (step < 0 || step > totalSteps) return;
+
+    const progress = Math.round((step / totalSteps) * 100);
+    console.log(`✔️ Paso actual: ${step} / ${totalSteps} (${progress}%)`);
 
     anime({
         targets: progressLine,
-        width: `${progressPercentage}%`,
+        width: `${progress}%`,
         easing: 'easeInOutQuad',
         duration: 500,
     });
 
-    progressNodes.forEach((node, index) => {
-        if (index <= step) {
-            node.classList.add('active');
+    if (progressPercentage) {
+        progressPercentage.textContent = `${progress}%`;
+
+        const isLightMode = document.body.classList.contains("light-mode");
+
+        if (progress === 0) {
+            progressPercentage.classList.add("low-contrast");
         } else {
-            node.classList.remove('active');
+            progressPercentage.classList.remove("low-contrast");
         }
-    });
+
+        // Cambia SOLO el color del texto
+        progressPercentage.style.color = isLightMode
+            ? (progress === 0 ? "#555" : "#222") // Más oscuro en 0%
+            : (progress > 50 ? "#ffffff" : "#e0e0e0"); // Ajuste en Dark Mode
+    }
 }
 
 // Evento del botón "Siguiente"
@@ -82,23 +85,14 @@ prevButton.addEventListener('click', () => {
     }
 });
 
-// Habilitar clic en los nodos de la barra de progreso
-progressNodes.forEach((node, index) => {
-    node.addEventListener('click', () => {
-        if (index < currentStep) {
-            // Permitir regresar a secciones anteriores
-            currentStep = index;
-            showSection(currentStep);
-        } else if (index > currentStep) {
-            // Intentando avanzar, validar la sección actual primero
-            let isValid = window.validateSection();
-            if (isValid) {
-                currentStep = index;
-                showSection(currentStep);
-            }
-        }
-    });
-});
-
 // Inicializar la primera sección
-showSection(currentStep);
+document.addEventListener("DOMContentLoaded", () => {
+    console.log("✅ DOM completamente cargado");
+
+    if (!sections.length) {
+        console.error("❌ ERROR: No se encontraron secciones.");
+        return;
+    }
+
+    showSection(currentStep); // Inicializar la primera sección y la barra de progreso
+});

@@ -5,10 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Formulario por Secciones</title>
     <link rel="stylesheet" href="css/stylesheets.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 </head>
 <body>
-    <header>
-        <h1>Formulario por Secciones</h1>
+    <header class="header-banner">
+        <h1>Actualización Datos Residentes 2025</h1>
+        <button id="themeToggle" class="theme-toggle">
+            <i class="fas fa-sun"></i>
+            <span>Cambiar Tema</span>
+        </button>
     </header>
 
     <!-- Formulario dividido en secciones -->
@@ -296,26 +301,18 @@
         </div>
     </form>
 
-    <!-- Barra de progreso con nodos -->
+    <!-- Barra de progreso mejorada -->
     <div class="progress-container">
-        <div class="progress-bar">
-            <div id="progress-line"></div>
-            <div class="progress-node" data-label="Contacto Principal"></div>
-            <div class="progress-node" data-label="Departamento"></div>
-            <div class="progress-node" data-label="Vehículo"></div>
-            <div class="progress-node" data-label="Residentes"></div>
-            <div class="progress-node" data-label="Mascotas"></div>
-            <div class="progress-node" data-label="Bicicletas"></div>
-        </div>
+        <div id="progress-line"></div>
+        <span id="progress-percentage">0%</span>
     </div>
 
     <div id="overlay" class="overlay hidden">
         <!-- Spinner dentro del overlay -->
         <div id="spinner" class="spinner hidden">
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
+            <div class="gear gear1"></div>
+            <div class="gear gear2"></div>
+            <div class="gear gear3"></div>
         </div>
 
         <!-- Mensaje de confirmación dentro del overlay -->
@@ -323,6 +320,7 @@
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="scripts/themeToggle.js"></script>
     <script src="scripts/validaRut.js"></script>
     <script src="scripts/validador.js"></script>
     <script src="scripts/nacionalidades.js"></script>
