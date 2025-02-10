@@ -1,4 +1,43 @@
 
+/* Estilo del cintillo */
+.header-banner {
+    width: 100%;
+    height: 100px;
+    background-image: url('../files/Neus.jpg');
+    background-size: cover; /* Ajusta la imagen para cubrir el espacio */
+    background-position: 50% 95%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    font-size: 1.5rem; /* Reduje el tamaño del título */
+    font-weight: bold;
+    text-align: center;
+}
+
+
+.header-banner {
+    position: relative;
+}
+
+.header-banner h1 {
+    background: rgba(0, 0, 0, 0.5); /* Fondo negro semitransparente */
+    padding: 8px 16px;
+    border-radius: 8px;
+    display: inline-block; /* Para que no ocupe todo el ancho */
+    color: white;
+    font-size: 1.8rem;
+    font-weight: bold;
+    text-align: center;
+    text-shadow: none; /* Evita sombras innecesarias */
+}
+
+/* En Light Mode, si necesitas un ajuste adicional */
+body.light-mode .header-banner {
+    color: black; /* Ajusta el color del texto si es necesario */
+}
+
 /* Estilos básicos */
 body {
     font-family: Arial, sans-serif;
@@ -15,30 +54,75 @@ body.light-mode {
     color: #121212;
 }
 
-/* Botón de cambio de tema */
+/* Ajuste del botón de cambiar tema */
+/* Estilo base del botón */
+/* Estilo base del botón */
 .theme-toggle {
-    background: none;
-    border: none;
-    font-size: 1.8rem;
-    cursor: pointer;
-    position: fixed;
+    position: absolute;
     top: 15px;
     right: 20px;
-    z-index: 1000;
-    transition: transform 0.3s;
+    background: rgba(0, 0, 0, 0.6); /* Fondo oscuro semitransparente */
+    padding: 10px 12px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    color: white; /* Texto en blanco por defecto */
+    font-size: 14px;
+    font-weight: bold;
+    transition: background 0.3s, color 0.3s;
+    border: none;
 }
 
-.theme-toggle:hover {
-    transform: scale(1.2);
+/* Cambiar color del icono y texto */
+.theme-toggle i {
+    font-size: 18px;
+    color: white;
 }
 
+.theme-toggle span {
+    font-size: 0.9rem;
+    font-weight: bold;
+    color: white;
+}
+
+/* Ajuste para Light Mode */
+body.light-mode .theme-toggle {
+    background: rgba(255, 255, 255, 0.9); /* Fondo claro */
+    color: black !important; /* Texto negro */
+    border: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+/* Asegurar que el icono cambie de color en Light Mode */
 body.light-mode .theme-toggle i {
-    color: #121212;
+    color: black;
 }
 
-body .theme-toggle i {
-    color: #ffffff;
+/* Asegurar que el texto cambie de color en Light Mode */
+body.light-mode .theme-toggle span {
+    color: black !important;
 }
+
+/* Efecto hover */
+.theme-toggle:hover {
+    background: rgba(255, 255, 255, 0.9); /* Hover claro en modo oscuro */
+    color: black;
+}
+
+body.light-mode .theme-toggle:hover {
+    background: rgba(0, 0, 0, 0.7); /* Hover oscuro en modo claro */
+    color: white !important;
+}
+
+/* Ajustar icono en hover */
+body.light-mode .theme-toggle:hover i {
+    color: white !important;
+}
+
+body.light-mode .theme-toggle:hover span {
+    color: white !important;
+}
+
 
 /* Encabezado */
 header {
@@ -65,7 +149,8 @@ body.light-mode form {
     color: #121212; /* Texto oscuro */
 }
 
-/* Inputs y Selects */
+/* Estilos generales para inputs */
+/* Inputs y Selects en Modo Oscuro */
 input, select, textarea {
     width: 100%;
     padding: 8px;
@@ -74,8 +159,17 @@ input, select, textarea {
     border: 1px solid #444;
     border-radius: 5px;
     box-sizing: border-box;
-    background-color: #383838;
-    color: #e0e0e0;
+    background-color: #222; /* Ajustado a un tono gris más uniforme */
+    color: #e0e0e0; /* Texto más claro para evitar contraste extremo */
+    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out, border 0.3s ease-in-out;
+}
+
+/* Cuando el input tiene contenido en modo oscuro */
+input:not(:placeholder-shown),
+textarea:not(:placeholder-shown) {
+    background-color: #292929 !important; /* Gris más oscuro pero uniforme */
+    color: #f0f0f0 !important; /* Texto blanco suave */
+    border: 1px solid #666; /* Un borde más definido para contraste */
 }
 
 /* Placeholder */
@@ -96,7 +190,7 @@ body.light-mode .radio-group-docs label {
     color: #121212; /* Negro en Light Mode */
 }
 
-/* Light Mode */
+/* Modo Claro */
 body.light-mode input,
 body.light-mode select,
 body.light-mode textarea {
@@ -105,16 +199,56 @@ body.light-mode textarea {
     border: 1px solid #ccc;
 }
 
+/* Light Mode: Ajuste cuando los inputs tienen contenido */
+body.light-mode input:not(:placeholder-shown),
+body.light-mode textarea:not(:placeholder-shown) {
+    background-color: #f8f8f8 !important; /* Un gris muy claro */
+    color: #121212 !important; /* Texto oscuro */
+    border: 1px solid #aaa; /* Un borde más definido */
+}
+
+/* Ajuste de inputs en modo oscuro */
+body:not(.light-mode) input,
+body:not(.light-mode) select,
+body:not(.light-mode) textarea {
+    background-color: #292929; /* Un gris más oscuro */
+    color: #ffffff; /* Texto blanco */
+    border: 1px solid #555; /* Un borde sutil */
+}
+
 body.light-mode input::placeholder,
 body.light-mode textarea::placeholder {
     color: rgba(80, 80, 80, 0.7);
 }
 
+/* Ajustar el color del placeholder para mejor visibilidad */
+body:not(.light-mode) input::placeholder,
+body:not(.light-mode) textarea::placeholder {
+    color: rgba(200, 200, 200, 0.7); /* Gris claro */
+}
+
 /* Foco */
+/* Ajuste del borde cuando los inputs están en foco */
 input:focus, textarea:focus, select:focus {
     outline: none;
     border: 1px solid #008cba;
-    background-color: #444;
+    background-color: #333; /* Oscuro en foco */
+}
+
+body:not(.light-mode) input:focus,
+body:not(.light-mode) textarea:focus,
+body:not(.light-mode) select:focus {
+    background-color: #333333; /* Un poco más claro en foco */
+    border: 1px solid #008cba; /* Resalta el borde con un azul */
+    outline: none;
+}
+
+/* Modo Claro: Ajuste en foco */
+body.light-mode input:focus,
+body.light-mode textarea:focus,
+body.light-mode select:focus {
+    background-color: #ffffff; /* Blanco en foco */
+    border: 1px solid #008cba;
 }
 
 /* Botones de navegación */
@@ -436,4 +570,10 @@ body.light-mode .radio-group-docs label {
     width: 16px;
     height: 16px;
     accent-color: #007bff;
+}
+
+@media (max-width: 768px) {
+    .header-banner h1 {
+        font-size: 1.2rem; /* Reduce aún más en móviles */
+    }
 }
