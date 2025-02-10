@@ -1,0 +1,122 @@
+/* 🔹 Estilos Generales */
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #121212;
+    color: #ffffff;
+    text-align: center;
+    transition: background 0.3s, color 0.3s;
+}
+
+/* 🔹 Light Mode */
+body.light-mode {
+    background-color: #ffffff;
+    color: #121212;
+}
+
+/* 🔹 Cintillo con imagen de fondo */
+.header-banner {
+    width: 100%;
+    height: 180px;
+    background-image: url('../files/Neus.jpg'); /* Imagen de cabecera */
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+/* 🔹 Título sobre la imagen */
+.header-banner h1 {
+    background: rgba(0, 0, 0, 0.6); /* Fondo oscuro translúcido */
+    padding: 10px 20px;
+    border-radius: 8px;
+    color: white;
+    font-size: 2rem;
+}
+
+/* 🔹 Botón de cambio de tema */
+.theme-toggle {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    background: rgba(0, 0, 0, 0.6);
+    padding: 10px 12px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+}
+
+/* Light Mode */
+body.light-mode .theme-toggle {
+    background: rgba(255, 255, 255, 0.9);
+    color: black;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+body.light-mode .theme-toggle i {
+    color: black;
+}
+
+/* 🔹 Contenido de la Landing */
+.landing-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 60vh;
+    padding: 20px;
+}
+
+/* 🔹 Caja informativa */
+.info-box {
+    max-width: 600px;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Light Mode */
+body.light-mode .info-box {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+/* 🔹 Botón de acceso al formulario */
+.btn {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 12px 24px;
+    font-size: 18px;
+    background-color: #008cba;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+    background-color: #005f73;
+}
+
+/* 🔹 Footer */
+footer {
+    margin-top: 30px;
+    padding: 15px 0;
+    background-color: #222;
+    color: white;
+    font-size: 14px;
+}
+
+body.light-mode footer {
+    background-color: #f1f1f1;
+    color: #333;
+}
