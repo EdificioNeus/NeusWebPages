@@ -104,18 +104,38 @@ function showConfirmationMessage(message, type = 'success') {
     overlay.classList.remove('hidden');
     spinner.classList.add('hidden');
 
-    // Configurar el mensaje
-    confirmationMessage.innerHTML = `<h2>${type === 'success' ? 'Éxito' : 'Error'}</h2><p>${message}</p>`;
-    confirmationMessage.classList.remove('hidden');
-    confirmationMessage.classList.remove('success', 'error');
+    // Crear botón de cierre "X"
+    const closeButton = `<button class="close-btn" onclick="closeConfirmationMessage()">×</button>`;
+
+    // Configurar el mensaje con la "X" para cerrar
+    confirmationMessage.innerHTML = `
+        ${closeButton}
+        <h2>${type === 'success' ? 'Éxito' : 'Error'}</h2>
+        <p>${message}</p>
+    `;
+
+    confirmationMessage.classList.remove('hidden', 'success', 'error');
     confirmationMessage.classList.add(type); // Aplicar estilo basado en tipo
 
-    // Opción: Ocultar automáticamente después de unos segundos
-    setTimeout(() => {
-        overlay.classList.add('hidden');
-        confirmationMessage.classList.add('hidden');
-    }, 5000);
+    // Configurar temporizador para ocultar automáticamente
+    let timeout = setTimeout(() => closeConfirmationMessage(), 5000);
+
+    // Guardar el timeout para poder cancelarlo si se cierra manualmente
+    confirmationMessage.dataset.timeoutId = timeout;
 }
+
+// Función para cerrar el mensaje manualmente
+function closeConfirmationMessage() {
+    const overlay = document.getElementById('overlay');
+    const confirmationMessage = document.getElementById('confirmationMessage');
+
+    overlay.classList.add('hidden');
+    confirmationMessage.classList.add('hidden');
+
+    // Cancelar el temporizador si el usuario cierra antes
+    clearTimeout(confirmationMessage.dataset.timeoutId);
+}
+
 
 // Hacer que validateCurrentSection sea accesible globalmente
 window.validateSection = validateCurrentSection;
