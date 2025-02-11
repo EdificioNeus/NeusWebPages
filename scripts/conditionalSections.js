@@ -309,25 +309,40 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("cantidadBodegas").addEventListener("input", function () {
         const cantidad = parseInt(this.value, 10) || 0;
         const camposBodegas = document.getElementById("camposBodegas");
+
         console.log(`Generando campos para ${cantidad} bodegas.`);
+
+        // Verifica si ya se han generado los campos para evitar duplicación
+        if (camposBodegas.children.length === cantidad) {
+            console.log("Los campos ya están generados, evitando duplicación.");
+            return;
+        }
 
         camposBodegas.innerHTML = "";
 
         if (cantidad > 0 && cantidad <= 10) {
-            for (let i = 1; i <= cantidad; i++) {
-                const bodegaContainer = document.createElement("div");
-                bodegaContainer.classList.add("bodega-container");
+            fetch('files/bodegas.json') // Carga los datos desde el JSON
+                .then(response => response.json())
+                .then(bodegasDisponibles => {
+                    for (let i = 1; i <= cantidad; i++) {
+                        const bodegaContainer = document.createElement("div");
+                        bodegaContainer.classList.add("bodega-container");
 
-                // Agregar título para cada bodega
-                const title = document.createElement("h3");
-                title.textContent = `Bodega ${i}`;
-                bodegaContainer.appendChild(title);
+                        // Agregar título para cada bodega
+                        const title = document.createElement("h3");
+                        title.textContent = `Bodega ${i}`;
+                        bodegaContainer.appendChild(title);
 
-                const bodegaField = createDynamicField(i, "Número de Bodega", "numeroBodega",true);
-                bodegaContainer.appendChild(bodegaField);
+                        // Crear el select de bodegas con opciones desde el JSON
+                        const bodegaField = createDynamicField(i, "Número de Bodega", "numeroBodega", true, "select", bodegasDisponibles);
 
-                camposBodegas.appendChild(bodegaContainer);
-            }
+                        bodegaContainer.appendChild(bodegaField);
+                        camposBodegas.appendChild(bodegaContainer);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error cargando las bodegas:', error);
+                });
         }
     });
 

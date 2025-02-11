@@ -7,6 +7,7 @@ body {
     color: #ffffff;
     text-align: center;
     transition: background 0.3s, color 0.3s;
+    font-size: 14px; /* Se redujo el tamaño general del texto */
 }
 
 /* 🔹 Light Mode */
@@ -15,11 +16,11 @@ body.light-mode {
     color: #121212;
 }
 
-/* 🔹 Cintillo con imagen de fondo */
+/* 🔹 Cintillo con imagen */
 .header-banner {
     width: 100%;
-    height: 180px;
-    background-image: url('../files/Neus.jpg'); /* Imagen de cabecera */
+    height: 120px; /* Se redujo la altura */
+    background-image: url('../files/Neus.jpg');
     background-size: cover;
     background-position: center;
     display: flex;
@@ -30,39 +31,33 @@ body.light-mode {
 
 /* 🔹 Título sobre la imagen */
 .header-banner h1 {
-    background: rgba(0, 0, 0, 0.6); /* Fondo oscuro translúcido */
-    padding: 10px 20px;
-    border-radius: 8px;
+    background: rgba(0, 0, 0, 0.5);
+    padding: 6px 12px; /* Se redujo el padding */
+    border-radius: 6px;
     color: white;
-    font-size: 2rem;
+    font-size: 1.5rem; /* Se redujo el tamaño del título */
 }
 
 /* 🔹 Botón de cambio de tema */
 .theme-toggle {
     position: absolute;
-    top: 15px;
-    right: 20px;
-    background: rgba(0, 0, 0, 0.6);
-    padding: 10px 12px;
-    border-radius: 8px;
+    top: 10px;
+    right: 15px;
+    background: rgba(0, 0, 0, 0.5);
+    padding: 6px 10px; /* Se redujo el tamaño del botón */
+    border-radius: 6px;
     display: flex;
     align-items: center;
-    gap: 5px;
+    gap: 4px;
     color: white;
-    font-size: 14px;
+    font-size: 12px; /* Se redujo el tamaño del texto */
     font-weight: bold;
     border: none;
     cursor: pointer;
 }
 
-/* Light Mode */
 body.light-mode .theme-toggle {
-    background: rgba(255, 255, 255, 0.9);
-    color: black;
-    border: 1px solid rgba(0, 0, 0, 0.2);
-}
-
-body.light-mode .theme-toggle i {
+    background: rgba(255, 255, 255, 0.8);
     color: black;
 }
 
@@ -71,18 +66,18 @@ body.light-mode .theme-toggle i {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 60vh;
-    padding: 20px;
+    height: 40vh; /* Se redujo la altura */
+    padding: 10px;
 }
 
 /* 🔹 Caja informativa */
 .info-box {
-    max-width: 600px;
-    padding: 20px;
+    max-width: 500px;
+    padding: 15px;
     background: rgba(255, 255, 255, 0.1);
-    border-radius: 10px;
+    border-radius: 8px;
     text-align: center;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
 }
 
 /* Light Mode */
@@ -93,13 +88,13 @@ body.light-mode .info-box {
 /* 🔹 Botón de acceso al formulario */
 .btn {
     display: inline-block;
-    margin-top: 20px;
-    padding: 12px 24px;
-    font-size: 18px;
+    margin-top: 12px;
+    padding: 8px 16px; /* Se redujo el padding */
+    font-size: 14px; /* Se redujo el tamaño del texto */
     background-color: #008cba;
     color: white;
     text-decoration: none;
-    border-radius: 5px;
+    border-radius: 4px;
     transition: background-color 0.3s ease;
 }
 
@@ -107,13 +102,71 @@ body.light-mode .info-box {
     background-color: #005f73;
 }
 
+/* 🔹 Nueva Sección: Enlaces de Interés */
+.enlaces-interes {
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    margin-top: 10px;
+}
+
+.enlaces-interes h2 {
+    font-size: 1.4rem; /* Se redujo el tamaño del título */
+    margin-bottom: 15px;
+}
+
+/* 🔹 Grupo de botones */
+.button-group {
+    display: flex;
+    justify-content: center;
+    gap: 10px; /* Se redujo el espacio entre botones */
+    flex-wrap: wrap;
+}
+
+/* 🔹 Estilos específicos para los botones */
+.button-group .btn {
+    font-size: 13px; /* Se redujo el tamaño del texto */
+    padding: 6px 12px; /* Se redujo el padding */
+}
+
+.whatsapp-btn {
+    background-color: #25D366;
+}
+
+.contact-btn {
+    background-color: #f39c12;
+}
+
+.reglamento-btn {
+    background-color: #e74c3c;
+}
+
+.gasto-comun-btn {
+    background-color: #06AFF1;
+}
+
+.whatsapp-btn:hover {
+    background-color: #1ebe5d;
+}
+
+.contact-btn:hover {
+    background-color: #e67e22;
+}
+
+.reglamento-btn:hover {
+    background-color: #c0392b;
+}
+
+.gasto-comun-btn:hover {
+    background-color: #006C8B;
+}
+
 /* 🔹 Footer */
 footer {
-    margin-top: 30px;
-    padding: 15px 0;
+    margin-top: 15px; /* Se redujo el margen superior */
+    padding: 10px 0;
     background-color: #222;
     color: white;
-    font-size: 14px;
+    font-size: 12px; /* Se redujo el tamaño del texto */
 }
 
 body.light-mode footer {

@@ -9,37 +9,55 @@
 </head>
 <body>
 
-    <!-- Cintillo superior con imagen -->
+    <!-- Cintillo con imagen y botón de tema -->
     <header class="header-banner">
         <h1>Bienvenido al Registro de Residentes</h1>
         <button id="themeToggle" class="theme-toggle">
-            <i class="fas fa-sun"></i>
-            <span>Cambiar Tema</span>
+            <i class="fas fa-moon"></i> <span>Cambiar Tema</span>
         </button>
     </header>
 
-    <!-- Sección principal con mensaje y botón -->
+    <!-- Sección de Registro de Residentes -->
     <main class="landing-content">
         <div class="info-box">
             <h2>¡Mantengamos nuestra comunidad actualizada!</h2>
             <p>
-                En función de dar cumplimiento a la <strong>Ley de Copropiedad Inmobiliaria 21.442</strong>,
-                es importante que mantengamos un registro actualizado de todos los residentes del edificio.
-                Esto permite una mejor gestión de la seguridad, comunicación y convivencia dentro de la comunidad.
+                En cumplimiento de la <strong>Ley de Copropiedad Inmobiliaria 21.442</strong>,
+                es fundamental mantener actualizado el registro de residentes.
+                Esto mejora la seguridad y convivencia dentro del edificio.
             </p>
             <p>
-                Te invitamos a completar el formulario con tus datos para asegurarnos de que
-                toda la información se encuentra al día. ¡Gracias por tu colaboración!
+                Ayúdanos completando el formulario con tu información. ¡Tu colaboración es clave!
             </p>
             <a href="formulario.html" class="btn">Ir al Formulario</a>
         </div>
     </main>
+
+    <!-- Nueva Sección: Enlaces de Interés -->
+    <section class="enlaces-interes">
+        <h2>📌 Enlaces de Interés</h2>
+        <div class="button-group">
+            <a href="https://wa.me/XXXXXXXXXX" class="btn whatsapp-btn" target="_blank">
+                <i class="fab fa-whatsapp"></i> Contactar por WhatsApp
+            </a>
+            <!--a href="contacto.html" class="btn contact-btn">
+                <i class="fas fa-envelope"></i> Formulario de Contacto
+            </a-->
+            <a href="files/Reglamento_Interno.pdf" class="btn reglamento-btn" download>
+                <i class="fas fa-file-pdf"></i> Descargar Reglamento
+            </a>
+            <a href="https://edificioneus.edipro.cl/" class="btn gasto-comun-btn" target="_blank">
+                <i class="fas fa-money-bill-wave"></i> Ver Gasto Común
+            </a>
+        </div>
+    </section>
 
     <!-- Pie de página -->
     <footer>
         <p>&copy; 2025 Administración del Edificio NEUS. Todos los derechos reservados.</p>
     </footer>
 
+    <!-- Scripts -->
     <script src="scripts/themeToggle.js"></script>
 </body>
 </html>
