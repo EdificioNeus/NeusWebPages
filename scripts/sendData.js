@@ -5,6 +5,8 @@ function getCheckboxValues(prefix) {
     return Array.from(checkboxes).map(checkbox => checkbox.value);
 }
 
+let requestSent = false; // 🔴 Nueva variable para evitar duplicados
+
 document.getElementById("registroForm").addEventListener("submit", function (e) {
     e.preventDefault(); // Prevenir el comportamiento predeterminado del formulario
     console.log("Formulario enviado. Preparando datos...");
@@ -18,8 +20,6 @@ document.getElementById("registroForm").addEventListener("submit", function (e) 
     overlay.classList.remove("hidden");
     spinner.classList.remove("hidden");
     confirmationMessage.classList.add("hidden");
-
-    const url = "https://script.google.com/macros/s/AKfycbzeEjm52NQSz-4aatvdS5Rlr9RBfcypJwVtXLX0Kb25a5YirKwxBhUoacyUJL2g6Qy7/exec";
 
     // Construir el JSON principal
     const jsonData = {
@@ -150,12 +150,52 @@ document.getElementById("registroForm").addEventListener("submit", function (e) 
         }
     }
 
-    // Revisar si hay un contrato de arriendo adjunto
+    // Revisar si hay un contrato de arriendo adjunto o generado desde la cámara
     const contratoInput = document.getElementById("contrato");
+    const tieneContratoPDF = contratoInput && contratoInput.dataset.pdf && contratoInput.dataset.pdf !== "null";
     const hasContrato = contratoInput && contratoInput.files && contratoInput.files.length > 0;
 
-    // Construir solicitud HTTP dependiendo si hay contrato o no
-    let fetchOptions;
+    // Si el usuario tomó fotos con la cámara y se generó un PDF
+    if (tieneContratoPDF) {
+        console.log("📸 Usando contrato generado por la cámara.");
+
+        // Remover el prefijo "data:application/pdf;filename=generated.pdf;base64," si existe
+        let pdfBase64 = contratoInput.dataset.pdf;
+        if (pdfBase64.startsWith("data:application/pdf")) {
+            pdfBase64 = pdfBase64.split(",")[1]; // Extraer solo el contenido Base64
+        }
+
+        jsonData.ContactoPrincipal.ContratoDeArriendo = pdfBase64; // Solo el Base64
+        jsonData.ContactoPrincipal.NombreArchivo = "contrato_generado.pdf"; // Nombre predeterminado
+        enviarDatos(jsonData);
+    }
+    // Si el usuario cargó un archivo manualmente
+    else if (hasContrato) {
+        console.log("📂 Se detectó un archivo adjunto. Convirtiendo a Base64...");
+
+        // Leer archivo como Base64
+        const reader = new FileReader();
+        reader.onload = function () {
+            const base64File = reader.result.split(",")[1]; // Extraer solo el contenido Base64
+            jsonData.ContactoPrincipal.ContratoDeArriendo = base64File;
+            jsonData.ContactoPrincipal.NombreArchivo = contratoInput.files[0].name;
+
+            // Enviar los datos con el contrato en Base64
+            enviarDatos(jsonData);
+        };
+
+        reader.onerror = function (error) {
+            console.error("❌ Error al leer el archivo:", error);
+        };
+
+        reader.readAsDataURL(contratoInput.files[0]);
+    }
+    // Si no hay contrato adjunto ni generado, solo se envían los datos sin contrato
+    else {
+        console.log("⚠️ No se detectó contrato adjunto.");
+        jsonData.ContactoPrincipal.ContratoDeArriendo = "Sin contrato";
+        enviarDatos(jsonData);
+    }
 
     if (hasContrato)
     {
@@ -168,17 +208,7 @@ document.getElementById("registroForm").addEventListener("submit", function (e) 
             jsonData.ContactoPrincipal.ContratoDeArriendo = base64File;
             jsonData.ContactoPrincipal.NombreArchivo = contratoInput.files[0].name;
 
-            // Enviar datos como texto plano
-            fetchOptions = {
-                method: "POST",
-                headers: { "Content-Type": "text/plain;charset=utf-8" },
-                body: JSON.stringify(jsonData),
-            };
-
-            console.log("fetchOptions (request enviado):", fetchOptions);
-
-            // Enviar los datos al servidor
-            enviarDatos(fetchOptions);
+            enviarDatos(jsonData);
         };
 
         reader.onerror = function (error) {
@@ -189,70 +219,74 @@ document.getElementById("registroForm").addEventListener("submit", function (e) 
     }
     else
     {
-        console.log("No se detectó archivo adjunto. Enviando como JSON...");
-        fetchOptions = {
+        enviarDatos(jsonData);
+    }
+
+    // Función para enviar los datos al servidor
+    function enviarDatos(jsonData)
+    {
+        if (requestSent)
+        {
+            console.warn("⚠️ Ya se envió una solicitud, evitando duplicado.");
+            return;
+        }
+
+        requestSent = true; // ✅ Evitar envíos duplicados
+        const url = "https://script.google.com/macros/s/AKfycbzeEjm52NQSz-4aatvdS5Rlr9RBfcypJwVtXLX0Kb25a5YirKwxBhUoacyUJL2g6Qy7/exec";
+
+        const fetchOptions =
+        {
             method: "POST",
             headers: { "Content-Type": "text/plain;charset=utf-8" },
             body: JSON.stringify(jsonData),
         };
 
-        enviarDatos(fetchOptions);
-    }
-
-    // Imprimir el JSON completo
-    //console.log("JSON completo a enviar:", JSON.stringify(jsonData, null, 2));
-    console.log("fetchOptions (request enviado):", fetchOptions);
-    console.log("JSON completo antes de enviar:", JSON.stringify(jsonData, null, 2));
-
-    function enviarDatos(fetchOptions) {
-
-        /*try {
-            const jsonData = JSON.parse(fetchOptions.body);
-            localStorage.setItem("debug_last_sent_json", JSON.stringify(jsonData, null, 2));
-            console.log("JSON guardado en localStorage para depuración.");
-        } catch (error) {
-            console.error("Error al guardar JSON en localStorage:", error);
-        }
-
-        // También permitir la descarga del JSON como un archivo para depuración
-        guardarJSONComoArchivo(fetchOptions.body);*/
+        console.log("📡 Enviando datos a:", url);
+        console.log("📤 JSON enviado:", JSON.stringify(jsonData, null, 2));
 
         fetch(url, fetchOptions)
-            .then((response) => {
-                if (!response.ok) {
-                    throw new Error(`Error en la respuesta del servidor: ${response.statusText}`);
-                }
+            .then(response => {
+                console.log("📥 Respuesta recibida:", response);
                 return response.text();
             })
-            .then((result) => {
-                console.log("Datos procesados:", result);
+            .then(result => {
+                console.log("📜 Respuesta del servidor:", result); // 🔍 Imprimir respuesta completa
 
-                // Ocultar spinner
-                spinner.classList.add("hidden");
+                try
+                {
+                    const jsonResponse = JSON.parse(result);
+                    if (jsonResponse.status === "success") {
+                        console.log("✅ Confirmación de éxito recibida. Mostrando mensaje...");
+                        showConfirmationMessage("¡Gracias por tu respuesta! Tu información ha sido registrada correctamente.", "success");
 
-                // Mostrar mensaje de éxito
-                showConfirmationMessage("¡Gracias por tu respuesta! Tu información ha sido registrada correctamente.", "success");
-
-                // Redirigir después de 3 segundos
-                setTimeout(() => {
-                    overlay.classList.add("hidden");
-                    document.getElementById("registroForm").reset();
-                    window.location.href = "index.html";
-                }, 3000);
+                        // Esperar 3 segundos antes de redirigir
+                        setTimeout(() => {
+                            document.getElementById("registroForm").reset();
+                            console.log("🔄 Redirigiendo a index.html...");
+                            window.location.href = "index.html";
+                        }, 3000);
+                    }
+                    else
+                    {
+                        console.warn("⚠️ Error en respuesta del servidor:", jsonResponse.message);
+                        showConfirmationMessage(`⚠️ Error: ${jsonResponse.message}`, "error");
+                        requestSent = false;
+                    }
+                }
+                catch (error)
+                {
+                    console.error("❌ Error al procesar la respuesta JSON:", error);
+                    showConfirmationMessage(`⚠️ Respuesta inesperada del servidor.`, "error");
+                    requestSent = false;
+                }
             })
-            .catch((error) => {
-                console.error("Error al enviar el formulario:", error);
-
-                // Ocultar spinner
-                spinner.classList.add("hidden");
-
-                // Mostrar mensaje de error
+            .catch(error => {
+                console.error("❌ Error al enviar el formulario:", error);
                 showConfirmationMessage(`Hubo un problema al enviar tu información: ${error.message}`, "error");
+                requestSent = false;
             });
     }
-
 });
-
 
 // Función para descargar el JSON enviado como archivo
 function guardarJSONComoArchivo(jsonData) {
