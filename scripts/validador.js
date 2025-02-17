@@ -1,3 +1,56 @@
+document.addEventListener("DOMContentLoaded", () => {
+    const abrirCamaraBtn = document.getElementById("abrirCamara");
+    const cameraContainer = document.getElementById("cameraContainer");
+    const esPropietario = document.getElementById("esPropietario");
+    const esArrendatario = document.getElementById("esArrendatario");
+    const closeCameraBtn = document.getElementById("closeCamera");
+    const contratoArriendo = document.getElementById("contratoArriendo");
+
+    // Asegurar que la cámara esté oculta al inicio
+    cameraContainer.classList.add("hidden");
+
+    if (abrirCamaraBtn) {
+        abrirCamaraBtn.addEventListener("click", () => {
+            if (typeof window.abrirCamara === "function") {
+                if (esArrendatario.checked) {
+                    cameraContainer.classList.remove("hidden"); // Mostrar cámara solo si es arrendatario
+                    window.abrirCamara();
+                } else {
+                    console.warn("⚠️ La cámara solo se puede abrir si seleccionas 'Arrendatario'.");
+                }
+            } else {
+                console.error("⚠️ La función abrirCamara() no está definida.");
+            }
+        });
+    }
+
+    if (closeCameraBtn) {
+        closeCameraBtn.addEventListener("click", () => {
+            if (typeof window.detenerCamara === "function") {
+                window.detenerCamara();
+                cameraContainer.classList.add("hidden"); // Ocultar cámara al cerrarla
+            } else {
+                console.error("⚠️ La función detenerCamara() no está definida.");
+            }
+        });
+    }
+
+    // Si cambia a propietario, ocultar la cámara y sección de contrato
+    if (esPropietario) {
+        esPropietario.addEventListener("change", () => {
+            cameraContainer.classList.add("hidden");
+            contratoArriendo.classList.add("hidden"); // Ocultar la sección del contrato
+            if (typeof window.detenerCamara === "function") window.detenerCamara();
+        });
+    }
+
+    if (esArrendatario) {
+        esArrendatario.addEventListener("change", () => {
+            contratoArriendo.classList.remove("hidden"); // Mostrar el campo de contrato
+        });
+    }
+});
+
 // Evento para inicializar las validaciones
 document.addEventListener("DOMContentLoaded", () => {
     // Asocia un evento 'blur' genérico a todos los campos del formulario
@@ -14,8 +67,10 @@ function validateField(event) {
     let isValid = true;
     let message = "";
 
+    if (field.type === "file") return "";
+
     // Ignorar validación si el campo está oculto, deshabilitado o no es visible
-    if (field.closest(".hidden") || field.disabled || field.type === "hidden") {
+    if (field.closest(".hidden") || field.disabled || field.type === "hidden" || field.type === "file") {
         console.log(`Campo ignorado en validación: ${field.name || field.id}`);
         return "";
     }
@@ -83,6 +138,8 @@ function validateField(event) {
 function validateCurrentSection() {
     const currentSection = document.querySelector(".section.active");
     const fields = currentSection.querySelectorAll("input, select, textarea");
+    const contratoInput = document.getElementById("contrato");
+
     let isValid = true;
 
     fields.forEach((field) => {
@@ -92,6 +149,24 @@ function validateCurrentSection() {
         }
     });
 
+    // Validar solo si la sección de contrato está visible
+    if (contratoInput && !contratoInput.closest(".hidden")) {
+        const contratoError = contratoInput.nextElementSibling;
+
+        if (imagenesCapturadas.length > 0 || contratoInput.files.length > 0 || contratoInput.dataset.valid === "true") {
+            contratoInput.classList.remove("input-error");
+            if (contratoError) contratoError.style.display = "none";
+        } else {
+            contratoInput.classList.add("input-error");
+            if (contratoError) {
+                contratoError.textContent = "Debe subir un contrato o tomar una foto";
+                contratoError.style.display = "block";
+            }
+            isValid = false;
+        }
+    }
+
+    console.log("Validación final: ", isValid);
     return isValid;
 }
 

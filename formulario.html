@@ -17,7 +17,7 @@
     </header>
 
     <!-- Formulario dividido en secciones -->
-    <form id="registroForm" action="">
+    <form id="registroForm" action="" novalidate>
         <!-- Secciones -->
         <div class="section" id="Contacto-Principal">
             <h2>Datos de Contacto Principal</h2>
@@ -141,12 +141,26 @@
                 </label>
             </div>
 
-            <!-- Campo para cargar contrato de arriendo (se oculta inicialmente) -->
+            <!-- Contenedor para la carga del contrato -->
             <div id="contratoArriendo" class="hidden">
                 <label for="contrato">Cargar Contrato de Arriendo</label>
-                <input type="file" id="contrato" name="contrato" accept=".pdf,.doc,.docx,.jpg,.png" required>
+                <input class="dropZone" type="file" id="contrato" name="contrato" accept=".pdf,.doc,.docx,.jpg,.png">
+                <button type="button" id="abrirCamara">📷 Usar Cámara</button>
+                <!-- Aquí ya no se coloca el previewContainer -->
                 <span class="error-message">Debe cargar un archivo válido</span>
             </div>
+
+            <!-- Contenedor para la cámara y sus controles -->
+            <div id="cameraContainer" class="hidden">
+                <video id="video" autoplay></video>
+                <div id="cameraControls">
+                    <button type="button" id="captureButton" class="camera-button">📸 Capturar</button>
+                    <button type="button" id="closeCamera" class="camera-button">❌ Cerrar Cámara</button>
+                </div>
+            </div>
+
+            <!-- Contenedor para las previsualizaciones, fuera de la cámara -->
+            <div id="previewContainer"></div>
 
             <p>¿Tiene Estacionamiento?</p>
             <div class="radio-group">
@@ -320,7 +334,9 @@
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
     <script src="scripts/themeToggle.js"></script>
+    <script src="scripts/captureAndConvert.js"></script>
     <script src="scripts/validaRut.js"></script>
     <script src="scripts/validador.js"></script>
     <script src="scripts/nacionalidades.js"></script>
