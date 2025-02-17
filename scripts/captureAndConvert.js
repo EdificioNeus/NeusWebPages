@@ -100,22 +100,67 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
+    let useFrontCamera = false; // Variable para alternar entre cámaras
+    let currentStream = null; // Para almacenar el stream activo
+
     function abrirCamara() {
-        const cameraContainer = document.getElementById("cameraContainer");
-        if (!cameraContainer) return;
+        console.log("📸 Intentando abrir la cámara. Modo actual:", useFrontCamera ? "Frontal" : "Trasera");
 
-        cameraContainer.classList.remove("hidden");
+        const constraints = {
+            video: {
+                facingMode: useFrontCamera ? "user" : "environment",
+                width: { ideal: 1280 },
+                height: { ideal: 720 }
+            }
+        };
 
-        navigator.mediaDevices.getUserMedia({ video: true })
-            .then(stream => {
+        navigator.mediaDevices.getUserMedia(constraints)
+            .then(function (stream) {
+                console.log("✅ Cámara abierta correctamente");
+
+                // Detener el stream anterior si existe
+                if (currentStream) {
+                    console.log("🛑 Deteniendo el stream anterior");
+                    currentStream.getTracks().forEach(track => track.stop());
+                }
+                currentStream = stream;
+
                 const video = document.getElementById("video");
+                if (!video) {
+                    console.error("❌ ERROR: No se encontró el elemento <video> en el DOM.");
+                    return;
+                }
+
                 video.srcObject = stream;
-                videoStream = stream;
+
+                // Intentar reproducir solo cuando esté listo
+                video.onloadedmetadata = () => {
+                    console.log("📹 Video cargado, iniciando reproducción...");
+                    video.play().catch(error => console.warn("⚠️ No se pudo reproducir el video automáticamente:", error));
+                };
             })
-            .catch(error => {
-                console.error("Error al acceder a la cámara:", error);
+            .catch(function (error) {
+                console.error("❌ Error al acceder a la cámara:", error);
+                alert("⚠️ No se pudo acceder a la cámara. Intenta cambiar manualmente en los permisos del navegador.");
             });
     }
+
+    // Función para cambiar entre cámara frontal y trasera
+    function cambiarCamara() {
+        console.log("🔄 Cambiando cámara...");
+        useFrontCamera = !useFrontCamera; // Alterna entre las cámaras
+        abrirCamara(); // Vuelve a abrir la cámara con la nueva configuración
+    }
+
+    // Agregar evento al botón de cambiar cámara
+    document.addEventListener("DOMContentLoaded", function () {
+        const switchButton = document.getElementById("switchCameraButton");
+        if (switchButton) {
+            switchButton.addEventListener("click", cambiarCamara);
+        } else {
+            console.error("❌ ERROR: No se encontró el botón 'switchCameraButton'.");
+        }
+    });
 
     // --- CAPTURAR IMAGEN ---
     function capturarImagen(video) {
