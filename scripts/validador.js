@@ -7,7 +7,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const contratoArriendo = document.getElementById("contratoArriendo");
 
     // Asegurar que la cámara esté oculta al inicio
-    cameraContainer.classList.add("hidden");
+    if (cameraContainer) {
+        cameraContainer.classList.add("hidden");
+      }
+
 
     if (abrirCamaraBtn) {
         abrirCamaraBtn.addEventListener("click", () => {
@@ -201,6 +204,11 @@ function showConfirmationMessage(message, type = 'success') {
 
 // Función para cerrar el mensaje manualmente
 function closeConfirmationMessage() {
+    // Si no existe un id de sesión, redirige
+    if (!sessionStorage.getItem("sessionId")) {
+        window.location.href = "index.html";
+        return;
+    }
     const overlay = document.getElementById('overlay');
     const confirmationMessage = document.getElementById('confirmationMessage');
 
@@ -211,7 +219,6 @@ function closeConfirmationMessage() {
     clearTimeout(confirmationMessage.dataset.timeoutId);
 }
 
-
 // Hacer que validateCurrentSection sea accesible globalmente
 window.validateSection = validateCurrentSection;
-
+window.showConfirmationMessage = showConfirmationMessage;

@@ -368,7 +368,6 @@ body.light-mode #progress-percentage.low-contrast {
 }
 
 /* Spinner */
-/* Contenedor del spinner */
 .spinner {
     position: relative;
     width: 110px;
@@ -901,4 +900,75 @@ body.light-mode .checkbox-item label {
     #video {
         max-width: 100%; /* Usa todo el ancho en celulares pequeños */
     }
+}
+
+/*para buscar en select*/
+/* Contenedor para el select y el buscador */
+.custom-select-container {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+}
+
+/* Campo de búsqueda */
+.custom-select-search {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #444;
+    border-radius: 5px;
+    background-color: #222;
+    color: white;
+    font-size: 14px;
+}
+
+/* Estilo del select */
+.custom-select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #444;
+    border-radius: 5px;
+    background-color: #222;
+    color: white;
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+/* Estilos cuando el input está enfocado */
+.custom-select-search:focus {
+    border-color: #00bfff;
+    outline: none;
+}
+
+/* Opciones del select */
+.custom-select option {
+    background-color: #222;
+    color: white;
+}
+
+/* Opciones cuando se pasa el mouse */
+.custom-select option:hover {
+    background-color: #444;
+}
+
+/* Ajusta la apariencia del datalist (esto afecta la compatibilidad) */
+datalist {
+    position: absolute;
+    width: 100%;
+    max-height: 200px; /* Limita la altura */
+    overflow-y: auto; /* Permite el desplazamiento */
+    background: #222; /* Fondo oscuro para que haga match con tu tema */
+    color: #fff; /* Texto blanco */
+    border: 1px solid #666;
+    border-radius: 5px;
+}
+
+/* Ajusta la apariencia de las opciones dentro del datalist */
+datalist option {
+    padding: 10px;
+    cursor: pointer;
+}
+
+/* Resalta la opción cuando se pasa el cursor */
+datalist option:hover {
+    background: #444;
 }
