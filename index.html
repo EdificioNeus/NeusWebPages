@@ -30,6 +30,7 @@
                 Ayúdanos completando el formulario con tu información. ¡Tu colaboración es clave!
             </p>
             <a href="formulario.html" class="btn">Ir al Formulario</a>
+            <div id="counter" style="margin-top: 10px; text-align: center;"></div>
         </div>
     </main>
 
@@ -55,6 +56,19 @@
         </div>
     </section>
 
+    <div id="overlay" class="overlay hidden">
+        <!-- Spinner dentro del overlay -->
+        <div id="spinner" class="spinner hidden">
+            <div class="gear gear1"></div>
+            <div class="gear gear2"></div>
+            <div class="gear gear3"></div>
+        </div>
+
+        <!-- Mensaje de confirmación dentro del overlay -->
+        <div id="confirmationMessage" class="hidden"></div>
+        <button class="close-btn">X</button>
+    </div>
+
     <!-- Pie de página -->
     <footer>
         <p>&copy; 2025 Administración del Edificio NEUS. Todos los derechos reservados.</p>
@@ -62,5 +76,59 @@
 
     <!-- Scripts -->
     <script src="scripts/themeToggle.js"></script>
+    <script src="scripts/validador.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+          let formExpired = false;
+          let interval = null;
+
+          fetch('config.json')
+            .then(response => response.json())
+            .then(data => {
+              const targetDate = new Date(data.vigencia + 'T00:00:00');
+              const counterDiv = document.getElementById('counter');
+
+              function updateCountdown() {
+                const now = new Date();
+                const diff = targetDate - now;
+
+                if (diff <= 0) {
+                  counterDiv.textContent = "Lo sentimos el formulario ha expirado el: "+data.vigencia;
+                  formExpired = true;
+                  clearInterval(interval);
+                  return;
+                }
+
+                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+                const minutes = Math.floor((diff / (1000 * 60)) % 60);
+                const seconds = Math.floor((diff / 1000) % 60);
+
+                counterDiv.textContent = `${days} día${days !== 1 ? 's' : ''}, ${hours} hora${hours !== 1 ? 's' : ''}, ${minutes} min, ${seconds} seg`;
+              }
+
+              updateCountdown();
+              interval = setInterval(updateCountdown, 1000);
+
+              // Manejar el clic en "Ir al Formulario"
+              const formLink = document.querySelector('a.btn[href="formulario.html"]');
+              if (formLink) {
+                formLink.addEventListener('click', function(event) {
+                  if (formExpired) {
+                    event.preventDefault();
+                    showConfirmationMessage("Lo sentimos el formulario ha expirado", "error");
+                  } else {
+                    // Generar un id de sesión único y almacenarlo
+                    const sessionId = Math.random().toString(36).substr(2, 9);
+                    sessionStorage.setItem("sessionId", sessionId);
+                  }
+                });
+              }
+            })
+            .catch(error => console.error('Error al cargar la configuración:', error));
+        });
+      </script>
+
 </body>
 </html>

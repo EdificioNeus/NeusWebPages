@@ -332,6 +332,7 @@
 
         <!-- Mensaje de confirmación dentro del overlay -->
         <div id="confirmationMessage" class="hidden"></div>
+        <button class="close-btn">X</button>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
@@ -345,5 +346,42 @@
     <script src="scripts/navigation.js"></script>
     <script src="scripts/conditionalSections.js"></script>
     <script src="scripts/sendData.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+          fetch('config.json')
+            .then(response => response.json())
+            .then(data => {
+              // Se asume que data.vigencia está en formato "YYYY-MM-DD"
+              const targetDate = new Date(data.vigencia + 'T00:00:00');
+              // Verifica si la fecha es válida
+              if (isNaN(targetDate.getTime())) {
+                console.error("La fecha de vigencia en config.json no es válida:", data.vigencia);
+                return;
+              }
+              // Si la fecha actual es mayor o igual a la fecha de vigencia, se muestra el error
+              if (new Date() >= targetDate) {
+                showConfirmationMessage("El formulario ha expirado.", "error");
+              }
+            })
+            .catch(error => console.error('Error al cargar la configuración:', error));
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+          const closeBtn = document.querySelector("#confirmationMessage .close-btn");
+          if (closeBtn) {
+            closeBtn.addEventListener("click", function() {
+              // Si no existe el id de sesión, redirigir
+              if (!sessionStorage.getItem("sessionId")) {
+                window.location.href = "index.html";
+              } else {
+                // De lo contrario, simplemente oculta el mensaje
+                document.getElementById("overlay").classList.add("hidden");
+              }
+            });
+          }
+        });
+      </script>
+
 </body>
 </html>
