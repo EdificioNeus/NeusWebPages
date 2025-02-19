@@ -572,6 +572,7 @@ body.light-mode .input-error::placeholder {
     border-radius: 5px;
     font-size: 12px;
     white-space: nowrap;
+
     box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.2);
     display: none; /* Oculto por defecto */
     z-index: 10; /* Asegura que esté por encima de otros elementos */
@@ -588,9 +589,9 @@ body.light-mode .input-error::placeholder {
     border-color: #d32f2f transparent transparent transparent;
 }
 
-/* Asegurar que cada input muestra su mensaje */
-.input-container .input-error ~ .error-message {
-    display: block;
+/* Mostrar solo cuando el campo tiene error */
+.input-error + .error-message {
+    display: block !important;
 }
 
 /* Responsivo */
@@ -902,73 +903,126 @@ body.light-mode .checkbox-item label {
     }
 }
 
-/*para buscar en select*/
-/* Contenedor para el select y el buscador */
-.custom-select-container {
+/* ===== Dropdown Custom Base ===== */
+.dropdown-box {
+    width: 100%; /* para que coincida con el 100% que usas en input */
     position: relative;
-    display: inline-block;
-    width: 100%;
+    margin-bottom: 15px; /* mismo espacio vertical que los demás */
 }
 
-/* Campo de búsqueda */
-.custom-select-search {
+/* Estilo del input en modo oscuro (por defecto) */
+.dropdown-box input {
     width: 100%;
-    padding: 10px;
+    padding: 8px;
+    margin-top: 5px;       /* si quieres la misma separación vertical */
+    margin-bottom: 0;      /* o ajusta según tus otros campos */
     border: 1px solid #444;
     border-radius: 5px;
+    box-sizing: border-box;
     background-color: #222;
-    color: white;
-    font-size: 14px;
-}
-
-/* Estilo del select */
-.custom-select {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #444;
-    border-radius: 5px;
-    background-color: #222;
-    color: white;
-    font-size: 14px;
-    margin-top: 5px;
-}
-
-/* Estilos cuando el input está enfocado */
-.custom-select-search:focus {
-    border-color: #00bfff;
+    color: #e0e0e0;
+    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out, border 0.3s ease-in-out;
     outline: none;
-}
-
-/* Opciones del select */
-.custom-select option {
-    background-color: #222;
-    color: white;
-}
-
-/* Opciones cuando se pasa el mouse */
-.custom-select option:hover {
-    background-color: #444;
-}
-
-/* Ajusta la apariencia del datalist (esto afecta la compatibilidad) */
-datalist {
-    position: absolute;
-    width: 100%;
-    max-height: 200px; /* Limita la altura */
-    overflow-y: auto; /* Permite el desplazamiento */
-    background: #222; /* Fondo oscuro para que haga match con tu tema */
-    color: #fff; /* Texto blanco */
-    border: 1px solid #666;
-    border-radius: 5px;
-}
-
-/* Ajusta la apariencia de las opciones dentro del datalist */
-datalist option {
-    padding: 10px;
     cursor: pointer;
 }
 
-/* Resalta la opción cuando se pasa el cursor */
-datalist option:hover {
-    background: #444;
+/* Contenedor del item seleccionado */
+.dropdown-box .selected-item {
+    position: relative;
+}
+
+/* Flecha indicadora en modo oscuro */
+.dropdown-box .selected-item::after {
+    content: "";
+    width: 3px;
+    height: 3px;
+    border: 2px solid;
+    border-color: transparent #858585 #858585 transparent;
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-70%) rotate(45deg);
+}
+
+/* Contenedor del contenido desplegable */
+.dropdown-box .dropdown-content {
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+    border-radius: 5px;
+    max-height: 240px;
+    overflow: auto;
+    display: none;
+    position: absolute;
+    z-index: 99;
+    background-color: #2c2c2c; /* Fondo oscuro */
+    width: 100%;
+}
+
+/* Mostrar el contenido al activar */
+.dropdown-box.active .dropdown-content {
+    display: block;
+}
+
+/* Área del input de búsqueda dentro del dropdown */
+.dropdown-box .dropdown-content .search-input {
+    padding: 5px;
+}
+
+/* Lista de opciones */
+.dropdown-box .dropdown-content ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.dropdown-box .dropdown-content ul li {
+    font-size: 0.8rem;
+    padding: 2px 5px;
+    cursor: pointer;
+    color: #e0e0e0;
+}
+
+/* Ocultar elementos filtrados */
+.dropdown-box .dropdown-content ul li.hide {
+    display: none;
+}
+
+/* Hover sobre opción (modo oscuro) */
+.dropdown-box .dropdown-content ul li:hover {
+    background-color: #444444;
+}
+
+/* Opción activa (seleccionada) en modo oscuro */
+.dropdown-box .dropdown-content ul li.active {
+    background-color: #0ea5e9;
+    color: #ffffff;
+}
+
+/* ===== Overrides para Light Mode ===== */
+body.light-mode .dropdown-box input {
+    background-color: #ffffff;
+    color: #121212;
+    border: 1px solid #ccc;
+}
+
+body.light-mode .dropdown-box .selected-item::after {
+    border-color: transparent #ccc #ccc transparent;
+}
+
+body.light-mode .dropdown-box .dropdown-content {
+    background-color: #ffffff;
+    color: #121212;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+body.light-mode .dropdown-box .dropdown-content ul li {
+    color: #121212;
+}
+
+body.light-mode .dropdown-box .dropdown-content ul li:hover {
+    background-color: #f5f5f5;
+}
+
+body.light-mode .dropdown-box .dropdown-content ul li.active {
+    background-color: #00c3ff;
+    color: #ffffff;
 }

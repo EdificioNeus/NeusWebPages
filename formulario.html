@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Formulario por Secciones</title>
-    <link rel="stylesheet" href="css/stylesheets.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="css/stylesheets.css">
 </head>
 <body>
     <header class="header-banner">
@@ -22,11 +22,22 @@
         <div class="section" id="Contacto-Principal">
             <h2>Datos de Contacto Principal</h2>
 
-            <div class="input-container">
-                <label for="departamento">Número de Departamento</label>
-                <select id="departamento" name="departamento" required>
-                    <option value="" disabled selected>Cargando...</option>
-                </select>
+            <!-- Aquí usamos nuestro dropdown custom para departamento -->
+            <div class="input-container" id="dropdownDepartamento">
+                <label for="departamentoInput">Número de Departamento</label>
+                <div class="dropdown-box" id="customDropdown">
+                <div class="selected-item">
+                    <input type="text" id="departamentoInput" name="departamento" placeholder="Seleccione un departamento" required readonly>
+                </div>
+                <div class="dropdown-content">
+                    <div class="search-input">
+                    <input type="text" id="departamentoSearch" placeholder="Buscar...">
+                    </div>
+                    <ul id="departamentoList">
+                    <!-- Aquí se cargarán las opciones desde departamentos.json -->
+                    </ul>
+                </div>
+                </div>
                 <span class="error-message">Este campo es requerido</span>
             </div>
 

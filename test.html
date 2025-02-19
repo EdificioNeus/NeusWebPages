@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewpòrt" content="width?device-width, initial-scale=1.0">
+        <title>Searchable Select Element</title>
+        <style>
+            *{
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+                font-family: Arial, Helvetica, sans-serif;
+            }
+            body {
+                display: flex;
+                align-items: center;
+                padding: 50px 200px;
+                flex-direction: column;
+            }
+
+            .dropdown-box {
+                width: 300px;
+                position: relative;
+            }
+
+            .dropdown-box input{
+                width: 100%;
+                border: 1px solid rgb(129,129,129);
+                outline: none;
+                border-radius: 5px;
+                padding: 3px 5px;
+                color: rgb(80, 80, 80);
+            }
+            .dropdown-box .selected-item{
+                position: relative;
+
+            }
+
+            .dropdown-box .selected-item::after{
+                content: "";
+                width: 3px;
+                height: 3px;
+                border: 2px solid;
+                border-color: transparent rgb(129,129,129) rgb(129,129,129) transparent;
+                position: absolute;
+                top: 50%;
+                right: 10px;
+                transform: translateY(-70%) rotate(45deg);
+            }
+
+            .dropdown-box .selected-item,
+            .dropdown-box .selected-item input
+            {
+                cursor: pointer;
+            }
+
+            .dropdown-box .dropdown-content{
+                box-shadow: 0 5px 15px rgb(0 0 0 / 15%);
+                border-radius: 5px;
+                max-height: 240px;
+                overflow: auto;
+                display: none;
+                position: absolute;
+                z-index: 99;
+                background-color: white;
+                width: 100%;
+            }
+            .dropdown-box.active .dropdown-content{
+                display: block;
+            }
+
+            .dropdown-box .dropdown-content .search-input{
+                padding: 5px;
+            }
+
+            .dropdown-box .dropdown-content ul{
+                list-style: none;
+            }
+
+            .dropdown-box .dropdown-content ul li{
+                font-size: 0.8rem;
+                padding: 2px 5px;
+                cursor: pointer;
+            }
+
+            .dropdown-box .dropdown-content ul li.hide{
+                display: none;
+            }
+
+            .dropdown-box .dropdown-content ul li:hover{
+                background-color: rgb(245,245,245);
+            }
+
+            .dropdown-box .dropdown-content ul li.active{
+                background-color: rgb(213,242,246);
+                color: rgb(34,34,218);
+            }
+
+        </style>
+    </head>
+    <body>
+
+        <div class="dropdown-box">
+            <div class="selected-item">
+                <input type="text" name="" value="Select" readonly id="">
+            </div>
+            <div class="dropdown-content">
+                <div class="search-input">
+                    <input type="text" name="" id="">
+                </div>
+                <ul>
+                    <li class="dropdown-item active">Select</li>
+                    <li class="dropdown-item">value 1</li>
+                    <li class="dropdown-item">value 2</li>
+                    <li class="dropdown-item">value 3</li>
+                    <li class="dropdown-item">value 4</li>
+                    <li class="dropdown-item">value 5</li>
+                    <li class="dropdown-item">value 6</li>
+                    <li class="dropdown-item">value 7</li>
+                    <li class="dropdown-item">value 8</li>
+                    <li class="dropdown-item">value 9</li>
+                    <li class="dropdown-item">value 10</li>
+                    <li class="dropdown-item">value 11</li>
+                    <li class="dropdown-item">value 12</li>
+                    <li class="dropdown-item">value 13</li>
+                    <li class="dropdown-item">value 14</li>
+                    <li class="dropdown-item">value 15</li>
+                    <li class="dropdown-item">value 16</li>
+                    <li class="dropdown-item">value 17</li>
+                    <li class="dropdown-item">value 18</li>
+                    <li class="dropdown-item">value 19</li>
+                    <li class="dropdown-item">value 20</li>
+                </ul>
+            </div>
+        </div>
+
+        <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quos at iste quod aspernatur similique omnis dolor reiciendis, harum itaque expedita, impedit, voluptates incidunt enim ut dolorem. Quibusdam quisquam aut quasi?</p>
+
+        <script>
+            window.addEventListener("load", () => {
+                window.addEventListener("click", windowClickEvent => {
+                    const dropdownContent = document.querySelector(".dropdown-content");
+                    const dropdown = document.querySelector(".dropdown-box");
+                    const selectedItem = document.querySelector(".selected-item");
+
+                    if(dropdown.classList.contains("active")){
+                        if(!dropdownContent.contains(windowClickEvent.target)){
+                            closeDropdown();
+                        }
+                    }
+                    else if(selectedItem.contains(windowClickEvent.target)){
+                        openDropdown();
+                    }
+                })
+
+                const dropdownItems = document.querySelectorAll(".dropdown-item");
+
+                dropdownItems.forEach(dropdownItem => {
+                    dropdownItem.addEventListener("click", () => {
+                        dropdownItems.forEach(innerDropdownItem => {
+                            innerDropdownItem.classList.remove("active");
+                        })
+
+                        dropdownItem.classList.add("active");
+
+                        const selectedItemInput = document.querySelector(".selected-item input");
+
+                        selectedItemInput.value = dropdownItem.innerHTML;
+                        closeDropdown();
+                    })
+                })
+
+                const searchInput = document.querySelector(".search-input input");
+
+                searchInput.addEventListener("keyup", () => {
+                    const filter = searchInput.value.toLocaleLowerCase();
+
+                    dropdownItems.forEach(dropdownItem => {
+                        if(dropdownItem.innerHTML.toLocaleLowerCase().startsWith(filter)){
+                            dropdownItem.classList.remove("hide");
+                        }
+                        else {
+                            dropdownItem.classList.add("hide");
+                        }
+                    })
+                })
+            })
+
+            function closeDropdown(){
+                const dropdown = document.querySelector(".dropdown-box");
+
+                dropdown.classList.remove("active");
+            }
+
+            function openDropdown(){
+                const dropdown = document.querySelector(".dropdown-box");
+
+                dropdown.classList.add("active");
+            }
+        </script>
+    </body>
+</html>

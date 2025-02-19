@@ -5,220 +5,184 @@ document.addEventListener("DOMContentLoaded", () => {
     const esArrendatario = document.getElementById("esArrendatario");
     const closeCameraBtn = document.getElementById("closeCamera");
     const contratoArriendo = document.getElementById("contratoArriendo");
+    const departamento = document.getElementById("departamentoInput");
 
-    // Asegurar que la cámara esté oculta al inicio
-    if (cameraContainer) {
+    // Ocultar elementos al inicio
+    cameraContainer?.classList.add("hidden");
+    contratoArriendo?.classList.add("hidden"); // Ocultar por defecto
+
+    // ✅ Manejo del mensaje de error del departamento
+    if (departamento) {
+        const errorMessage = departamento.closest(".input-container")?.querySelector(".error-message");
+        if (errorMessage) {
+            errorMessage.style.display = "none";
+        }
+
+        departamento.addEventListener("change", () => {
+            validateField(departamento);
+        });
+    }
+
+    // ✅ Eventos de la cámara
+    abrirCamaraBtn?.addEventListener("click", () => {
+        if (esArrendatario?.checked) {
+            cameraContainer.classList.remove("hidden");
+            window.abrirCamara?.();
+        } else {
+            console.warn("⚠️ La cámara solo se puede abrir si seleccionas 'Arrendatario'.");
+        }
+    });
+
+    closeCameraBtn?.addEventListener("click", () => {
+        window.detenerCamara?.();
         cameraContainer.classList.add("hidden");
-      }
+    });
 
+    // ✅ Eventos de cambio de rol
+    esPropietario?.addEventListener("change", () => {
+        cameraContainer.classList.add("hidden");
+        contratoArriendo.classList.add("hidden");
+        window.detenerCamara?.();
+    });
 
-    if (abrirCamaraBtn) {
-        abrirCamaraBtn.addEventListener("click", () => {
-            if (typeof window.abrirCamara === "function") {
-                if (esArrendatario.checked) {
-                    cameraContainer.classList.remove("hidden"); // Mostrar cámara solo si es arrendatario
-                    window.abrirCamara();
-                } else {
-                    console.warn("⚠️ La cámara solo se puede abrir si seleccionas 'Arrendatario'.");
-                }
-            } else {
-                console.error("⚠️ La función abrirCamara() no está definida.");
-            }
-        });
-    }
+    esArrendatario?.addEventListener("change", () => {
+        contratoArriendo.classList.remove("hidden");
+    });
 
-    if (closeCameraBtn) {
-        closeCameraBtn.addEventListener("click", () => {
-            if (typeof window.detenerCamara === "function") {
-                window.detenerCamara();
-                cameraContainer.classList.add("hidden"); // Ocultar cámara al cerrarla
-            } else {
-                console.error("⚠️ La función detenerCamara() no está definida.");
-            }
-        });
-    }
+    // ✅ Validación de campos
+    document.querySelectorAll("input, select, textarea").forEach(field => {
+        field.addEventListener("change", () => validateField(field));
+    });
 
-    // Si cambia a propietario, ocultar la cámara y sección de contrato
-    if (esPropietario) {
-        esPropietario.addEventListener("change", () => {
-            cameraContainer.classList.add("hidden");
-            contratoArriendo.classList.add("hidden"); // Ocultar la sección del contrato
-            if (typeof window.detenerCamara === "function") window.detenerCamara();
-        });
-    }
-
-    if (esArrendatario) {
-        esArrendatario.addEventListener("change", () => {
-            contratoArriendo.classList.remove("hidden"); // Mostrar el campo de contrato
-        });
-    }
-});
-
-// Evento para inicializar las validaciones
-document.addEventListener("DOMContentLoaded", () => {
-    // Asocia un evento 'blur' genérico a todos los campos del formulario
-    const formFields = document.querySelectorAll("input, select, textarea");
-    formFields.forEach((field) => {
-        field.addEventListener("blur", validateField); // Llama a la función genérica en cada campo
+    // ✅ Validación específica del departamento (SIN la validación eliminada)
+    departamento?.addEventListener("change", () => {
+        validateField(departamento);
     });
 });
 
-// Función genérica para validar un campo
-function validateField(event) {
-    const field = event.target || event; // Permitir llamar a validateField con o sin evento
-    const errorMessage = field.nextElementSibling; // Mensaje de error ubicado después del campo
+// ✅ FUNCIÓN DE VALIDACIÓN CON TIMEOUT DE 3 SEGUNDOS
+function validateField(field) {
+    if (!field || field.type === "file") return;
+
+    if (field.id !== "departamentoInput" && (field.closest(".hidden") || field.disabled || field.type === "hidden")) {
+        return;
+    }
+
     let isValid = true;
     let message = "";
+    let errorMessage = field.closest(".input-container")?.querySelector(".error-message");
 
-    if (field.type === "file") return "";
-
-    // Ignorar validación si el campo está oculto, deshabilitado o no es visible
-    if (field.closest(".hidden") || field.disabled || field.type === "hidden" || field.type === "file") {
-        console.log(`Campo ignorado en validación: ${field.name || field.id}`);
+    if (!errorMessage) {
+        console.warn(`No se encontró el mensaje de error para el campo: ${field.id}`);
         return "";
     }
 
-    // 1. Validar campos requeridos
+    // ✅ Validaciones en cadena
     if (field.hasAttribute("required") && !field.value.trim()) {
         isValid = false;
         message = "Este campo es requerido";
-    }
-
-    // 2. Validar números de teléfono
-    if (isValid && field.type === "tel" && !/^\+?[0-9\s()-]{8,15}$/.test(field.value.trim())) {
+    } else if (field.type === "tel" && !/^\+?[0-9\s()-]{8,15}$/.test(field.value.trim())) {
         isValid = false;
         message = "Número de teléfono inválido";
-    }
-
-    // 3. Validar correos electrónicos
-    if (isValid && field.type === "email" && !/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(field.value.trim())) {
+    } else if (field.type === "email" && !/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(field.value.trim())) {
         isValid = false;
         message = "Correo electrónico inválido";
-    }
-
-    // 4. Validar números (min y max)
-    if (isValid && field.type === "number" && field.value) {
+    } else if (field.type === "number" && field.value) {
         const value = parseFloat(field.value);
         const min = field.min ? parseFloat(field.min) : null;
         const max = field.max ? parseFloat(field.max) : null;
-
         if ((min !== null && value < min) || (max !== null && value > max)) {
             isValid = false;
             message = `El valor debe estar entre ${min} y ${max}`;
         }
-    }
-
-    // Validar RUT (solo si tiene el atributo data-validation="rut")
-    if (isValid && field.dataset.validation === "rut" && typeof Fn !== "undefined") {
-        let normalizedRut = field.value.replace(/\./g, '').replace(/-/g, '-').toLowerCase();
-        console.log("Validando RUT:", normalizedRut); // <-- Agregar este log para depuración
-
+    } else if (field.dataset.validation === "rut" && typeof Fn !== "undefined") {
+        const normalizedRut = field.value.replace(/\./g, "").replace(/-/g, "-").toLowerCase();
         if (!Fn.validaRut(normalizedRut)) {
             isValid = false;
             message = "RUT inválido";
         }
     }
 
-    // Mostrar/ocultar mensajes de error
-    if (!isValid) {
-        console.error(`Error en el campo: ${field.name || field.id}, mensaje: ${message}`);
-        field.classList.add("input-error");
-        if (errorMessage) {
-            errorMessage.textContent = message; // Muestra el mensaje correspondiente
+    // ✅ Manejo de mensajes de error con `display`
+    field.classList.toggle("input-error", !isValid);
+
+    if (errorMessage) {
+        if (!isValid) {
+            errorMessage.textContent = message;
             errorMessage.style.display = "block";
-        }
-    } else {
-        field.classList.remove("input-error");
-        if (errorMessage) {
-            errorMessage.style.display = "none"; // Oculta el mensaje
+
+            // ❗ Ocultar el mensaje después de 3 segundos
+            setTimeout(() => {
+                errorMessage.style.display = "none";
+                errorMessage.textContent = "";
+            }, 30000);
+        } else {
+            errorMessage.style.display = "none";
+            errorMessage.textContent = ""; // Se asegura que se borre el mensaje de error
         }
     }
 
-    return message; // Retorna el mensaje para uso en validaciones más amplias
+    return message;
 }
 
-// Función para validar todos los campos visibles de una sección
+// ✅ FUNCIÓN PARA VALIDAR UNA SECCIÓN COMPLETA
 function validateCurrentSection() {
     const currentSection = document.querySelector(".section.active");
-    const fields = currentSection.querySelectorAll("input, select, textarea");
-    const contratoInput = document.getElementById("contrato");
+    if (!currentSection) return true; // Si no hay sección activa, se considera válido
 
+    const fields = currentSection.querySelectorAll("input, select, textarea");
     let isValid = true;
 
-    fields.forEach((field) => {
-        const message = validateField(field); // Utiliza la función validateField
-        if (message) {
-            isValid = false; // Si hay algún error, marca la sección como inválida
-        }
-    });
-
-    // Validar solo si la sección de contrato está visible
-    if (contratoInput && !contratoInput.closest(".hidden")) {
-        const contratoError = contratoInput.nextElementSibling;
-
-        if (imagenesCapturadas.length > 0 || contratoInput.files.length > 0 || contratoInput.dataset.valid === "true") {
-            contratoInput.classList.remove("input-error");
-            if (contratoError) contratoError.style.display = "none";
-        } else {
-            contratoInput.classList.add("input-error");
-            if (contratoError) {
-                contratoError.textContent = "Debe subir un contrato o tomar una foto";
-                contratoError.style.display = "block";
-            }
+    for (const field of fields) { // Usar for...of para salir temprano si hay un error
+        if (validateField(field)) { // Si validateField devuelve un mensaje, hay un error
             isValid = false;
         }
     }
 
-    console.log("Validación final: ", isValid);
+    const contratoInput = document.getElementById("contrato");
+    if (contratoInput && !contratoInput.closest(".hidden")) {
+        const contratoError = contratoInput.nextElementSibling;
+        const isValidContrato = imagenesCapturadas.length > 0 || contratoInput.files.length > 0 || contratoInput.dataset.valid === "true";
+        contratoInput.classList.toggle("input-error", !isValidContrato);
+        if (contratoError) {
+            contratoError.textContent = isValidContrato ? "" : "Debe subir un contrato o tomar una foto";
+            contratoError.style.display = isValidContrato ? "none" : "block";
+        }
+        isValid = isValid && isValidContrato; // Mantener el valor de isValid
+    }
+
     return isValid;
 }
 
-function showConfirmationMessage(message, type = 'success') {
-    const overlay = document.getElementById('overlay');
-    const spinner = document.getElementById('spinner');
-    const confirmationMessage = document.getElementById('confirmationMessage');
+// ✅ FUNCIÓN PARA MOSTRAR MENSAJE DE CONFIRMACIÓN
+function showConfirmationMessage(message, type = "success") {
+    const overlay = document.getElementById("overlay");
+    const spinner = document.getElementById("spinner");
+    const confirmationMessage = document.getElementById("confirmationMessage");
 
     // Mostrar el overlay y ocultar el spinner
-    overlay.classList.remove('hidden');
-    spinner.classList.add('hidden');
+    overlay.classList.remove("hidden");
+    spinner.classList.add("hidden");
 
     // Crear botón de cierre "X"
     const closeButton = `<button class="close-btn" onclick="closeConfirmationMessage()">×</button>`;
 
     // Configurar el mensaje con la "X" para cerrar
-    confirmationMessage.innerHTML = `
-        ${closeButton}
-        <h2>${type === 'success' ? 'Éxito' : 'Error'}</h2>
-        <p>${message}</p>
-    `;
+    confirmationMessage.innerHTML = `${closeButton}<h2>${type === "success" ? "Éxito" : "Error"}</h2><p>${message}</p>`;
 
-    confirmationMessage.classList.remove('hidden', 'success', 'error');
-    confirmationMessage.classList.add(type); // Aplicar estilo basado en tipo
+    confirmationMessage.classList.remove("hidden", "success", "error");
+    confirmationMessage.classList.add(type);
 
-    // Configurar temporizador para ocultar automáticamente
-    let timeout = setTimeout(() => closeConfirmationMessage(), 5000);
-
-    // Guardar el timeout para poder cancelarlo si se cierra manualmente
-    confirmationMessage.dataset.timeoutId = timeout;
+    // ❗ Ocultar el mensaje después de 5 segundos
+    setTimeout(() => closeConfirmationMessage(), 5000);
 }
 
-// Función para cerrar el mensaje manualmente
+// ✅ FUNCIÓN PARA CERRAR MENSAJES
 function closeConfirmationMessage() {
-    // Si no existe un id de sesión, redirige
-    if (!sessionStorage.getItem("sessionId")) {
-        window.location.href = "index.html";
-        return;
-    }
-    const overlay = document.getElementById('overlay');
-    const confirmationMessage = document.getElementById('confirmationMessage');
-
-    overlay.classList.add('hidden');
-    confirmationMessage.classList.add('hidden');
-
-    // Cancelar el temporizador si el usuario cierra antes
-    clearTimeout(confirmationMessage.dataset.timeoutId);
+    document.getElementById("overlay")?.classList.add("hidden");
+    document.getElementById("confirmationMessage")?.classList.add("hidden");
 }
 
-// Hacer que validateCurrentSection sea accesible globalmente
-window.validateSection = validateCurrentSection;
+// Exponer funciones globalmente
+window.validateSection  = validateCurrentSection;
 window.showConfirmationMessage = showConfirmationMessage;
