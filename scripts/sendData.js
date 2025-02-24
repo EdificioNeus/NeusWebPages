@@ -54,8 +54,8 @@ function enviarFormulario()
             Apellidos: document.getElementById("Apellidos")?.value.trim() || "",
             TipoIdentificacion: document.querySelector('input[name="documentType"]:checked')?.value || "",
             NumeroIdentificacion: document.getElementById("rutContainer").classList.contains("hidden")
-                ? document.getElementById("dni")?.value.trim() || ""
-                : document.getElementById("rut")?.value.trim() || "",
+            ? document.getElementById("dni")?.value.trim() || ""
+            : document.getElementById("rut")?.value.trim().replace(/\./g, "") || "",
             CorreoElectronico: document.getElementById("email")?.value.trim() || "",
             Telefono: document.getElementById("contacto")?.value.trim() || "",
             Nacionalidad: document.getElementById("nacionalidad")?.value.trim() || "",
