@@ -84,7 +84,7 @@ function enviarFormulario()
         },
     };
 
-	    // Recopilar datos dinámicos
+	// Recopilar datos dinámicos
     // 1. Estacionamientos
     const cantidadEstacionamientos = jsonData.ContactoPrincipal.CantidadEstacionamientos;
     for (let i = 1; i <= cantidadEstacionamientos; i++) {
