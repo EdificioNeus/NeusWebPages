@@ -1080,3 +1080,10 @@ body.light-mode .btn-rechazar {
 .modal.show {
     display: flex !important; /* Se usa !important para asegurar que se muestre */
 }
+
+/* Ajuste para móviles */
+@media (max-width: 768px) {
+    .modal-content {
+        width: 90%; /* Ensancha el modal en pantallas pequeñas */
+    }
+}
