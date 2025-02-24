@@ -1,41 +1,65 @@
 // Función para obtener los valores seleccionados de un grupo de checkboxes
 function getCheckboxValues(prefix) {
     const checkboxes = document.querySelectorAll(`input[id^="${prefix}"]:checked`);
-    console.log(`Checkboxes encontrados para ${prefix}:`, checkboxes); // Debug
     return Array.from(checkboxes).map(checkbox => checkbox.value);
 }
 
-let requestSent = false; // 🔴 Nueva variable para evitar duplicados
+let requestSent = false; // ✅ Evitar envíos duplicados
 
-document.getElementById("registroForm").addEventListener("submit", function (e) {
-    e.preventDefault(); // Prevenir el comportamiento predeterminado del formulario
-    console.log("Formulario enviado. Preparando datos...");
+document.addEventListener("DOMContentLoaded", function () {
+    const modal = document.getElementById("disclaimerModal");
+    const aceptarBtn = document.getElementById("aceptarPolitica");
+    const rechazarBtn = document.getElementById("rechazarPolitica");
+    const formulario = document.getElementById("registroForm");
 
-    // Referencias al overlay, spinner y mensaje de confirmación
-    const overlay = document.getElementById("overlay");
-    const spinner = document.getElementById("spinner");
-    const confirmationMessage = document.getElementById("confirmationMessage");
+    // Ocultar modal por defecto (seguridad extra)
+    modal.style.display = "none";
 
-    // Mostrar overlay y spinner, ocultar mensaje previo
-    overlay.classList.remove("hidden");
-    spinner.classList.remove("hidden");
-    confirmationMessage.classList.add("hidden");
+    // Evitar que el formulario se envíe directamente
+    formulario.addEventListener("submit", function (e) {
+        e.preventDefault(); // 🔴 Bloquea envío por defecto
 
-    // Construir el JSON principal
+        // Mostrar el modal solo cuando el usuario presiona enviar
+        modal.style.display = "flex";
+    });
+
+    // Si el usuario acepta los términos, cerrar modal y enviar formulario
+    aceptarBtn.addEventListener("click", function () {
+        modal.style.display = "none"; // Ocultar modal
+        enviarFormulario(); // 🔥 Enviar formulario automáticamente
+    });
+
+    // Si el usuario rechaza, solo cerramos el modal
+    rechazarBtn.addEventListener("click", function () {
+        modal.style.display = "none";
+    });
+});
+
+// Función para enviar los datos al servidor
+function enviarFormulario()
+{
+    if (requestSent) {
+        console.warn("⚠️ Ya se envió una solicitud, evitando duplicado.");
+        return;
+    }
+
+    // Mostrar overlay y spinner
+    document.getElementById("overlay").classList.remove("hidden");
+    document.getElementById("spinner").classList.remove("hidden");
+
+    // Construcción del JSON con los datos del formulario
     const jsonData = {
         ContactoPrincipal: {
             Nombres: document.getElementById("Nombres")?.value.trim() || "",
             Apellidos: document.getElementById("Apellidos")?.value.trim() || "",
             TipoIdentificacion: document.querySelector('input[name="documentType"]:checked')?.value || "",
-            NumeroIdentificacion:
-                document.getElementById("rutContainer").classList.contains("hidden")
-                    ? document.getElementById("dni")?.value.trim() || ""
-                    : document.getElementById("rut")?.value.trim() || "",
+            NumeroIdentificacion: document.getElementById("rutContainer").classList.contains("hidden")
+                ? document.getElementById("dni")?.value.trim() || ""
+                : document.getElementById("rut")?.value.trim() || "",
             CorreoElectronico: document.getElementById("email")?.value.trim() || "",
             Telefono: document.getElementById("contacto")?.value.trim() || "",
             Nacionalidad: document.getElementById("nacionalidad")?.value.trim() || "",
             RegistradoEdipro: document.querySelector('input[name="tieneEdipro"]:checked')?.value || "",
-            RegistradoHuellero: document.querySelector('input[name="tieneHuella"]:checked')?.value || "",
             NumeroDepartamento: document.getElementById("departamento")?.value.trim() || "",
             TieneEstacionamiento: document.querySelector('input[name="tieneEstacionamiento"]:checked')?.value || "no",
             CantidadEstacionamientos: parseInt(document.getElementById("cantidadEstacionamientos")?.value, 10) || 0,
@@ -44,7 +68,7 @@ document.getElementById("registroForm").addEventListener("submit", function (e) 
             CantidadBodegas: parseInt(document.getElementById("cantidadBodegas")?.value, 10) || 0,
             NumerosDeBodega: [],
             PropietarioOArrendatario: document.querySelector('input[name="tipoPropietario"]:checked')?.value || "",
-            ContratoDeArriendo: "",
+            ContratoDeArriendo: "Sin contrato", // Valor por defecto
             TieneAuto: document.querySelector('input[name="tieneAuto"]:checked')?.value || "no",
             CantidadDeAutos: parseInt(document.getElementById("cantidadAutos")?.value, 10) || 0,
             Autos: [],
@@ -60,7 +84,7 @@ document.getElementById("registroForm").addEventListener("submit", function (e) 
         },
     };
 
-    // Recopilar datos dinámicos
+	    // Recopilar datos dinámicos
     // 1. Estacionamientos
     const cantidadEstacionamientos = jsonData.ContactoPrincipal.CantidadEstacionamientos;
     for (let i = 1; i <= cantidadEstacionamientos; i++) {
@@ -221,9 +245,10 @@ document.getElementById("registroForm").addEventListener("submit", function (e) 
     {
         enviarDatos(jsonData);
     }
+}
 
-    // Función para enviar los datos al servidor
-    function enviarDatos(jsonData)
+// Función para enviar los datos al servidor
+function enviarDatos(jsonData)
     {
         if (requestSent)
         {
@@ -283,20 +308,24 @@ document.getElementById("registroForm").addEventListener("submit", function (e) 
             .catch(error => {
                 console.error("❌ Error al enviar el formulario:", error);
                 showConfirmationMessage(`Hubo un problema al enviar tu información: ${error.message}`, "error");
-                requestSent = false;
+                requestSent = false; // ❌ Permitir reintento
             });
     }
-});
 
-// Función para descargar el JSON enviado como archivo
-function guardarJSONComoArchivo(jsonData) {
-    const blob = new Blob([jsonData], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "debug_sent_data.json";
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    console.log("Archivo de depuración generado.");
+// Función para mostrar mensaje de confirmación
+function showConfirmationMessage(message, type = "success") {
+    const overlay = document.getElementById("overlay");
+    const spinner = document.getElementById("spinner");
+    const confirmationMessage = document.getElementById("confirmationMessage");
+
+    overlay.classList.remove("hidden");
+    spinner.classList.add("hidden");
+    confirmationMessage.innerHTML = `<h2>${type === "success" ? "Éxito" : "Error"}</h2><p>${message}</p>`;
+    confirmationMessage.classList.remove("hidden");
+    confirmationMessage.classList.add(type);
+
+    setTimeout(() => {
+        overlay.classList.add("hidden");
+        confirmationMessage.classList.add("hidden");
+    }, 5000);
 }

@@ -972,3 +972,111 @@ datalist option {
 datalist option:hover {
     background: #444;
 }
+
+/* 🔹 Estilos generales del modal */
+.modal {
+    display: none; /* 🔴 Oculto por defecto */
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* 🔹 Contenedor del modal */
+.modal-content {
+    background-color: #1e1e1e; /* Fondo oscuro por defecto */
+    padding: 25px;
+    border-radius: 10px;
+    text-align: center;
+    width: 50%;
+    max-width: 600px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    color: #ffffff;
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+/* Light Mode */
+body.light-mode .modal-content {
+    background-color: #ffffff;
+    color: #121212;
+}
+
+/* 🔹 Título del modal */
+.modal-content h2 {
+    font-size: 22px;
+    margin-bottom: 15px;
+    color: #ffcc00;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+/* 🔹 Estilos de los párrafos dentro del modal */
+.modal-content p {
+    margin-bottom: 15px;
+    text-align: justify;
+}
+
+/* 🔹 Botones dentro del modal */
+.modal-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+/* 🔵 Botón Aceptar */
+.btn-aceptar {
+    background-color: #007bff;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    transition: background-color 0.3s ease-in-out;
+}
+
+.btn-aceptar:hover {
+    background-color: #0056b3;
+}
+
+/* 🔴 Botón Rechazar */
+.btn-rechazar {
+    background-color: #dc3545;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    transition: background-color 0.3s ease-in-out;
+}
+
+.btn-rechazar:hover {
+    background-color: #b52a37;
+}
+
+/* Light Mode Ajustes */
+body.light-mode .btn-aceptar {
+    background-color: #0056b3;
+}
+
+body.light-mode .btn-rechazar {
+    background-color: #b52a37;
+}
+
+/* 🔹 Mostrar modal cuando se active */
+.modal.show {
+    display: flex !important; /* Se usa !important para asegurar que se muestre */
+}
