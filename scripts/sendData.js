@@ -232,7 +232,7 @@ document.getElementById("registroForm").addEventListener("submit", function (e) 
         }
 
         requestSent = true; // ✅ Evitar envíos duplicados
-        const url = "https://script.google.com/macros/s/AKfycbzeEjm52NQSz-4aatvdS5Rlr9RBfcypJwVtXLX0Kb25a5YirKwxBhUoacyUJL2g6Qy7/exec";
+        const url = "https://script.google.com/macros/s/AKfycbzMm6hIapg7NbqCkQPXAg2AocTqI8ZrhxhYzzBXoGcQjScfexswEbEHrn-z7i6KDFnp/exec";
 
         const fetchOptions =
         {
