@@ -87,7 +87,10 @@ body.light-mode .info-box {
 
 /* 🔹 Botón de acceso al formulario */
 .formulario-btn {
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px; /* Espaciado entre ícono y texto */
     padding: 12px 20px;
     font-size: 16px;
     font-weight: bold;
@@ -97,6 +100,8 @@ body.light-mode .info-box {
     background-color: #007bff; /* Azul brillante */
     border-radius: 6px;
     transition: background 0.3s ease-in-out;
+    border: none;
+    cursor: pointer;
 }
 
 /* Efecto hover */
@@ -104,6 +109,18 @@ body.light-mode .info-box {
     background-color: #0056b3; /* Azul más oscuro */
 }
 
+/* Ajustes para pantallas pequeñas */
+@media (max-width: 768px) {
+    .formulario-btn {
+        width: 90%; /* Para que se vea más grande en móvil */
+        font-size: 14px; /* Reducir tamaño de fuente */
+        padding: 10px 15px;
+    }
+
+    .formulario-btn i {
+        font-size: 18px; /* Ajustar el tamaño del ícono en móvil */
+    }
+}
 
 /* Ajuste para los botones */
 .btn {
