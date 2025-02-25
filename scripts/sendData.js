@@ -60,6 +60,7 @@ function enviarFormulario()
             Telefono: document.getElementById("contacto")?.value.trim() || "",
             Nacionalidad: document.getElementById("nacionalidad")?.value.trim() || "",
             RegistradoEdipro: document.querySelector('input[name="tieneEdipro"]:checked')?.value || "",
+            RegistradoHuellero: document.querySelector('input[name="tieneHuella"]:checked')?.value || "",
             NumeroDepartamento: document.getElementById("departamento")?.value.trim() || "",
             TieneEstacionamiento: document.querySelector('input[name="tieneEstacionamiento"]:checked')?.value || "no",
             CantidadEstacionamientos: parseInt(document.getElementById("cantidadEstacionamientos")?.value, 10) || 0,
