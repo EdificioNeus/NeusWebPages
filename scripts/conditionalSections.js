@@ -467,9 +467,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 const identificacionField = createDynamicField(i, "Nº identificación", "identificacionResidente", true);
                 const registroBiometrico = createDynamicRadioGroup(i, "¿Registro en Huellero?", "registroHuellero", [
                     { value: "si", label: "Sí" },
-                    { value: "no", label: "No" }
+                    { value: "no", label: "No", checked: true}
                 ], true);
-                const telefonoField = createDynamicField(i, "Teléfono", "telefonoResidente", true, "tel");
+                const telefonoField = createDynamicField(i, "Teléfono", "telefonoResidente", true, "tel", "Ej: +56912345678");
                 const correoField = createDynamicField(i, "Correo", "correoResidente", "email");
                 const parentescoField = createDynamicField(i, "Parentesco", "parentescoResidente", false);
 
@@ -566,7 +566,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 const nombreField = createDynamicField(i, "Nombre", "nombreMascota",false);
                 const vacunasRadioGroup = createDynamicRadioGroup(i, "¿Tiene vacunas al día?", "vacunasMascota", [
                     { value: "si", label: "Sí" },
-                    { value: "no", label: "No" }
+                    { value: "no", label: "No", checked: true}
                 ], true);
 
                 // Agregar los campos al contenedor del Mascota
@@ -688,7 +688,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 // Función para crear un campo dinámico reutilizable
-function createDynamicField(index, labelName, idPrefix, required = true, type = "text", options = null) {
+function createDynamicField(index, labelName, idPrefix, required = true, type = "text", options = null, placeholder="") {
     const container = document.createElement("div");
     container.classList.add("input-container");
 
@@ -725,6 +725,14 @@ function createDynamicField(index, labelName, idPrefix, required = true, type = 
         input.setAttribute("type", type);
         input.setAttribute("id", `${idPrefix}${index}`);
         input.setAttribute("name", `${idPrefix}${index}`);
+
+        if (placeholder) {
+            input.setAttribute("placeholder", placeholder);
+            setTimeout(() => {
+                input.placeholder = placeholder;
+            }, 0);
+        }
+
     }
 
     if (required) {

@@ -613,7 +613,7 @@ body.light-mode .input-error::placeholder {
 }
 
 .radio-group label, .radio-group-docs label {
-    display: flex;
+    display: inline-flex !important;
     align-items: center;
     gap: 5px;
     font-size: 16px;

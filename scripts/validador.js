@@ -85,7 +85,7 @@ function validateField(event) {
     }
 
     // 2. Validar números de teléfono
-    if (isValid && field.type === "tel" && !/^\+?[0-9\s()-]{8,15}$/.test(field.value.trim())) {
+    if (isValid && field.type === "tel" && !/^\+?[0-9()-]{8,15}$/.test(field.value.trim())) {
         isValid = false;
         message = "Número de teléfono inválido";
     }
