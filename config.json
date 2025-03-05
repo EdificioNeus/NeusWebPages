@@ -1,3 +1,60 @@
 {
-    "vigencia": "2025-03-18"
+    "sections": [
+        {
+            "title": "Registro de Residentes",
+            "description": "<p>En cumplimiento de la <strong>Ley de Copropiedad Inmobiliaria 21.442</strong>, es fundamental mantener actualizado el registro de residentes. Esto mejora la seguridad y convivencia dentro del edificio.</p><p>Ayúdanos completando el formulario con tu información. ¡Tu colaboración es clave!</p>",
+            "button": {
+                "text": "Completar datos Residentes",
+                "icon": "fas fa-clipboard-list",
+                "link": "formulario.html"
+            },
+            "vigencia": "2025-03-18",
+            "contador": true
+        }
+    ],
+    "enlacesInteres": [
+        {
+            "text": "Contactar por WhatsApp",
+            "icon": "fab fa-whatsapp",
+            "link": "https://wa.me/56997889052",
+            "class": "whatsapp-btn",
+            "group": 1
+        },
+        {
+            "text": "Agenda una cita con el administrador",
+            "icon": "fas fa-calendar-alt",
+            "link": "https://form.jotform.com/242696202608054",
+            "class": "contact-btn",
+            "group": 1
+        },
+        {
+            "text": "Crear un ticket al administrador",
+            "icon": "fas fa-envelope",
+            "link": "https://form.jotform.com/242694986380674",
+            "class": "contact-btn",
+            "group": 2
+        },
+        {
+            "text": "Descargar Reglamento",
+            "icon": "fas fa-file-pdf",
+            "link": "files/Reglamento_Interno.pdf",
+            "download": true,
+            "class": "reglamento-btn",
+            "group": 2
+        },
+        {
+            "text": "Ver Gasto Común",
+            "icon": "fas fa-money-bill-wave",
+            "link": "https://edificioneus.edipro.cl/",
+            "class": "gasto-comun-btn",
+            "group": 3
+        },
+        {
+            "text": "Solicitar Acceso a EDIPRO",
+            "icon": "fas fa-door-open",
+            "link": "https://edificioneus.edipro.app/accesos/new",
+            "class": "edipro-Access-btn",
+            "group": 3
+        }
+    ]
 }
