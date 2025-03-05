@@ -64,10 +64,11 @@ body.light-mode .theme-toggle {
 /* 🔹 Contenido de la Landing */
 .landing-content {
     display: flex;
+    flex-direction: column; /* 🟢 Asegura que las secciones estén en una columna */
     justify-content: center;
     align-items: center;
-    height: 40vh; /* Se redujo la altura */
-    padding: 10px;
+    padding: 20px;
+    gap: 20px; /* 🟢 Agrega espacio entre cada sección */
 }
 
 /* 🔹 Caja informativa */
@@ -78,6 +79,7 @@ body.light-mode .theme-toggle {
     border-radius: 8px;
     text-align: center;
     box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+    margin-bottom: 30px; /* 🟢 Agregamos espacio entre secciones */
 }
 
 /* Light Mode */

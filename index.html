@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registro de Residentes</title>
+    <title>Portal de Edificio Neus</title>
     <link rel="stylesheet" href="css/indexstyles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 </head>
@@ -17,54 +17,13 @@
         </button>
     </header>
 
-    <!-- Sección de Registro de Residentes -->
-    <main class="landing-content">
-        <div class="info-box">
-            <h2>¡Mantengamos nuestra comunidad actualizada!</h2>
-            <p>
-                En cumplimiento de la <strong>Ley de Copropiedad Inmobiliaria 21.442</strong>,
-                es fundamental mantener actualizado el registro de residentes.
-                Esto mejora la seguridad y convivencia dentro del edificio.
-            </p>
-            <p>
-                Ayúdanos completando el formulario con tu información. ¡Tu colaboración es clave!
-            </p>
-            <a href="formulario.html" class="formulario-btn">
-                <i class="fas fa-clipboard-list"></i> Completar datos Residentes
-            </a>
-            <div id="counter" style="margin-top: 10px; text-align: center;"></div>
-        </div>
-    </main>
+    <!-- Contenedor donde se cargarán dinámicamente las secciones -->
+    <main id="dynamic-sections" class="landing-content"></main>
 
-    <!-- Nueva Sección: Enlaces de Interés -->
+    <!-- Sección fija: Enlaces de Interés (botones se cargarán dinámicamente) -->
     <section class="enlaces-interes">
         <h2>📌 Enlaces de Interés</h2>
-        <div class="button-container">
-            <div class="button-group">
-                <a href="https://wa.me/56997889052" class="btn whatsapp-btn" target="_blank">
-                    <i class="fab fa-whatsapp"></i> Contactar por WhatsApp
-                </a>
-                <a href="https://form.jotform.com/242696202608054" class="btn contact-btn">
-                    <i class="fas fa-calendar-alt"></i> Agenda una cita con el administrador
-                </a>
-            </div>
-            <div class="button-group">
-                <a href="https://form.jotform.com/242694986380674" class="btn contact-btn">
-                    <i class="fas fa-envelope"></i> Crear un ticket al administrador
-                </a>
-                <a href="files/Reglamento_Interno.pdf" class="btn reglamento-btn" download>
-                    <i class="fas fa-file-pdf"></i> Descargar Reglamento
-                </a>
-            </div>
-            <div class="button-group">
-                <a href="https://edificioneus.edipro.cl/" class="btn gasto-comun-btn" target="_blank">
-                    <i class="fas fa-money-bill-wave"></i> Ver Gasto Común
-                </a>
-                <a href="https://edificioneus.edipro.app/accesos/new" class="btn edipro-Access-btn" target="_blank">
-                    <i class="fas fa-door-open"></i> Solicitar Acceso a EDIPRO
-                </a>
-            </div>
-        </div>
+        <div id="enlaces-interes-container" class="button-container"></div>
     </section>
 
     <div id="overlay" class="overlay hidden">
@@ -88,58 +47,7 @@
     <!-- Scripts -->
     <script src="scripts/themeToggle.js"></script>
     <script src="scripts/validador.js"></script>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-          let formExpired = false;
-          let interval = null;
-
-          fetch('config.json')
-            .then(response => response.json())
-            .then(data => {
-              const targetDate = new Date(data.vigencia + 'T00:00:00');
-              const counterDiv = document.getElementById('counter');
-
-              function updateCountdown() {
-                const now = new Date();
-                const diff = targetDate - now;
-
-                if (diff <= 0) {
-                  counterDiv.textContent = "Lo sentimos el formulario ha expirado el: "+data.vigencia;
-                  formExpired = true;
-                  clearInterval(interval);
-                  return;
-                }
-
-                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-                const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
-                const minutes = Math.floor((diff / (1000 * 60)) % 60);
-                const seconds = Math.floor((diff / 1000) % 60);
-
-                counterDiv.textContent = `${days} día${days !== 1 ? 's' : ''}, ${hours} hora${hours !== 1 ? 's' : ''}, ${minutes} min, ${seconds} seg`;
-              }
-
-              updateCountdown();
-              interval = setInterval(updateCountdown, 1000);
-
-              // Manejar el clic en "Ir al Formulario"
-              const formLink = document.querySelector('a.btn[href="formulario.html"]');
-              if (formLink) {
-                formLink.addEventListener('click', function(event) {
-                  if (formExpired) {
-                    event.preventDefault();
-                    showConfirmationMessage("Lo sentimos el formulario ha expirado", "error");
-                  } else {
-                    // Generar un id de sesión único y almacenarlo
-                    const sessionId = Math.random().toString(36).substr(2, 9);
-                    sessionStorage.setItem("sessionId", sessionId);
-                  }
-                });
-              }
-            })
-            .catch(error => console.error('Error al cargar la configuración:', error));
-        });
-      </script>
+    <script src="scripts/loadSections.js"></script>
 
 </body>
 </html>
