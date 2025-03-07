@@ -378,7 +378,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         const estacionamientoField = createDynamicField(i, "Número de Estacionamiento", "numeroEstacionamiento", true, "select", estacionamientosDisponibles);
 
                         // Crear el radio button de "¿Tiene Control Portón?"
-                        const tieneControlPorton = createDynamicRadioGroup(i, "¿Tiene Control Portón?", "controlPorton", [
+                        const tieneControlPorton = createDynamicRadioGroup(i, "¿Tiene Control Portón?", "tieneControlPorton", [
                             { value: "si", label: "Sí" },
                             { value: "no", label: "No", checked: true }
                         ], true);

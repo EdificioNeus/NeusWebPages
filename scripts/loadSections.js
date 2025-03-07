@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', function() {
             enlacesContainer.innerHTML = ""; // Limpiar los enlaces previos
 
             const now = new Date();
+            let formularioVigente = false;
 
             // Generar secciones dinámicas (excepto Enlaces de Interés)
             data.sections.forEach(section => {
@@ -16,6 +17,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     if (now > expiryDate) {
                         console.warn(`Sección "${section.title}" ha expirado el ${section.vigencia} y no se mostrará.`);
                         return;
+                    } else {
+                        formularioVigente = true;  // ✅ El formulario está vigente
                     }
                 }
 
@@ -30,7 +33,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Descripción (Renderiza HTML)
                 if (section.description) {
                     let description = document.createElement('div');
-                    description.innerHTML = section.description; // Se inserta como HTML
+                    description.innerHTML = section.description;
                     sectionElement.appendChild(description);
                 }
 
@@ -84,7 +87,20 @@ document.addEventListener('DOMContentLoaded', function() {
                 container.appendChild(sectionElement);
             });
 
-            // Generar botones de "Enlaces de Interés" agrupados de a 2
+            // ✅ Si el formulario está vigente, generar un sessionId
+            if (formularioVigente) {
+                if (!sessionStorage.getItem("sessionId")) {
+                    const newSessionId = generateSessionId();
+                    sessionStorage.setItem("sessionId", newSessionId);
+                    console.log("🆕 sessionId generado y almacenado:", newSessionId);
+                } else {
+                    console.log("🔄 sessionId existente detectado:", sessionStorage.getItem("sessionId"));
+                }
+            } else {
+                console.warn("⚠️ Formulario expirado. No se generará sessionId.");
+            }
+
+            // Generar botones de "Enlaces de Interés"
             if (data.enlacesInteres && Array.isArray(data.enlacesInteres)) {
                 const groups = {};
 
@@ -106,7 +122,6 @@ document.addEventListener('DOMContentLoaded', function() {
                         linkElement.href = link.link;
                         linkElement.classList.add('btn');
 
-                        // Agregar la clase CSS definida en el JSON
                         if (link.class) {
                             linkElement.classList.add(link.class);
                         }
@@ -131,3 +146,8 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .catch(error => console.error('Error al cargar la configuración:', error));
 });
+
+// Función para generar un sessionId aleatorio
+function generateSessionId() {
+    return 'sess-' + Math.random().toString(36).substr(2, 9) + '-' + Date.now();
+}

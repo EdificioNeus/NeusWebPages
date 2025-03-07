@@ -8,11 +8,14 @@ const prevButton = document.getElementById('prevBtn');
 
 // Función para mostrar la sección actual
 function showSection(index) {
+    console.log(`📌 Mostrando sección ${index} de ${sections.length - 1}`);
     sections.forEach((section, i) => {
         section.classList.toggle("active", i === index);
     });
 
     updateProgress(index); // Actualizar barra de progreso
+
+    poblarSeccionActiva(sections[index].id);
 
     // Ocultar el botón "Anterior" en la primera sección
     prevButton.style.display = index === 0 ? "none" : "block";
@@ -67,10 +70,12 @@ nextButton.addEventListener("click", () => {
     let isValid = window.validateSection();
 
     if (action === "next" && isValid) {
-        currentStep++;
-        showSection(currentStep);
+        if (currentStep < sections.length - 1) {  // ✅ Evita avanzar más de lo permitido
+            currentStep++;
+            showSection(currentStep);
+        }
     } else if (action === "submit") {
-        console.log("Enviando formulario...");
+        console.log("✅ Enviando formulario...");
         if (isValid) {
             document.getElementById("registroForm").dispatchEvent(new Event("submit"));
         }

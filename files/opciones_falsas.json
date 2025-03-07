@@ -1,0 +1,91 @@
+{
+    "residentes_falsos": [
+        "CARLOS", "juan", "María", "SOFÍA", "andrés", "Lucía", "PEDRO", "ana", "Diego", "valeria",
+        "MIGUEL", "laura", "Javier", "CAMILA", "gabriel", "Natalia", "LUIS", "clara", "Alejandro", "PAULA",
+        "esteban", "Florencia", "RICARDO", "martina", "Sebastián", "Julieta", "TOMÁS", "agustina", "Mateo", "Emilia",
+        "rodrigo", "Catalina", "FELIPE", "renata", "Santiago", "Isabella", "IGNACIO", "victoria", "Manuel", "Constanza",
+        "GONZALO", "pilar", "Álvaro", "Antonella", "leandro", "Macarena", "NICOLÁS", "daniela", "Facundo", "josefina"
+    ],
+    "mascotas_falsas": [
+        "LUNA", "max", "Firulais", "nala", "ROCKY", "Simba", "MIA", "toby", "Lola", "COCO",
+        "bruno", "Daisy", "REX", "bella", "Zeus", "MILO", "chloe", "Jack", "LUCY", "duke",
+        "Sasha", "THOR", "kira", "Buddy", "ROXY", "oliver", "Zoe", "TITO", "lili", "Benji",
+        "maya", "Sam", "NICO", "ruby", "Charlie", "MOKA", "pancho", "Lara", "PEPA", "tango",
+        "Dante", "lola", "RINGO", "nina", "Blanco", "OREO", "mimi", "Kiko", "BAMBI", "paco"
+    ],
+    "autos_colores_falsos": [
+        "NEGRO", "rojo", "Azul", "VERDE", "blanco", "Gris", "PLATA", "amarillo", "Naranja", "MORADO",
+        "turquesa", "Dorado", "MARRÓN", "celeste", "Rosa", "BEIGE", "violeta", "Cian", "MAGENTA", "lila",
+        "Esmeralda", "RUBÍ", "índigo", "Coral", "ÁMBAR", "oliva", "Caramelo", "COBRE", "bronce", "Perla",
+        "AZABACHE", "granate", "Caoba", "AQUA", "fucsia", "Lima", "MARFIL", "platino", "Salmón", "TINTO",
+        "verdeLima", "azulMarino", "GrisMetálico", "naranjaQuemado", "BlancoPerla", "rojoCereza", "verdeOliva", "azulEléctrico", "doradoMate", "rosaPastel"
+    ],
+    "estacionamientos_falsos": [
+        "170", "102", "155", "88", "136", "54", "213", "75", "127", "234",
+        "18", "161", "260", "92", "208", "37", "149", "267", "110", "85",
+        "225", "66", "132", "171", "44", "196", "106", "153", "275", "21",
+        "118", "239", "77", "143", "201", "96", "164", "55", "124", "247",
+        "33", "180", "215", "69", "138", "257", "90", "112", "231", "48"
+    ],
+    "bodegas_falsas": [
+        "163", "104", "150", "82", "141", "59", "219", "70", "129", "240",
+        "15", "166", "263", "98", "204", "41", "145", "270", "115", "80",
+        "221", "62", "137", "175", "49", "191", "108", "158", "279", "26",
+        "120", "244", "72", "147", "205", "94", "169", "52", "126", "251",
+        "30", "185", "210", "64", "134", "259", "87", "117", "236", "45"
+    ],
+    "bicicletas_marcas_falsas": [
+        "TREK", "giant", "Specialized", "SCOTT", "merida", "Cannondale", "BIANCHI", "cube", "Orbea", "KONA",
+        "santaCruz", "Yeti", "GT", "FUJI", "pinarello", "Colnago", "CERVÉLO", "raleigh", "Diamondback", "NORCO",
+        "marin", "Jamis", "FOCUS", "ridgeback", "Dawes", "SALSA", "surly", "Tern", "ELECTRA", "gazelle",
+        "Haro", "MONGOOSE", "schwinn", "Felt", "COMMENCAL", "niner", "Pivot", "ROCKRIDER", "ghost", "Haibike",
+        "LAPIERRE", "wilier", "DeRosa", "eddyMerckx", "Ridley", "BOARDMAN", "planetX", "Vitus", "GENESIS", "bombtrack"
+    ],
+    "nombres_falsos": [
+        "Fernando", "Mariana", "Elena", "Raúl", "Adriana", "Carlos", "Patricia", "Andrés", "Daniela", "Joaquín",
+        "Ricardo", "Rosa", "Esteban", "Alejandra", "Germán", "Paula", "Cristian", "Lorena", "Víctor", "Carla",
+        "Manuel", "Cecilia", "Gabriel", "Sofía", "Hugo", "Valentina", "Felipe", "Camila", "Eduardo", "Beatriz",
+        "Martín", "Gloria", "Luis", "Isabel", "Rodrigo", "Antonia", "Sebastián", "Florencia", "Jorge", "Margarita",
+        "Gonzalo", "Carolina", "Francisco", "Natalia", "Emilio", "Renata", "Alberto", "Juana", "Pedro", "Josefa"
+    ],
+    "identificaciones_falsas": [
+        "15467238-9", "27583946-1", "39856472-0", "48273956-2", "50678934-7", "62938475-5", "74583920-4", "83927465-3",
+        "91827364-8", "10485729-6", "21038475-2", "32569847-9", "45783920-1", "56782940-3", "69837456-7", "78945612-5",
+        "12345678-9", "98765432-1", "45678912-3", "65432178-2", "78912345-6", "32165498-4", "85296374-7", "74185296-5",
+        "36985214-8", "25874136-2", "14785236-9", "95175348-6", "35795148-3", "12398765-4", "78965412-8", "65498732-7",
+        "45632178-9", "85214796-2", "74136985-4", "96385214-7", "98732145-6", "15948732-8", "75395126-9", "95185236-4",
+        "85236914-7", "78921456-3", "65412398-5", "32198765-2", "12378945-8", "15926374-9", "95148632-7", "45698732-1",
+        "78965412-3", "85214739-5"
+    ],
+    "telefonos_falsos": [
+        "987654321", "956783412", "923456789", "945678231", "978123456", "965432187", "932178654", "947856321",
+        "921345678", "987621345", "934567812", "912345678", "967812345", "923456187", "956431278", "934568721",
+        "918276345", "975312468", "943287156", "986547231", "912678453", "932168745", "961234785", "948573216",
+        "926134587", "954678312", "971234658", "965874213", "948762135", "952346871", "934876512", "978652341",
+        "987643215", "923476581", "954317682", "916842375", "935162748", "974325861", "986325147", "942687531",
+        "957312468", "926543187", "934871652", "948375216", "921873654", "954162837", "972481536", "943527816",
+        "967248153", "958743261"
+    ],
+    "correos_falsos": [
+        "fernando.rojas@gmail.com", "mariana.luna@hotmail.com", "elena.morales@yahoo.com", "raul.torres@outlook.com",
+        "adriana.sanchez@gmail.com", "carlos.perez@empresa.com", "patricia.diaz@hotmail.com", "andres.fuentes@negocios.cl",
+        "daniela.munoz@yahoo.com", "joaquin.vera@live.com", "ricardo.martinez@gmail.com", "rosa.gonzalez@hotmail.com",
+        "esteban.vargas@empresa.cl", "alejandra.lopez@yahoo.com", "german.ramirez@gmail.com", "paula.castro@outlook.com",
+        "cristian.mendoza@yahoo.com", "lorena.fernandez@empresa.com", "victor.cortez@hotmail.com", "carla.ruiz@gmail.com",
+        "manuel.navarro@empresa.cl", "cecilia.espinoza@yahoo.com", "gabriel.gutierrez@gmail.com", "sofia.alvarez@outlook.com",
+        "hugo.rodriguez@hotmail.com", "valentina.salazar@gmail.com", "felipe.moreno@empresa.cl", "camila.ramos@yahoo.com",
+        "eduardo.maldonado@gmail.com", "beatriz.ojeda@outlook.com", "martin.arias@negocios.cl", "gloria.castillo@yahoo.com",
+        "luis.silva@gmail.com", "isabel.gallardo@hotmail.com", "rodrigo.morales@empresa.com", "antonia.cabrera@yahoo.com",
+        "sebastian.herrera@gmail.com", "florencia.soto@empresa.cl", "jorge.iglesias@hotmail.com", "margarita.peña@gmail.com",
+        "gonzalo.cardenas@outlook.com", "carolina.saez@yahoo.com", "francisco.villanueva@gmail.com", "natalia.rivera@empresa.cl",
+        "emilio.martin@hotmail.com", "renata.vasquez@yahoo.com", "alberto.acevedo@gmail.com", "juana.fuentes@empresa.cl",
+        "pedro.alarcon@hotmail.com", "josefa.meneses@gmail.com"
+    ],
+    "departamentos_falsos": [
+        "1702", "1614", "804", "1707", "715", "505", "1213", "907", "1215", "308",
+        "312", "309", "1212", "1017", "314", "412", "302", "1203", "1009", "808",
+        "204", "807", "404", "316", "902", "816", "612", "1704", "112", "1302",
+        "906", "214", "707", "312", "1407", "209", "1208", "306", "1111", "104",
+        "417", "513", "615", "1506", "211", "1405", "1306", "1711", "1204", "317"
+    ]
+}
