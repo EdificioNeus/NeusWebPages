@@ -59,7 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
             spinner.classList.remove('hidden');
 
             // Consulta al App Script para verificar si el departamento ya tiene datos registrados
-            fetch(`https://script.google.com/macros/s/AKfycbySyhS1yXEETcVLVsUO6ds3bLFywaJf74w_NzBaf6cukR1rKr2uJZu5NEzfIB5DD2iY/exec?departamento=${encodeURIComponent(selectedDepartamento)}&action=getData`)
+            fetch(`https://script.google.com/macros/s/AKfycbwmZek7j0lwfGJHsAfetS7NUINpihwjs79mKRt5QuiwHMRABqJxuGlzNJD_fPIKUlN_/exec?departamento=${encodeURIComponent(selectedDepartamento)}&action=getData`)
                 .then(response => response.json())
                 .then(data => {
 
