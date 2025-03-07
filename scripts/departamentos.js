@@ -104,7 +104,7 @@ document.addEventListener('DOMContentLoaded', () => {
             spinner.classList.remove('hidden');
 
             // Consulta al App Script para verificar el departamento
-            fetch(`https://script.google.com/macros/s/AKfycbzMm6hIapg7NbqCkQPXAg2AocTqI8ZrhxhYzzBXoGcQjScfexswEbEHrn-z7i6KDFnp/exec?departamento=${encodeURIComponent(selectedDepartamento)}`)
+            fetch(`https://script.google.com/macros/s/AKfycbwmZek7j0lwfGJHsAfetS7NUINpihwjs79mKRt5QuiwHMRABqJxuGlzNJD_fPIKUlN_/exec?departamento=${encodeURIComponent(selectedDepartamento)}`)
                 .then((response) => {
                     console.log('Respuesta recibida del servidor:', response);
                     return response.json();
