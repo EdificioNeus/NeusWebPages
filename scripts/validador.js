@@ -173,50 +173,95 @@ function validateCurrentSection() {
     return isValid;
 }
 
-function showConfirmationMessage(message, type = 'success') {
-    const overlay = document.getElementById('overlay');
-    const spinner = document.getElementById('spinner');
+/*function showConfirmationMessage(message, type = 'success') {
+    console.log("📢 showConfirmationMessage llamado con mensaje:", message, "y tipo:", type);
+
+    const overlay = document.getElementById('confirmationOverlay');
     const confirmationMessage = document.getElementById('confirmationMessage');
+    const overlaySpinner = document.getElementById("overlay");
+    const spinner = document.getElementById("spinner");
 
-    // Mostrar el overlay y ocultar el spinner
+    overlaySpinner.classList.add("hidden");
+    spinner.classList.add("hidden");
+
+    if (!overlay || !confirmationMessage) {
+        console.error("❌ No se encontró confirmationOverlay o confirmationMessage en el DOM.");
+        return;
+    }
+
+    // Mostrar overlay y mensaje
     overlay.classList.remove('hidden');
-    spinner.classList.add('hidden');
+    confirmationMessage.classList.remove('hidden');
 
-    // Crear botón de cierre "X"
-    const closeButton = `<button class="close-btn" onclick="closeConfirmationMessage()">×</button>`;
+    console.log("✅ Se eliminaron clases 'hidden' de overlay y mensaje.");
 
-    // Configurar el mensaje con la "X" para cerrar
     confirmationMessage.innerHTML = `
-        ${closeButton}
-        <h2>${type === 'success' ? 'Éxito' : 'Error'}</h2>
+        <button class="close-btn" onclick="closeConfirmationMessage()">×</button>
+        <h2>${type === 'success' ? 'ÉXITO' : 'ERROR'}</h2>
         <p>${message}</p>
     `;
 
-    confirmationMessage.classList.remove('hidden', 'success', 'error');
-    confirmationMessage.classList.add(type); // Aplicar estilo basado en tipo
+    console.log("✅ Se insertó el contenido en confirmationMessage:", confirmationMessage.innerHTML);
+
+    confirmationMessage.classList.remove('success', 'error', 'hidden');
+    confirmationMessage.classList.add(type);
+
+    console.log("✅ Clases actuales en confirmationMessage:", confirmationMessage.classList);
 
     // Configurar temporizador para ocultar automáticamente
-    let timeout = setTimeout(() => closeConfirmationMessage(), 5000);
+    let timeout = setTimeout(() => {
+        closeConfirmationMessage();
+    }, 3000);
 
-    // Guardar el timeout para poder cancelarlo si se cierra manualmente
     confirmationMessage.dataset.timeoutId = timeout;
+}*/
+
+function showConfirmationMessage(message, type = 'success') {
+    console.log("📢 showConfirmationMessage llamado con mensaje:", message, "y tipo:", type);
+    const isDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const overlaySpinner = document.getElementById("overlay");
+    const spinner = document.getElementById("spinner");
+
+    if (overlaySpinner && spinner) {
+        overlaySpinner.classList.add("hidden");
+        spinner.classList.add("hidden");
+    }
+
+    Swal.fire({
+        title: type === 'success' ? '✅ Éxito' : '❌ Error',
+        text: message,
+        icon: type === 'success' ? 'success' : 'error',
+        timer: 3000, // Se cierra automáticamente después de 3 segundos
+        showConfirmButton: false,
+        toast: false,
+        position: 'center',
+        backdrop: "rgba(0,0,0,0.75)",
+        customClass: {
+            popup: type === 'success' ? 'swal-success' : 'swal-error'
+        }
+    });
+
+    console.log("✅ SweetAlert2 se ha mostrado con el mensaje:", message);
 }
 
-// Función para cerrar el mensaje manualmente
+// Ajustar `closeConfirmationMessage` para ocultar correctamente el overlay
 function closeConfirmationMessage() {
-    // Si no existe un id de sesión, redirige
-    if (!sessionStorage.getItem("sessionId")) {
+    if (!sessionStorage.getItem("sessionId"))
+        {
+        console.warn("⚠️ Sesión no válida. Redirigiendo a index.html...");
         window.location.href = "index.html";
-        return;
     }
-    const overlay = document.getElementById('overlay');
+
+    const overlay = document.getElementById('confirmationOverlay');
     const confirmationMessage = document.getElementById('confirmationMessage');
 
-    overlay.classList.add('hidden');
-    confirmationMessage.classList.add('hidden');
+    if (overlay) overlay.classList.add('hidden');
+    if (confirmationMessage) confirmationMessage.classList.add('hidden');
 
-    // Cancelar el temporizador si el usuario cierra antes
-    clearTimeout(confirmationMessage.dataset.timeoutId);
+    // Cancelar el temporizador si el usuario cierra antes de tiempo
+    if (confirmationMessage.dataset.timeoutId) {
+        clearTimeout(confirmationMessage.dataset.timeoutId);
+    }
 }
 
 // Hacer que validateCurrentSection sea accesible globalmente

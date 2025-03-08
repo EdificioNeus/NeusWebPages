@@ -146,7 +146,13 @@
                 <label for="contrato">Cargar Contrato de Arriendo</label>
                 <input class="dropZone" type="file" id="contrato" name="contrato" accept=".pdf,.doc,.docx,.jpg,.png">
                 <button type="button" id="abrirCamara">📷 Usar Cámara</button>
-                <!-- Aquí ya no se coloca el previewContainer -->
+
+                <!-- 📂 Enlace para ver el contrato -->
+                <a id="contratoLink" href="#" target="_blank" class="hidden"></a>
+
+                <!-- 🗑️ Botón para eliminar contrato -->
+                <button type="button" id="eliminarContrato" class="hidden">🗑️ Eliminar Contrato</button>
+
                 <span class="error-message">Debe cargar un archivo válido</span>
             </div>
 
@@ -322,6 +328,18 @@
         <span id="progress-percentage">0%</span>
     </div>
 
+    <!-- Modal de validación -->
+    <div id="modalValidacion" class="modal hidden">
+        <div class="modal-content">
+            <h2>Verificación de Identidad</h2>
+            <div id="preguntasContainer"></div>
+            <div class="modal-buttons">
+                <button id="confirmarValidacion" class="confirm-button">Confirmar</button>
+                <button id="cancelarValidacion" class="cancel-button" onclick="document.getElementById('modalValidacion').classList.add('hidden')">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
     <div id="overlay" class="overlay hidden">
         <!-- Spinner dentro del overlay -->
         <div id="spinner" class="spinner hidden">
@@ -329,12 +347,12 @@
             <div class="gear gear2"></div>
             <div class="gear gear3"></div>
         </div>
-
-        <!-- Mensaje de confirmación dentro del overlay -->
-        <div id="confirmationMessage" class="hidden"></div>
-        <button class="close-btn">X</button>
     </div>
 
+    <!-- Nuevo overlay para el mensaje de confirmación -->
+    <div id="confirmationOverlay" class="overlay hidden">
+        <div id="confirmationMessage" class="hidden"></div>
+    </div>
 
     <!-- Modal de Protección de Datos -->
     <div id="disclaimerModal" class="modal">
@@ -360,6 +378,7 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="scripts/themeToggle.js"></script>
     <script src="scripts/captureAndConvert.js"></script>
     <script src="scripts/validaRut.js"></script>
@@ -367,27 +386,38 @@
     <script src="scripts/nacionalidades.js"></script>
     <script src="scripts/departamentos.js"></script>
     <script src="scripts/navigation.js"></script>
+    <script src="scripts/poblarDatos.js"></script>
     <script src="scripts/conditionalSections.js"></script>
     <script src="scripts/sendData.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-          fetch('config.json')
-            .then(response => response.json())
-            .then(data => {
-              // Se asume que data.vigencia está en formato "YYYY-MM-DD"
-              const targetDate = new Date(data.vigencia + 'T00:00:00');
-              // Verifica si la fecha es válida
-              if (isNaN(targetDate.getTime())) {
-                console.error("La fecha de vigencia en config.json no es válida:", data.vigencia);
-                return;
-              }
-              // Si la fecha actual es mayor o igual a la fecha de vigencia, se muestra el error
-              if (new Date() >= targetDate) {
-                showConfirmationMessage("El formulario ha expirado.", "error");
-              }
-            })
-            .catch(error => console.error('Error al cargar la configuración:', error));
-        });
+            fetch('config.json')
+              .then(response => response.json())
+              .then(data => {
+                // Buscar la sección de "Registro de Residentes"
+                const registroSeccion = data.sections.find(section => section.title === "Registro de Residentes");
+
+                if (registroSeccion) {
+                  // Obtener la fecha de vigencia de la sección
+                  const targetDate = new Date(registroSeccion.vigencia + 'T00:00:00');
+
+                  // Verifica si la fecha es válida
+                  if (isNaN(targetDate.getTime())) {
+                    console.error("La fecha de vigencia en config.json no es válida:", registroSeccion.vigencia);
+                    return;
+                  }
+
+                  // Si la fecha actual es mayor o igual a la fecha de vigencia, se muestra el error
+                  if (new Date() >= targetDate) {
+                    showConfirmationMessage("El formulario ha expirado.", "error");
+                  }
+                } else {
+                  console.error("No se encontró la sección 'Registro de Residentes' en el archivo config.json.");
+                }
+              })
+              .catch(error => console.error('Error al cargar la configuración:', error));
+          });
+
     </script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {

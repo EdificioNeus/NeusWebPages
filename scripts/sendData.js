@@ -50,6 +50,7 @@ function enviarFormulario()
     // Construcción del JSON con los datos del formulario
     const jsonData = {
         ContactoPrincipal: {
+            idPrincipal: idPrincipal, // ✅ Si es edición, agregamos el ID
             Nombres: document.getElementById("Nombres")?.value.trim() || "",
             Apellidos: document.getElementById("Apellidos")?.value.trim() || "",
             TipoIdentificacion: document.querySelector('input[name="documentType"]:checked')?.value || "",
@@ -63,6 +64,7 @@ function enviarFormulario()
             RegistradoHuellero: document.querySelector('input[name="tieneHuella"]:checked')?.value || "",
             NumeroDepartamento: document.getElementById("departamento")?.value.trim() || "",
             TieneEstacionamiento: document.querySelector('input[name="tieneEstacionamiento"]:checked')?.value || "no",
+            TieneControlPorton: document.querySelector('input[name="tieneControlPorton"]:checked')?.value || "no",
             CantidadEstacionamientos: parseInt(document.getElementById("cantidadEstacionamientos")?.value, 10) || 0,
             NumerosDeEstacionamiento: [],
             TieneBodega: document.querySelector('input[name="tieneBodega"]:checked')?.value || "no",
@@ -84,6 +86,8 @@ function enviarFormulario()
             Bicicletas: [],
         },
     };
+
+    jsonData.modoEdicion = modoEdicion;
 
 	// Recopilar datos dinámicos
     // 1. Estacionamientos
@@ -154,6 +158,8 @@ function enviarFormulario()
             Telefono: document.getElementById(`telefonoResidente${i}`)?.value.trim() || "",
             Correo: document.getElementById(`correoResidente${i}`)?.value.trim() || "",
             Parentesco: document.getElementById(`parentescoResidente${i}`)?.value.trim() || "",
+            RegistroHuellero: document.querySelector(`input[name="registroHuellero_${i}"]:checked`)?.value || "",
+
             NecesidadesEspeciales: necesidadesEspeciales,
         };
 
@@ -312,21 +318,3 @@ function enviarDatos(jsonData)
                 requestSent = false; // ❌ Permitir reintento
             });
     }
-
-// Función para mostrar mensaje de confirmación
-function showConfirmationMessage(message, type = "success") {
-    const overlay = document.getElementById("overlay");
-    const spinner = document.getElementById("spinner");
-    const confirmationMessage = document.getElementById("confirmationMessage");
-
-    overlay.classList.remove("hidden");
-    spinner.classList.add("hidden");
-    confirmationMessage.innerHTML = `<h2>${type === "success" ? "Éxito" : "Error"}</h2><p>${message}</p>`;
-    confirmationMessage.classList.remove("hidden");
-    confirmationMessage.classList.add(type);
-
-    setTimeout(() => {
-        overlay.classList.add("hidden");
-        confirmationMessage.classList.add("hidden");
-    }, 5000);
-}

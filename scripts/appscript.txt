@@ -1,0 +1,242 @@
+function doPost(e) {
+  try {
+    // Verificar si hay datos en la solicitud
+    if (!e || !e.postData || !e.postData.contents) {
+      logToSheet("Solicitud sin cuerpo válida o sin datos. Detalles de e: " + JSON.stringify(e));
+      return ContentService.createTextOutput("")
+        .setMimeType(ContentService.MimeType.TEXT);
+    }
+
+    logToSheet("Solicitud recibida: " + JSON.stringify(e));
+
+    // Procesar los datos enviados como texto plano
+    const payload = JSON.parse(e.postData.contents); // Decodifica el JSON enviado como texto plano
+    logToSheet("Datos procesados del payload: " + JSON.stringify(payload));
+
+    // Manejo del archivo en base64 (si existe y no es "Sin contrato")
+    let fileUrl = "";
+    if (payload.ContactoPrincipal?.ContratoDeArriendo && payload.ContactoPrincipal.ContratoDeArriendo !== "Sin contrato") {
+      logToSheet("Archivo en base64 detectado. Procesando...");
+      fileUrl = handleBase64File(
+        payload.ContactoPrincipal.ContratoDeArriendo,
+        "Contrato_" + Utilities.getUuid() + ".pdf",
+        "application/pdf"
+      );
+      logToSheet("Archivo guardado en Google Drive: " + fileUrl);
+      payload.ContactoPrincipal.ContratoDeArriendo = fileUrl; // Actualiza con la URL del archivo
+    } else {
+      logToSheet("No se detectó un archivo válido para subir.");
+    }
+
+
+    // Procesar los datos y guardarlos en la hoja de cálculo
+    return procesarDatos(payload);
+  } catch (error) {
+    logToSheet("Excepción capturada: " + error.message);
+    return ContentService.createTextOutput(
+      JSON.stringify({ status: "error", message: error.message })
+    ).setMimeType(ContentService.MimeType.JSON);
+  }
+}
+
+function doGet(e) {
+  try {
+    const departamento = e.parameter.departamento;
+    if (!departamento) {
+      throw new Error("El parámetro 'departamento' es obligatorio.");
+    }
+
+    const ss = SpreadsheetApp.getActiveSpreadsheet();
+    const hojaContacto = ss.getSheetByName("ContactoPrincipal");
+
+    if (!hojaContacto) {
+      throw new Error("La hoja 'ContactoPrincipal' no existe.");
+    }
+
+    // Obtener todas las filas de la hoja
+    const datos = hojaContacto.getDataRange().getValues();
+
+    // Normalizar los datos antes de comparar
+    const departamentoNormalizado = departamento.trim();
+
+    // Verifica si el número de departamento existe en la columna 11 (L)
+    const existe = datos.some((fila, index) => {
+      if (index === 0) return false; // Ignorar la primera fila si son encabezados
+      const numeroDepto = fila[11] ? fila[11].toString().trim() : ""; // Asegurar que sea un string y sin espacios
+      return numeroDepto === departamentoNormalizado;
+    });
+
+    return ContentService.createTextOutput(
+      JSON.stringify({
+        status: "success",
+        exists: existe,
+      })
+    ).setMimeType(ContentService.MimeType.JSON);
+  } catch (error) {
+    return ContentService.createTextOutput(
+      JSON.stringify({
+        status: "error",
+        message: error.message,
+      })
+    ).setMimeType(ContentService.MimeType.JSON);
+  }
+}
+
+function handleBase64File(base64Data, fileName, mimeType) {
+  const folderId = "1Pp1Ai1xrx1jsYwg5Hi2tqvlfISIlMW3K"; // ID de la carpeta de Google Drive
+  const folder = DriveApp.getFolderById(folderId);
+
+  if (!folder) {
+    throw new Error("Carpeta de Google Drive no encontrada. Verifica el ID.");
+  }
+
+  // Decodificar el archivo base64 y guardarlo como Blob
+  const blob = Utilities.newBlob(Utilities.base64Decode(base64Data), mimeType, fileName);
+  const file = folder.createFile(blob);
+
+  return file.getUrl(); // Devuelve la URL del archivo guardado
+}
+
+function procesarDatos(payload) {
+  const contacto = payload.ContactoPrincipal;
+
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const hojaContacto = ss.getSheetByName("ContactoPrincipal");
+  const hojaEstacionamientos = ss.getSheetByName("Estacionamientos");
+  const hojaBodegas = ss.getSheetByName("Bodegas");
+  const hojaAutos = ss.getSheetByName("Autos");
+  const hojaMascotas = ss.getSheetByName("Mascotas");
+  const hojaResidentes = ss.getSheetByName("Residentes");
+  const hojaBicicletas = ss.getSheetByName("Bicicletas");
+
+  // Generar un ID único para asociar datos relacionados
+  const uniqueId = Utilities.getUuid();
+  const timestamp = new Date();
+
+  // Agregar datos del contacto principal a la hoja "ContactoPrincipal"
+  hojaContacto.appendRow([
+    uniqueId,
+    timestamp,
+    contacto.Nombres,
+    contacto.Apellidos,
+    contacto.TipoIdentificacion,
+    contacto.NumeroIdentificacion,
+    contacto.CorreoElectronico,
+    contacto.Telefono,
+    contacto.Nacionalidad,
+    contacto.RegistradoEdipro,
+    contacto.RegistradoHuellero,
+    contacto.NumeroDepartamento,
+    contacto.TieneEstacionamiento,
+    contacto.CantidadEstacionamientos,
+    contacto.TieneBodega,
+    contacto.CantidadBodegas,
+    contacto.TieneAuto,
+    contacto.CantidadDeAutos,
+    contacto.TieneMascota,
+	  contacto.CantidadDeMascotas,
+    contacto.TieneResidentesAdicionales,
+    contacto.CantidadDeResidentes,
+    contacto.TieneBicicleta,
+    contacto.CantidadBicicletas,
+    contacto.PropietarioOArrendatario,
+    contacto.ContratoDeArriendo || "Sin contrato"
+  ]);
+
+  // Agregar datos de estacionamientos a la hoja "Estacionamientos"
+  if (contacto.NumerosDeEstacionamiento && contacto.NumerosDeEstacionamiento.length > 0) {
+    contacto.NumerosDeEstacionamiento.forEach((numero) => {
+      hojaEstacionamientos.appendRow([
+        uniqueId,
+        timestamp,
+        contacto.NumeroDepartamento,
+        numero,
+      ]);
+    });
+  }
+
+  // Agregar datos de bodegas a la hoja "Bodegas"
+  if (contacto.NumerosDeBodega && contacto.NumerosDeBodega.length > 0) {
+    contacto.NumerosDeBodega.forEach((numero) => {
+      hojaBodegas.appendRow([
+        uniqueId,
+        timestamp,
+        contacto.NumeroDepartamento,
+        numero,
+      ]);
+    });
+  }
+
+  // Agregar datos de autos a la hoja "Autos"
+  if (contacto.Autos && contacto.Autos.length > 0) {
+    contacto.Autos.forEach((auto) => {
+      hojaAutos.appendRow([
+        uniqueId,
+        timestamp,
+        contacto.NumeroDepartamento,
+		    auto.Tipo,
+        auto.Marca,
+        auto.Modelo,
+        auto.Color,
+        auto.Patente,
+      ]);
+    });
+  }
+
+  // Agregar datos de autos a la hoja "Mascotas"
+  if (contacto.Mascotas && contacto.Mascotas.length > 0) {
+    contacto.Mascotas.forEach((mascota) => {
+      hojaMascotas.appendRow([
+        uniqueId,
+        timestamp,
+        contacto.NumeroDepartamento,
+        mascota.Raza,
+        mascota.Nombre,
+		    mascota.Vacunas,
+      ]);
+    });
+  }
+
+  // Agregar datos de autos a la hoja "Residentes"
+  if (contacto.Residentes && contacto.Residentes.length > 0) {
+    contacto.Residentes.forEach((residente) => {
+      hojaResidentes.appendRow([
+        uniqueId,
+        timestamp,
+        contacto.NumeroDepartamento,
+        residente.Nombre,
+        residente.Edad,
+        residente.Apellido,
+        residente.Identificacion,
+        residente.Telefono,
+        residente.Correo,
+        residente.Parentesco,
+		    residente.NecesidadesEspeciales.join(", "),
+      ]);
+    });
+  }
+
+  // Agregar datos de bicicletas a la hoja "Bicicletas"
+  if (contacto.Bicicletas && contacto.Bicicletas.length > 0) {
+    contacto.Bicicletas.forEach((bicicleta) => {
+      hojaBicicletas.appendRow([
+        uniqueId,
+        timestamp,
+        contacto.NumeroDepartamento,
+        bicicleta.Marca,
+        bicicleta.Color,
+        bicicleta.Bicicletero,
+      ]);
+    });
+  }
+
+  return ContentService.createTextOutput(
+    JSON.stringify({ status: "success", message: "Datos guardados exitosamente" })
+  ).setMimeType(ContentService.MimeType.JSON);
+}
+
+function logToSheet(message) {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const logSheet = ss.getSheetByName("Logs") || ss.insertSheet("Logs");
+  logSheet.appendRow([new Date(), message]);
+}
