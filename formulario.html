@@ -146,7 +146,13 @@
                 <label for="contrato">Cargar Contrato de Arriendo</label>
                 <input class="dropZone" type="file" id="contrato" name="contrato" accept=".pdf,.doc,.docx,.jpg,.png">
                 <button type="button" id="abrirCamara">📷 Usar Cámara</button>
-                <!-- Aquí ya no se coloca el previewContainer -->
+
+                <!-- 📂 Enlace para ver el contrato -->
+                <a id="contratoLink" href="#" target="_blank" class="hidden"></a>
+
+                <!-- 🗑️ Botón para eliminar contrato -->
+                <button type="button" id="eliminarContrato" class="hidden">🗑️ Eliminar Contrato</button>
+
                 <span class="error-message">Debe cargar un archivo válido</span>
             </div>
 
@@ -327,8 +333,10 @@
         <div class="modal-content">
             <h2>Verificación de Identidad</h2>
             <div id="preguntasContainer"></div>
-            <button id="confirmarValidacion">Confirmar</button>
-            <button id="cancelarValidacion" onclick="document.getElementById('modalValidacion').classList.add('hidden')">Cancelar</button>
+            <div class="modal-buttons">
+                <button id="confirmarValidacion" class="confirm-button">Confirmar</button>
+                <button id="cancelarValidacion" class="cancel-button" onclick="document.getElementById('modalValidacion').classList.add('hidden')">Cancelar</button>
+            </div>
         </div>
     </div>
 
@@ -370,6 +378,7 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="scripts/themeToggle.js"></script>
     <script src="scripts/captureAndConvert.js"></script>
     <script src="scripts/validaRut.js"></script>

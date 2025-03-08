@@ -4,6 +4,18 @@ let idPrincipal = null;   // ✅ Guardamos el ID del registro si existe
 
 document.addEventListener('DOMContentLoaded', () => {
     const departamentoSelect = document.getElementById('departamento');
+    const cancelButton = document.querySelector(".cancel-button");
+
+    if (cancelButton) {
+        cancelButton.addEventListener("click", function () {
+            showConfirmationMessage("Validación fallida, no puede continuar", "error");
+
+            // Espera 3 segundos antes de redirigir
+            setTimeout(() => {
+                window.location.href = "index.html";
+            }, 3000);
+        });
+    }
 
     // Ruta al archivo JSON
     const jsonPath = 'files/departamentos.json';
@@ -116,7 +128,6 @@ function mostrarModalValidacion(departamento) {
 
     generarPreguntasValidacion(datosFormulario);
 }
-
 
 // Generar preguntas aleatorias basadas en la información del departamento
 function generarPreguntasValidacion(data) {
@@ -279,7 +290,6 @@ function generarPreguntasValidacion(data) {
 function mezclarOpciones(opciones) {
     return opciones.sort(() => Math.random() - 0.5);
 }
-
 
 // Mostrar modal con preguntas de validación
 function mostrarModalConPreguntas(preguntas) {

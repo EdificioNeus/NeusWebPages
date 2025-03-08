@@ -173,7 +173,7 @@ function validateCurrentSection() {
     return isValid;
 }
 
-function showConfirmationMessage(message, type = 'success') {
+/*function showConfirmationMessage(message, type = 'success') {
     console.log("📢 showConfirmationMessage llamado con mensaje:", message, "y tipo:", type);
 
     const overlay = document.getElementById('confirmationOverlay');
@@ -214,6 +214,34 @@ function showConfirmationMessage(message, type = 'success') {
     }, 3000);
 
     confirmationMessage.dataset.timeoutId = timeout;
+}*/
+
+function showConfirmationMessage(message, type = 'success') {
+    console.log("📢 showConfirmationMessage llamado con mensaje:", message, "y tipo:", type);
+    const isDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const overlaySpinner = document.getElementById("overlay");
+    const spinner = document.getElementById("spinner");
+
+    if (overlaySpinner && spinner) {
+        overlaySpinner.classList.add("hidden");
+        spinner.classList.add("hidden");
+    }
+
+    Swal.fire({
+        title: type === 'success' ? '✅ Éxito' : '❌ Error',
+        text: message,
+        icon: type === 'success' ? 'success' : 'error',
+        timer: 3000, // Se cierra automáticamente después de 3 segundos
+        showConfirmButton: false,
+        toast: false,
+        position: 'center',
+        backdrop: "rgba(0,0,0,0.75)",
+        customClass: {
+            popup: type === 'success' ? 'swal-success' : 'swal-error'
+        }
+    });
+
+    console.log("✅ SweetAlert2 se ha mostrado con el mensaje:", message);
 }
 
 // Ajustar `closeConfirmationMessage` para ocultar correctamente el overlay

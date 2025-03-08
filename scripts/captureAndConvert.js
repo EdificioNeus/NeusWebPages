@@ -52,6 +52,34 @@ document.addEventListener("DOMContentLoaded", function () {
     let videoStream = null;
     const captureButton = document.getElementById("captureButton");
     const video = document.getElementById("video");
+    const contratoInput = document.getElementById("contrato");
+    const contratoLink = document.getElementById("contratoLink");
+    const eliminarContratoBtn = document.getElementById("eliminarContrato");
+
+    // Función para actualizar la visibilidad del contrato
+    function actualizarBotonesContrato(urlContrato) {
+        if (urlContrato && urlContrato !== "Sin contrato") {
+            contratoLink.href = urlContrato; // Asigna la URL
+            contratoLink.textContent = "📄 Ver contrato";
+            contratoLink.classList.remove("hidden");
+
+            eliminarContratoBtn.classList.remove("hidden");
+        } else {
+            contratoLink.classList.add("hidden");
+            eliminarContratoBtn.classList.add("hidden");
+        }
+    }
+
+    // Verificar si hay un contrato cargado en los datos obtenidos
+    if (typeof datosDepartamento !== "undefined" && datosDepartamento.contratoDeArriendo) {
+        actualizarBotonesContrato(datosDepartamento.contratoDeArriendo);
+    }
+
+    // Evento para eliminar contrato
+    eliminarContratoBtn.addEventListener("click", function () {
+        contratoInput.value = ""; // Limpiar input de archivo
+        actualizarBotonesContrato(""); // Ocultar los botones de contrato
+    });
 
     if (captureButton && video) {
         captureButton.addEventListener("click", (e) => {

@@ -213,7 +213,6 @@ function poblarBicicletas(bicicletas) {
         return;
     }
 
-
     const cantidadBicicletas = document.getElementById("cantidadBicicletas");
     const camposBicicletas = document.getElementById("camposBicicletas");
 
@@ -256,14 +255,32 @@ function poblarDatosDepartamento(data) {
     // Seleccionar propietario o arrendatario
     seleccionarRadio("tipoPropietario", data.propietarioOArrendatario);
 
+	const contratoArriendoContainer = document.getElementById("contratoArriendo");
+    const contratoInput = document.getElementById("contrato");
+    const contratoLink = document.getElementById("contratoLink"); // ⬅️ Nuevo enlace
+    const eliminarContratoBtn = document.getElementById("eliminarContrato"); // ⬅️ Nuevo botón
+
     // Si es arrendatario, mostrar el contenedor de carga de contrato
-    if (data.propietarioOArrendatario === "arrendatario")
-    {
-        document.getElementById("contratoArriendo").classList.remove("hidden");
-    }
-    else
-    {
-        document.getElementById("contratoArriendo").classList.add("hidden");
+    if (data.propietarioOArrendatario === "arrendatario") {
+        contratoArriendoContainer.classList.remove("hidden");
+
+        if (data.contratoDeArriendo && data.contratoDeArriendo.startsWith("https://drive.google.com")) {
+            // 📂 Mostrar el enlace al contrato
+            contratoLink.href = data.contratoDeArriendo;
+            contratoLink.textContent = "📄 Ver contrato";
+            contratoLink.classList.remove("hidden");
+
+            // 🗑️ Mostrar botón para eliminar contrato
+            eliminarContratoBtn.classList.remove("hidden");
+        } else {
+            // Si no hay contrato cargado, ocultar elementos
+            contratoLink.classList.add("hidden");
+            eliminarContratoBtn.classList.add("hidden");
+        }
+    } else {
+        contratoArriendoContainer.classList.add("hidden");
+        contratoLink.classList.add("hidden");
+        eliminarContratoBtn.classList.add("hidden");
     }
 
     // Seleccionar si tiene estacionamiento
