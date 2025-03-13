@@ -267,7 +267,7 @@ function enviarDatos(jsonData)
         }
 
         requestSent = true; // ✅ Evitar envíos duplicados
-        const url = "https://script.google.com/macros/s/AKfycbwmZek7j0lwfGJHsAfetS7NUINpihwjs79mKRt5QuiwHMRABqJxuGlzNJD_fPIKUlN_/exec";
+        const url = "https://script.google.com/macros/s/AKfycbwlwoII8OW-7LZP1ZwQhBjorATzktqTwebOq6NeGEthPK3VxDyc-bub64YV3e5-A6w4/exec";
 
         const fetchOptions =
         {
