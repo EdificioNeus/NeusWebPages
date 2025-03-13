@@ -64,9 +64,9 @@ function enviarFormulario()
             RegistradoHuellero: document.querySelector('input[name="tieneHuella"]:checked')?.value || "",
             NumeroDepartamento: document.getElementById("departamento")?.value.trim() || "",
             TieneEstacionamiento: document.querySelector('input[name="tieneEstacionamiento"]:checked')?.value || "no",
-            TieneControlPorton: document.querySelector('input[name="tieneControlPorton"]:checked')?.value || "no",
             CantidadEstacionamientos: parseInt(document.getElementById("cantidadEstacionamientos")?.value, 10) || 0,
             NumerosDeEstacionamiento: [],
+            TieneControlPorton: [],
             TieneBodega: document.querySelector('input[name="tieneBodega"]:checked')?.value || "no",
             CantidadBodegas: parseInt(document.getElementById("cantidadBodegas")?.value, 10) || 0,
             NumerosDeBodega: [],
@@ -90,13 +90,16 @@ function enviarFormulario()
     jsonData.modoEdicion = modoEdicion;
 
 	// Recopilar datos dinámicos
-    // 1. Estacionamientos
+ // 1. Estacionamientos
     const cantidadEstacionamientos = jsonData.ContactoPrincipal.CantidadEstacionamientos;
     for (let i = 1; i <= cantidadEstacionamientos; i++) {
         const numeroEstacionamiento = document.getElementById(`numeroEstacionamiento${i}`)?.value.trim() || "";
+        const tieneControl = document.querySelector(`input[name="tieneControlPorton_${i}"]:checked`)?.value || "no";
+
         if (numeroEstacionamiento) {
             jsonData.ContactoPrincipal.NumerosDeEstacionamiento.push(numeroEstacionamiento);
         }
+        jsonData.ContactoPrincipal.TieneControlPorton.push(tieneControl);
     }
 
     // 2. Bodegas

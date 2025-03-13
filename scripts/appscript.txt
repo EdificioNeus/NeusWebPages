@@ -1,92 +1,155 @@
-function doPost(e) {
-  try {
+function doPost(e)
+{
+  try
+  {
+	 const logId = Utilities.getUuid();
     // Verificar si hay datos en la solicitud
-    if (!e || !e.postData || !e.postData.contents) {
-      logToSheet("Solicitud sin cuerpo válida o sin datos. Detalles de e: " + JSON.stringify(e));
-      return ContentService.createTextOutput("")
-        .setMimeType(ContentService.MimeType.TEXT);
+    if (!e || !e.postData || !e.postData.contents)
+    {
+      logToDrive(logId, "Solicitud sin cuerpo válida o sin datos. Detalles de e: " + JSON.stringify(e));
+      return ContentService.createTextOutput("").setMimeType(ContentService.MimeType.TEXT);
     }
 
-    logToSheet("Solicitud recibida: " + JSON.stringify(e));
+    logToDrive(logId, "Solicitud recibida: " + JSON.stringify(e));
 
     // Procesar los datos enviados como texto plano
     const payload = JSON.parse(e.postData.contents); // Decodifica el JSON enviado como texto plano
-    logToSheet("Datos procesados del payload: " + JSON.stringify(payload));
+    logToDrive(logId, "Datos procesados del payload: " + JSON.stringify(payload));
 
     // Manejo del archivo en base64 (si existe y no es "Sin contrato")
     let fileUrl = "";
     if (payload.ContactoPrincipal?.ContratoDeArriendo && payload.ContactoPrincipal.ContratoDeArriendo !== "Sin contrato") {
-      logToSheet("Archivo en base64 detectado. Procesando...");
-      fileUrl = handleBase64File(
-        payload.ContactoPrincipal.ContratoDeArriendo,
-        "Contrato_" + Utilities.getUuid() + ".pdf",
-        "application/pdf"
-      );
-      logToSheet("Archivo guardado en Google Drive: " + fileUrl);
+      logToDrive(logId, "Archivo en base64 detectado. Procesando...");
+      fileUrl = handleBase64File(payload.ContactoPrincipal.ContratoDeArriendo,"Contrato_" + Utilities.getUuid() + ".pdf","application/pdf");
+      logToDrive(logId, "Archivo guardado en Google Drive: " + fileUrl);
       payload.ContactoPrincipal.ContratoDeArriendo = fileUrl; // Actualiza con la URL del archivo
-    } else {
-      logToSheet("No se detectó un archivo válido para subir.");
+    }
+    else
+    {
+      logToDrive(logId, "No se detectó un archivo válido para subir.");
     }
 
 
     // Procesar los datos y guardarlos en la hoja de cálculo
     return procesarDatos(payload);
-  } catch (error) {
-    logToSheet("Excepción capturada: " + error.message);
-    return ContentService.createTextOutput(
-      JSON.stringify({ status: "error", message: error.message })
-    ).setMimeType(ContentService.MimeType.JSON);
+  }
+  catch (error)
+  {
+    logToDrive(logId, "Excepción capturada: " + error.message);
+    return ContentService.createTextOutput(JSON.stringify({ status: "error", message: error.message })).setMimeType(ContentService.MimeType.JSON);
   }
 }
 
-function doGet(e) {
-  try {
-    const departamento = e.parameter.departamento;
-    if (!departamento) {
-      throw new Error("El parámetro 'departamento' es obligatorio.");
+function doGet(e)
+{
+    try
+    {
+        const departamento = e.parameter.departamento;
+        const action = e.parameter.action || "";
+
+        if (!departamento)
+        {
+            throw new Error("El parámetro 'departamento' es obligatorio.");
+        }
+
+        const ss = SpreadsheetApp.getActiveSpreadsheet();
+        const hojaContacto = ss.getSheetByName("ContactoPrincipal");
+        const datos = hojaContacto.getDataRange().getValues();
+
+        const departamentoNormalizado = departamento.trim();
+        let respuesta = { status: "success", exists: false };
+
+        for (let i = 1; i < datos.length; i++)
+        {
+            if (datos[i][11].toString().trim() === departamentoNormalizado)
+            {
+                respuesta.exists = true;
+
+                if (action === "getData")
+                {
+                    // Datos principales de ContactoPrincipal
+                    respuesta.idPrincipal= datos[i][0];
+                    respuesta.nombres = datos[i][2];
+                    respuesta.apellidos = datos[i][3];
+                    respuesta.tipoIdentificacion = datos[i][4];
+                    respuesta.numeroIdentificacion = datos[i][5];
+                    respuesta.correoElectronico = datos[i][6];
+                    respuesta.telefono = datos[i][7];
+                    respuesta.nacionalidad = datos[i][8];
+                    respuesta.registradoEdipro = datos[i][9];
+                    respuesta.registradoHuellero = datos[i][10];
+                    respuesta.departamento = datos[i][11];
+                    respuesta.tieneEstacionamiento = datos[i][12];
+                    respuesta.cantidadEstacionamientos = datos[i][13];
+                    respuesta.tieneBodega = datos[i][14];
+                    respuesta.cantidadBodegas = datos[i][15];
+                    respuesta.tieneAuto = datos[i][16];
+                    respuesta.cantidadAutos = datos[i][17];
+                    respuesta.tieneMascota = datos[i][18];
+                    respuesta.cantidadMascotas = datos[i][19];
+                    respuesta.tieneResidentesAdicionales = datos[i][20];
+                    respuesta.cantidadResidentes = datos[i][21];
+                    respuesta.tieneBicicleta = datos[i][22];
+                    respuesta.cantidadBicicletas = datos[i][23];
+                    respuesta.propietarioOArrendatario = datos[i][24];
+                    respuesta.contratoDeArriendo = datos[i][25];
+
+                    // Obtener datos desde otras hojas
+                    respuesta.autos = obtenerDatosHoja(ss, "Autos", departamentoNormalizado, ["Tipo", "Marca", "Modelo", "Color", "Patente"]);
+                    respuesta.estacionamientos = obtenerDatosHoja(ss, "Estacionamientos", departamentoNormalizado, ["Número","TieneControlPorton"]);
+                    respuesta.bodegas = obtenerDatosHoja(ss, "Bodegas", departamentoNormalizado, ["Número"]);
+                    respuesta.mascotas = obtenerDatosHoja(ss, "Mascotas", departamentoNormalizado, ["Raza", "Nombre", "VacunasAlDia"]);
+                    respuesta.residentes = obtenerDatosHoja(ss, "Residentes", departamentoNormalizado, ["Nombres", "Apellidos", "Edad", "NumeroIdentificacion", "Telefono", "Correo", "Parentesco", "NecesidadesEspeciales","RegistroHuellero"]);
+                    respuesta.bicicletas = obtenerDatosHoja(ss, "Bicicletas", departamentoNormalizado, ["Marca", "Color", "NúmeroBicicletero"]);
+                }
+                break;
+            }
+        }
+
+        return ContentService.createTextOutput(JSON.stringify(respuesta)).setMimeType(ContentService.MimeType.JSON);
     }
-
-    const ss = SpreadsheetApp.getActiveSpreadsheet();
-    const hojaContacto = ss.getSheetByName("ContactoPrincipal");
-
-    if (!hojaContacto) {
-      throw new Error("La hoja 'ContactoPrincipal' no existe.");
+    catch (error)
+    {
+        return ContentService.createTextOutput(JSON.stringify({ status: "error", message: error.message })).setMimeType(ContentService.MimeType.JSON);
     }
-
-    // Obtener todas las filas de la hoja
-    const datos = hojaContacto.getDataRange().getValues();
-
-    // Normalizar los datos antes de comparar
-    const departamentoNormalizado = departamento.trim();
-
-    // Verifica si el número de departamento existe en la columna 11 (L)
-    const existe = datos.some((fila, index) => {
-      if (index === 0) return false; // Ignorar la primera fila si son encabezados
-      const numeroDepto = fila[11] ? fila[11].toString().trim() : ""; // Asegurar que sea un string y sin espacios
-      return numeroDepto === departamentoNormalizado;
-    });
-
-    return ContentService.createTextOutput(
-      JSON.stringify({
-        status: "success",
-        exists: existe,
-      })
-    ).setMimeType(ContentService.MimeType.JSON);
-  } catch (error) {
-    return ContentService.createTextOutput(
-      JSON.stringify({
-        status: "error",
-        message: error.message,
-      })
-    ).setMimeType(ContentService.MimeType.JSON);
-  }
 }
 
-function handleBase64File(base64Data, fileName, mimeType) {
+function obtenerDatosHoja(ss, hojaNombre, departamento, columnas)
+{
+    const hoja = ss.getSheetByName(hojaNombre);
+    if (!hoja) return [];
+
+    const datos = hoja.getDataRange().getValues();
+    const headers = datos[0];
+    const resultado = [];
+
+    for (let i = 1; i < datos.length; i++)
+    {
+        if (datos[i][2].toString().trim() === departamento)
+        {
+            let objeto = {};
+            columnas.forEach((col, index) =>
+            {
+                const colIndex = headers.indexOf(col);
+                if (colIndex !== -1)
+                {
+                    objeto[col] = datos[i][colIndex];
+                }
+            });
+            resultado.push(objeto);
+        }
+    }
+
+    return resultado;
+}
+
+function handleBase64File(base64Data, fileName, mimeType)
+{
   const folderId = "1Pp1Ai1xrx1jsYwg5Hi2tqvlfISIlMW3K"; // ID de la carpeta de Google Drive
   const folder = DriveApp.getFolderById(folderId);
 
-  if (!folder) {
+  if (!folder)
+  {
     throw new Error("Carpeta de Google Drive no encontrada. Verifica el ID.");
   }
 
@@ -97,9 +160,9 @@ function handleBase64File(base64Data, fileName, mimeType) {
   return file.getUrl(); // Devuelve la URL del archivo guardado
 }
 
-function procesarDatos(payload) {
+function procesarDatos(payload, logId)
+{
   const contacto = payload.ContactoPrincipal;
-
   const ss = SpreadsheetApp.getActiveSpreadsheet();
   const hojaContacto = ss.getSheetByName("ContactoPrincipal");
   const hojaEstacionamientos = ss.getSheetByName("Estacionamientos");
@@ -109,134 +172,190 @@ function procesarDatos(payload) {
   const hojaResidentes = ss.getSheetByName("Residentes");
   const hojaBicicletas = ss.getSheetByName("Bicicletas");
 
-  // Generar un ID único para asociar datos relacionados
-  const uniqueId = Utilities.getUuid();
+  const data = hojaContacto.getDataRange().getValues();
+  let rowIndex = -1;
+  let idPrincipal = contacto.idPrincipal || "";
+
+  if (payload.modoEdicion && idPrincipal)
+  {
+    for (let i = 1; i < data.length; i++)
+    {
+      if (data[i][0] == idPrincipal)
+      {
+        rowIndex = i + 1;
+        break;
+      }
+    }
+  }
+
   const timestamp = new Date();
 
-  // Agregar datos del contacto principal a la hoja "ContactoPrincipal"
-  hojaContacto.appendRow([
-    uniqueId,
-    timestamp,
-    contacto.Nombres,
-    contacto.Apellidos,
-    contacto.TipoIdentificacion,
-    contacto.NumeroIdentificacion,
-    contacto.CorreoElectronico,
-    contacto.Telefono,
-    contacto.Nacionalidad,
-    contacto.RegistradoEdipro,
-    contacto.RegistradoHuellero,
-    contacto.NumeroDepartamento,
-    contacto.TieneEstacionamiento,
-    contacto.CantidadEstacionamientos,
-    contacto.TieneBodega,
-    contacto.CantidadBodegas,
-    contacto.TieneAuto,
-    contacto.CantidadDeAutos,
-    contacto.TieneMascota,
-	  contacto.CantidadDeMascotas,
-    contacto.TieneResidentesAdicionales,
-    contacto.CantidadDeResidentes,
-    contacto.TieneBicicleta,
-    contacto.CantidadBicicletas,
-    contacto.PropietarioOArrendatario,
-    contacto.ContratoDeArriendo || "Sin contrato"
-  ]);
+  if (rowIndex !== -1)
+  {
+    // 🔄 **Actualizar datos existentes**
+    logToDrive(logId, `🔄 Actualizando fila ${rowIndex} para ID ${idPrincipal}`);
 
-  // Agregar datos de estacionamientos a la hoja "Estacionamientos"
-  if (contacto.NumerosDeEstacionamiento && contacto.NumerosDeEstacionamiento.length > 0) {
-    contacto.NumerosDeEstacionamiento.forEach((numero) => {
-      hojaEstacionamientos.appendRow([
-        uniqueId,
-        timestamp,
-        contacto.NumeroDepartamento,
-        numero,
-      ]);
-    });
+    const valoresContacto = [
+      idPrincipal,
+      timestamp,
+      contacto.Nombres,
+      contacto.Apellidos,
+      contacto.TipoIdentificacion,
+      contacto.NumeroIdentificacion,
+      contacto.CorreoElectronico,
+      contacto.Telefono,
+      contacto.Nacionalidad,
+      contacto.RegistradoEdipro,
+      contacto.RegistradoHuellero,
+      contacto.NumeroDepartamento,
+      contacto.TieneEstacionamiento,
+      contacto.CantidadEstacionamientos,
+      contacto.TieneBodega,
+      contacto.CantidadBodegas,
+      contacto.TieneAuto,
+      contacto.CantidadDeAutos,
+      contacto.TieneMascota,
+      contacto.CantidadDeMascotas,
+      contacto.TieneResidentesAdicionales,
+      contacto.CantidadDeResidentes,
+      contacto.TieneBicicleta,
+      contacto.CantidadBicicletas,
+      contacto.PropietarioOArrendatario,
+      contacto.ContratoDeArriendo || "Sin contrato"
+    ];
+
+    hojaContacto.getRange(rowIndex, 1, 1, valoresContacto.length).setValues([valoresContacto]);
+
+    // ❌ **Eliminar registros anteriores antes de reinsertarlos**
+    limpiarRegistrosRelacionados(hojaEstacionamientos, idPrincipal);
+    limpiarRegistrosRelacionados(hojaBodegas, idPrincipal);
+    limpiarRegistrosRelacionados(hojaAutos, idPrincipal);
+    limpiarRegistrosRelacionados(hojaMascotas, idPrincipal);
+    limpiarRegistrosRelacionados(hojaResidentes, idPrincipal);
+    limpiarRegistrosRelacionados(hojaBicicletas, idPrincipal);
+
+  }
+  else
+  {
+    // 🆕 **Insertar nuevo registro**
+    logToDrive(logId, "🆕 Insertando nuevo registro...");
+    idPrincipal = Utilities.getUuid();
+    contacto.idPrincipal = idPrincipal;
+
+    hojaContacto.appendRow([
+      idPrincipal,
+      timestamp,
+      contacto.Nombres,
+      contacto.Apellidos,
+      contacto.TipoIdentificacion,
+      contacto.NumeroIdentificacion,
+      contacto.CorreoElectronico,
+      contacto.Telefono,
+      contacto.Nacionalidad,
+      contacto.RegistradoEdipro,
+      contacto.RegistradoHuellero,
+      contacto.NumeroDepartamento,
+      contacto.TieneEstacionamiento,
+      contacto.CantidadEstacionamientos,
+      contacto.TieneBodega,
+      contacto.CantidadBodegas,
+      contacto.TieneAuto,
+      contacto.CantidadDeAutos,
+      contacto.TieneMascota,
+      contacto.CantidadDeMascotas,
+      contacto.TieneResidentesAdicionales,
+      contacto.CantidadDeResidentes,
+      contacto.TieneBicicleta,
+      contacto.CantidadBicicletas,
+      contacto.PropietarioOArrendatario,
+      contacto.ContratoDeArriendo || "Sin contrato"
+    ]);
   }
 
-  // Agregar datos de bodegas a la hoja "Bodegas"
-  if (contacto.NumerosDeBodega && contacto.NumerosDeBodega.length > 0) {
-    contacto.NumerosDeBodega.forEach((numero) => {
-      hojaBodegas.appendRow([
-        uniqueId,
-        timestamp,
-        contacto.NumeroDepartamento,
-        numero,
-      ]);
-    });
-  }
+  // ✅ **Insertar datos en hojas secundarias**
+  insertarDatosRelacionados(logId, hojaEstacionamientos, contacto.NumerosDeEstacionamiento, contacto.NumeroDepartamento, idPrincipal, timestamp);
+  insertarDatosRelacionados(logId, hojaBodegas, contacto.NumerosDeBodega, contacto.NumeroDepartamento, idPrincipal, timestamp);
+  insertarAutos(logId, hojaAutos, contacto.Autos, contacto.NumeroDepartamento, idPrincipal, timestamp);
+  insertarMascotas(logId, hojaMascotas, contacto.Mascotas, contacto.NumeroDepartamento, idPrincipal, timestamp);
+  insertarResidentes(logId, hojaResidentes, contacto.Residentes, contacto.NumeroDepartamento, idPrincipal, timestamp);
+  insertarBicicletas(logId, hojaBicicletas, contacto.Bicicletas, contacto.NumeroDepartamento, idPrincipal, timestamp);
 
-  // Agregar datos de autos a la hoja "Autos"
-  if (contacto.Autos && contacto.Autos.length > 0) {
-    contacto.Autos.forEach((auto) => {
-      hojaAutos.appendRow([
-        uniqueId,
-        timestamp,
-        contacto.NumeroDepartamento,
-		    auto.Tipo,
-        auto.Marca,
-        auto.Modelo,
-        auto.Color,
-        auto.Patente,
-      ]);
-    });
-  }
-
-  // Agregar datos de autos a la hoja "Mascotas"
-  if (contacto.Mascotas && contacto.Mascotas.length > 0) {
-    contacto.Mascotas.forEach((mascota) => {
-      hojaMascotas.appendRow([
-        uniqueId,
-        timestamp,
-        contacto.NumeroDepartamento,
-        mascota.Raza,
-        mascota.Nombre,
-		    mascota.Vacunas,
-      ]);
-    });
-  }
-
-  // Agregar datos de autos a la hoja "Residentes"
-  if (contacto.Residentes && contacto.Residentes.length > 0) {
-    contacto.Residentes.forEach((residente) => {
-      hojaResidentes.appendRow([
-        uniqueId,
-        timestamp,
-        contacto.NumeroDepartamento,
-        residente.Nombre,
-        residente.Edad,
-        residente.Apellido,
-        residente.Identificacion,
-        residente.Telefono,
-        residente.Correo,
-        residente.Parentesco,
-		    residente.NecesidadesEspeciales.join(", "),
-      ]);
-    });
-  }
-
-  // Agregar datos de bicicletas a la hoja "Bicicletas"
-  if (contacto.Bicicletas && contacto.Bicicletas.length > 0) {
-    contacto.Bicicletas.forEach((bicicleta) => {
-      hojaBicicletas.appendRow([
-        uniqueId,
-        timestamp,
-        contacto.NumeroDepartamento,
-        bicicleta.Marca,
-        bicicleta.Color,
-        bicicleta.Bicicletero,
-      ]);
-    });
-  }
-
-  return ContentService.createTextOutput(
-    JSON.stringify({ status: "success", message: "Datos guardados exitosamente" })
-  ).setMimeType(ContentService.MimeType.JSON);
+  return ContentService.createTextOutput(JSON.stringify({ status: "success", message: rowIndex !== -1 ? "Registro actualizado" : "Registro insertado", idPrincipal })).setMimeType(ContentService.MimeType.JSON);
 }
 
-function logToSheet(message) {
-  const ss = SpreadsheetApp.getActiveSpreadsheet();
-  const logSheet = ss.getSheetByName("Logs") || ss.insertSheet("Logs");
-  logSheet.appendRow([new Date(), message]);
+function limpiarRegistrosRelacionados(sheet, idPrincipal) {
+  const data = sheet.getDataRange().getValues();
+  const rowsToDelete = [];
+
+  for (let i = data.length - 1; i > 0; i--) {
+    if (data[i][0] == idPrincipal) {
+      rowsToDelete.push(i + 1);
+    }
+  }
+
+  rowsToDelete.forEach(row => sheet.deleteRow(row));
+}
+
+function insertarDatosRelacionados(logId, sheet, lista, departamento, idPrincipal, timestamp) {
+  if (lista && lista.length > 0) {
+    lista.forEach(numero => {
+      sheet.appendRow([idPrincipal, timestamp, departamento, numero]);
+    });
+  }
+}
+
+function insertarAutos(logId, sheet, autos, departamento, idPrincipal, timestamp) {
+  if (autos && autos.length > 0) {
+    autos.forEach(auto => {
+      sheet.appendRow([idPrincipal, timestamp, departamento, auto.Tipo, auto.Marca, auto.Modelo, auto.Color, auto.Patente]);
+    });
+  }
+}
+
+function insertarMascotas(logId, sheet, mascotas, departamento, idPrincipal, timestamp) {
+  if (mascotas && mascotas.length > 0) {
+    mascotas.forEach(mascota => {
+      sheet.appendRow([idPrincipal, timestamp, departamento, mascota.Raza, mascota.Nombre, mascota.Vacunas]);
+    });
+  }
+}
+
+function insertarResidentes(logId, sheet, residentes, departamento, idPrincipal, timestamp) {
+  if (!residentes || residentes.length === 0) {
+    logToDrive(logId, "⚠️ No hay residentes para insertar en la hoja.");
+    return;
+  }
+
+  residentes.forEach(residente => {
+    const necesidadesEspeciales = Array.isArray(residente.NecesidadesEspeciales)
+      ? residente.NecesidadesEspeciales.join(", ")
+      : residente.NecesidadesEspeciales || "";
+
+    logToDrive(logId, `📝 Insertando residente: ${residente.Nombre} en departamento ${departamento}, ID: ${idPrincipal}`);
+
+    sheet.appendRow([
+      idPrincipal,
+      timestamp,
+      departamento,
+      residente.Nombre || "",
+      residente.Apellido || "",
+      residente.Edad || "",
+      residente.Identificacion || "",
+      residente.Telefono || "",
+      residente.Correo || "",
+      residente.Parentesco || "",
+      necesidadesEspeciales,
+      residente.RegistroHuellero || "no"
+    ]);
+  });
+
+  logToDrive(logId, "✅ Residentes insertados correctamente.");
+}
+
+function insertarBicicletas(logId, sheet, bicicletas, departamento, idPrincipal, timestamp) {
+  if (bicicletas && bicicletas.length > 0) {
+    bicicletas.forEach(bicicleta => {
+      sheet.appendRow([idPrincipal, timestamp, departamento, bicicleta.Marca, bicicleta.Color, bicicleta.Bicicletero]);
+    });
+  }
 }
