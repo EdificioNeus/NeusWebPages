@@ -273,7 +273,7 @@ function procesarDatos(payload, logId)
   }
 
   // ✅ **Insertar datos en hojas secundarias**
-  insertarDatosRelacionados(logId, hojaEstacionamientos, contacto.NumerosDeEstacionamiento, contacto.NumeroDepartamento, idPrincipal, timestamp);
+  insertarDatosRelacionados(logId, hojaEstacionamientos, contacto.NumerosDeEstacionamiento, contacto.NumeroDepartamento, idPrincipal, timestamp, contacto.TieneControlPorton);
   insertarDatosRelacionados(logId, hojaBodegas, contacto.NumerosDeBodega, contacto.NumeroDepartamento, idPrincipal, timestamp);
   insertarAutos(logId, hojaAutos, contacto.Autos, contacto.NumeroDepartamento, idPrincipal, timestamp);
   insertarMascotas(logId, hojaMascotas, contacto.Mascotas, contacto.NumeroDepartamento, idPrincipal, timestamp);
@@ -296,11 +296,20 @@ function limpiarRegistrosRelacionados(sheet, idPrincipal) {
   rowsToDelete.forEach(row => sheet.deleteRow(row));
 }
 
-function insertarDatosRelacionados(logId, sheet, lista, departamento, idPrincipal, timestamp) {
+function insertarDatosRelacionados(logId, sheet, lista, departamento, idPrincipal, timestamp, tieneControlPorton) {
   if (lista && lista.length > 0) {
-    lista.forEach(numero => {
-      sheet.appendRow([idPrincipal, timestamp, departamento, numero]);
-    });
+    if (sheet.getName() === "Estacionamientos" && tieneControlPorton && tieneControlPorton.length > 0) {
+      // Para estacionamientos, incluir el valor de TieneControlPorton
+      lista.forEach((numero, index) => {
+        const tieneControl = tieneControlPorton[index] || "no";
+        sheet.appendRow([idPrincipal, timestamp, departamento, numero, tieneControl]);
+      });
+    } else {
+      // Para otras hojas, mantener el comportamiento original
+      lista.forEach(numero => {
+        sheet.appendRow([idPrincipal, timestamp, departamento, numero]);
+      });
+    }
   }
 }
 
@@ -357,5 +366,43 @@ function insertarBicicletas(logId, sheet, bicicletas, departamento, idPrincipal,
     bicicletas.forEach(bicicleta => {
       sheet.appendRow([idPrincipal, timestamp, departamento, bicicleta.Marca, bicicleta.Color, bicicleta.Bicicletero]);
     });
+  }
+}
+
+// Función para registrar mensajes de log en un archivo en Google Drive
+function logToDrive(logId, message) {
+  try {
+    const logFolderId = "1Pp1Ai1xrx1jsYwg5Hi2tqvlfISIlMW3K"; // ID de la carpeta de logs en Google Drive
+    const folder = DriveApp.getFolderById(logFolderId);
+
+    if (!folder) {
+      console.error("Carpeta de logs no encontrada");
+      return;
+    }
+
+    const today = new Date();
+    const fileName = `log_${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}.txt`;
+
+    // Buscar si ya existe un archivo de log para hoy
+    let files = folder.getFilesByName(fileName);
+    let file;
+
+    if (files.hasNext()) {
+      file = files.next();
+    } else {
+      // Crear nuevo archivo de log
+      file = folder.createFile(fileName, "");
+    }
+
+    // Formatear el mensaje de log
+    const timestamp = new Date().toISOString();
+    const logMessage = `[${timestamp}] [${logId}] ${message}\n`;
+
+    // Añadir el mensaje al archivo
+    const currentContent = file.getBlob().getDataAsString();
+    file.setContent(currentContent + logMessage);
+
+  } catch (error) {
+    console.error("Error al escribir log:", error.message);
   }
 }
