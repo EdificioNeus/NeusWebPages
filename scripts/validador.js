@@ -173,50 +173,7 @@ function validateCurrentSection() {
     return isValid;
 }
 
-/*function showConfirmationMessage(message, type = 'success') {
-    console.log("📢 showConfirmationMessage llamado con mensaje:", message, "y tipo:", type);
-
-    const overlay = document.getElementById('confirmationOverlay');
-    const confirmationMessage = document.getElementById('confirmationMessage');
-    const overlaySpinner = document.getElementById("overlay");
-    const spinner = document.getElementById("spinner");
-
-    overlaySpinner.classList.add("hidden");
-    spinner.classList.add("hidden");
-
-    if (!overlay || !confirmationMessage) {
-        console.error("❌ No se encontró confirmationOverlay o confirmationMessage en el DOM.");
-        return;
-    }
-
-    // Mostrar overlay y mensaje
-    overlay.classList.remove('hidden');
-    confirmationMessage.classList.remove('hidden');
-
-    console.log("✅ Se eliminaron clases 'hidden' de overlay y mensaje.");
-
-    confirmationMessage.innerHTML = `
-        <button class="close-btn" onclick="closeConfirmationMessage()">×</button>
-        <h2>${type === 'success' ? 'ÉXITO' : 'ERROR'}</h2>
-        <p>${message}</p>
-    `;
-
-    console.log("✅ Se insertó el contenido en confirmationMessage:", confirmationMessage.innerHTML);
-
-    confirmationMessage.classList.remove('success', 'error', 'hidden');
-    confirmationMessage.classList.add(type);
-
-    console.log("✅ Clases actuales en confirmationMessage:", confirmationMessage.classList);
-
-    // Configurar temporizador para ocultar automáticamente
-    let timeout = setTimeout(() => {
-        closeConfirmationMessage();
-    }, 3000);
-
-    confirmationMessage.dataset.timeoutId = timeout;
-}*/
-
-function showConfirmationMessage(message, type = 'success') {
+function showConfirmationMessage(message, type = 'success', redirectToIndex = false) {
     console.log("📢 showConfirmationMessage llamado con mensaje:", message, "y tipo:", type);
     const isDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
     const overlaySpinner = document.getElementById("overlay");
@@ -227,6 +184,7 @@ function showConfirmationMessage(message, type = 'success') {
         spinner.classList.add("hidden");
     }
 
+    // Mostrar SweetAlert2
     Swal.fire({
         title: type === 'success' ? '✅ Éxito' : '❌ Error',
         text: message,
@@ -238,6 +196,12 @@ function showConfirmationMessage(message, type = 'success') {
         backdrop: "rgba(0,0,0,0.75)",
         customClass: {
             popup: type === 'success' ? 'swal-success' : 'swal-error'
+        }
+    }).then(() => {
+        // Redireccionar a index.html si redirectToIndex es true
+        if (redirectToIndex) {
+            console.log("⏳ Redireccionando a index.html...");
+            window.location.href = "index.html";
         }
     });
 
