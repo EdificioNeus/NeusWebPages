@@ -1,0 +1,1 @@
+// Chart.js se carga vía CDN
