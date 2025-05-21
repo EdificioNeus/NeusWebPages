@@ -55,6 +55,13 @@
             "link": "https://edificioneus.edipro.app/accesos/new",
             "class": "edipro-Access-btn",
             "group": 3
+        },
+        {
+            "text": "Informes de Gastos Comunes",
+            "icon": "fas fa-chart-line",
+            "link": "informes.html",
+            "class": "gasto-comun-btn",
+            "group": 3
         }
     ]
 }

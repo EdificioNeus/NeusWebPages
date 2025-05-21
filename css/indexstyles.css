@@ -436,3 +436,112 @@ body:not(.light-mode) .close-btn:hover {
         width: 90%; /* Que los botones ocupen casi todo el ancho */
     }
 }
+
+.reporte-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 2rem;
+    font-size: 0.95rem;
+}
+
+.reporte-table th,
+.reporte-table td {
+    border: 1px solid #ddd;
+    padding: 0.75rem 1rem;
+    text-align: left;
+}
+
+.reporte-table th {
+    background-color: #f4f4f4;
+    font-weight: bold;
+}
+
+.reporte-table th:nth-child(1),
+.reporte-table td:nth-child(1) {
+    width: 15%;
+    min-width: 120px;
+}
+
+.reporte-table th:nth-child(2),
+.reporte-table td:nth-child(2) {
+    width: 15%;
+    min-width: 100px;
+}
+
+.reporte-table th:nth-child(3),
+.reporte-table td:nth-child(3) {
+    width: 55%;
+    min-width: 300px;
+    white-space: normal;
+    overflow-wrap: break-word;
+}
+
+.reporte-table th:nth-child(4),
+.reporte-table td:nth-child(4) {
+    width: 15%;
+    min-width: 80px;
+    text-align: center;
+}
+
+.btn-reporte {
+    background-color: #003366;
+    color: white;
+    padding: 6px 12px;
+    text-decoration: none;
+    border-radius: 4px;
+}
+
+.btn-reporte:hover {
+    background-color: #005599;
+}
+
+body:not(.light-mode) .reporte-table {
+    background-color: #1e1e1e;
+    color: #f0f0f0;
+    border-color: #444;
+}
+
+body:not(.light-mode) .reporte-table th {
+    background-color: #2a2a2a;
+    color: #ffffff;
+}
+
+body:not(.light-mode) .reporte-table td {
+    background-color: #1e1e1e;
+    color: #dddddd;
+    border-color: #444;
+}
+
+body:not(.light-mode) .btn-reporte {
+    background-color: #333;
+    color: #fff;
+    border: 1px solid #555;
+}
+
+body:not(.light-mode) .btn-reporte:hover {
+    background-color: #444;
+}
+
+.reporte-descripcion {
+    text-align: center;
+    margin-bottom: 1rem;
+    font-size: 1rem;
+    line-height: 1.4;
+}
+
+.table-responsive {
+    width: 100%;
+    overflow-x: auto;
+}
+
+@media (max-width: 768px) {
+    .reporte-table {
+        font-size: 0.8rem;
+        min-width: 600px; /* fuerza scroll horizontal */
+    }
+
+    .reporte-table td, .reporte-table th {
+        white-space: nowrap; /* evita saltos de línea */
+        padding: 0.5rem;
+    }
+}

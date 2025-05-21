@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Informes de Gastos Comunes – Edificio Neus</title>
+  <link rel="stylesheet" href="css/indexstyles.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+</head>
+<body>
+  <header class="header-banner">
+    <h1>Informes de Gastos Comunes</h1>
+    <button id="themeToggle" class="theme-toggle">
+        <i class="fas fa-moon"></i> <span>Cambiar Tema</span>
+    </button>
+  </header>
+
+  <main>
+    <section>
+        <p class="reporte-descripcion">
+            Aquí puedes consultar los informes mensuales de gastos comunes generados por la administración del Edificio Neus.
+            Haz clic en <strong>Ver</strong> para acceder al desglose detallado.
+        </p>
+
+        <div class="table-responsive">
+            <table class="reporte-table">
+                <thead>
+                    <tr>
+                        <th>Mes</th>
+                        <th>Variación</th>
+                        <th>Resumen</th>
+                        <th>Acceso</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <!-- Aquí se insertarán dinámicamente las filas desde reportLoader.js -->
+                </tbody>
+            </table>
+        </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Administración del Edificio NEUS. Todos los derechos reservados.</p>
+  </footer>
+
+  <!-- Script que carga los reportes desde /reports/*.html -->
+    <script src="scripts/themeToggle.js"></script>
+    <script src="scripts/reportLoader.js"></script>
+</body>
+</html>
