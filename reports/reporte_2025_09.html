@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Reporte de Gastos Comunes</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="/assets/styles.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <!-- DataTables CSS -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
@@ -15,33 +15,33 @@
 </head>
 <body>
 <header>
-    <img src="../files/LogoNeus.png" alt="Logo Edificio" class="logo">
+    <img src="/assets/LogoNeus.png" alt="Logo Edificio" class="logo">
     <h1>Reporte de Gastos Comunes</h1>
 </header>
 
 <main>
     <section id="resumen-general">
-        <h2 data-mes="Septiembre-2024">Resumen General (PRELIMINAR SEPTIEMBRE)</h2>
+        <h2 data-mes="Septiembre-2024">Resumen General</h2>
         <div class="card-resumen"
-            data-variacion="15.86"
+            data-variacion="2.39"
             data-tipo="alta">
             <p>
                 📈 Comparando los gastos comunes entre el mes actual y el anterior,
                 se observa una <strong>alta significativa</strong> del
-                <strong>15.86%</strong>, lo que equivale a
-                <strong>$4.756.332</strong>.
+                <strong>2.39%</strong>, lo que equivale a
+                <strong>$717.514</strong>.
             </p>
             <p>
                 <strong>Total mes anterior:</strong> $29.992.975<br>
-                <strong>Total mes actual:</strong> $34.749.307
+                <strong>Total mes actual:</strong> $30.710.489
             </p>
-
+            
             <p>
                 Este cambio se debe principalmente al subfondo <strong>Gastos de uso y consumo</strong>,
                 con impacto relevante en <strong>Metrogas 50%</strong>
-                y <strong>Insumos de Aseo</strong>.
+                y <strong>Aguas Andinas Calderas 50%</strong>.
             </p>
-
+            
         </div>
     </section>
 
@@ -74,11 +74,11 @@
 
     <section>
         <h2>Detalle por Subfondo</h2>
-
+        
         <details>
-            <summary><strong>1. Gastos de Administración</strong> – aumento leve del 4.45% ($139.893)</summary>
+            <summary><strong>1. Gastos de Administración</strong> – disminución importante del -43.54% ($1.368.063)</summary>
 
-
+            
             <h4>Ítems Comunes</h4>
             <div style="overflow-x:auto">
                 <table class="simple-table">
@@ -92,31 +92,7 @@
                         </tr>
                     </thead>
                     <tbody>
-
-                        <tr>
-                            <td>Servicio de Correspondencia</td>
-                            <td>$60.000</td>
-                            <td>$60.000</td>
-                            <td>$0</td>
-                            <td>0.0%</td>
-                        </tr>
-
-                        <tr>
-                            <td>Comisión bancaria</td>
-                            <td>$23.309</td>
-                            <td>$23.439</td>
-                            <td>$130</td>
-                            <td>0.56%</td>
-                        </tr>
-
-                        <tr>
-                            <td>Seguro Espacios Comunes</td>
-                            <td>$1.495.803</td>
-                            <td>$1.507.956</td>
-                            <td>$12.153</td>
-                            <td>0.81%</td>
-                        </tr>
-
+                        
                         <tr>
                             <td>Software Reloj Control</td>
                             <td>$41.695</td>
@@ -124,7 +100,7 @@
                             <td>$0</td>
                             <td>0.0%</td>
                         </tr>
-
+                        
                         <tr>
                             <td>Honorarios Administración</td>
                             <td>$1.521.216</td>
@@ -132,30 +108,53 @@
                             <td>$0</td>
                             <td>0.0%</td>
                         </tr>
-
+                        
+                        <tr>
+                            <td>Servicio de Correspondencia</td>
+                            <td>$60.000</td>
+                            <td>$60.000</td>
+                            <td>$0</td>
+                            <td>0.0%</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>Comisión bancaria</td>
+                            <td>$23.309</td>
+                            <td>$23.439</td>
+                            <td>$130</td>
+                            <td>0.56%</td>
+                        </tr>
+                        
                     </tbody>
                 </table>
             </div>
+            
 
-
-
+            
             <h4>Ítems Nuevos</h4>
             <ul>
-
+                
                 <li>🆕 Caja chica — $112.610</li>
-
+                
                 <li>🆕 Gastos Notariales — $15.000</li>
-
+                
             </ul>
+            
 
-
-
+            
+            <h4>Ítems Faltantes</h4>
+            <ul>
+                
+                <li>❌ Seguro Espacios Comunes — $1.495.803</li>
+                
+            </ul>
+            
         </details>
-
+        
         <details>
-            <summary><strong>2. Gastos de uso y consumo</strong> – aumento importante del 27.00% ($2.123.731)</summary>
+            <summary><strong>2. Gastos de uso y consumo</strong> – aumento moderada del 18.15% ($1.427.873)</summary>
 
-
+            
             <h4>Ítems Comunes</h4>
             <div style="overflow-x:auto">
                 <table class="simple-table">
@@ -169,47 +168,7 @@
                         </tr>
                     </thead>
                     <tbody>
-
-                        <tr>
-                            <td>Metrogas 50%</td>
-                            <td>$3.730.448</td>
-                            <td>$4.495.059</td>
-                            <td>$764.611</td>
-                            <td>20.5%</td>
-                        </tr>
-
-                        <tr>
-                            <td>Aguas Andinas Riego</td>
-                            <td>$45.057</td>
-                            <td>$117.927</td>
-                            <td>$72.870</td>
-                            <td>161.73%</td>
-                        </tr>
-
-                        <tr>
-                            <td>Celular Conserjería</td>
-                            <td>$8.185</td>
-                            <td>$8.185</td>
-                            <td>$0</td>
-                            <td>0.0%</td>
-                        </tr>
-
-                        <tr>
-                            <td>Consumo energía eléctrica </td>
-                            <td>$3.110.587</td>
-                            <td>$3.414.923</td>
-                            <td>$304.336</td>
-                            <td>9.78%</td>
-                        </tr>
-
-                        <tr>
-                            <td>Aguas Andinas Calderas 50%</td>
-                            <td>$808.310</td>
-                            <td>$1.187.196</td>
-                            <td>$378.886</td>
-                            <td>46.87%</td>
-                        </tr>
-
+                        
                         <tr>
                             <td>Internet Conserjería</td>
                             <td>$32.037</td>
@@ -217,15 +176,39 @@
                             <td>$0</td>
                             <td>0.0%</td>
                         </tr>
-
+                        
                         <tr>
-                            <td>Insumos de Aseo</td>
-                            <td>$97.624</td>
-                            <td>$695.858</td>
-                            <td>$598.234</td>
-                            <td>612.79%</td>
+                            <td>Metrogas 50%</td>
+                            <td>$3.730.448</td>
+                            <td>$4.495.059</td>
+                            <td>$764.611</td>
+                            <td>20.5%</td>
                         </tr>
-
+                        
+                        <tr>
+                            <td>Aguas Andinas Riego</td>
+                            <td>$45.057</td>
+                            <td>$117.927</td>
+                            <td>$72.870</td>
+                            <td>161.73%</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>Celular Conserjería</td>
+                            <td>$8.185</td>
+                            <td>$8.185</td>
+                            <td>$0</td>
+                            <td>0.0%</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>Consumo energía eléctrica </td>
+                            <td>$3.110.587</td>
+                            <td>$3.414.923</td>
+                            <td>$304.336</td>
+                            <td>9.78%</td>
+                        </tr>
+                        
                         <tr>
                             <td>Aguas Andinas Espacios Comunes</td>
                             <td>$34.026</td>
@@ -233,21 +216,36 @@
                             <td>$4.793</td>
                             <td>14.09%</td>
                         </tr>
-
+                        
+                        <tr>
+                            <td>Aguas Andinas Calderas 50%</td>
+                            <td>$808.310</td>
+                            <td>$1.187.196</td>
+                            <td>$378.886</td>
+                            <td>46.87%</td>
+                        </tr>
+                        
                     </tbody>
                 </table>
             </div>
+            
 
+            
 
-
-
-
+            
+            <h4>Ítems Faltantes</h4>
+            <ul>
+                
+                <li>❌ Insumos de Aseo — $97.624</li>
+                
+            </ul>
+            
         </details>
-
+        
         <details>
-            <summary><strong>3. Gastos de mantención</strong> – aumento moderada del 15.49% ($1.465.938)</summary>
+            <summary><strong>3. Gastos de mantención</strong> – disminución leve del -3.90% ($369.066)</summary>
 
-
+            
             <h4>Ítems Comunes</h4>
             <div style="overflow-x:auto">
                 <table class="simple-table">
@@ -261,63 +259,7 @@
                         </tr>
                     </thead>
                     <tbody>
-
-                        <tr>
-                            <td>Mantención Sala de Calderas</td>
-                            <td>$2.647.286</td>
-                            <td>$3.429.215</td>
-                            <td>$781.929</td>
-                            <td>29.54%</td>
-                        </tr>
-
-                        <tr>
-                            <td>Mantencion Extractores y VEX</td>
-                            <td>$195.768</td>
-                            <td>$197.200</td>
-                            <td>$1.432</td>
-                            <td>0.73%</td>
-                        </tr>
-
-                        <tr>
-                            <td>Control de Plagas</td>
-                            <td>$208.250</td>
-                            <td>$351.050</td>
-                            <td>$142.800</td>
-                            <td>68.57%</td>
-                        </tr>
-
-                        <tr>
-                            <td>Mantención de Jardines</td>
-                            <td>$535.500</td>
-                            <td>$606.900</td>
-                            <td>$71.400</td>
-                            <td>13.33%</td>
-                        </tr>
-
-                        <tr>
-                            <td>Mantención de Sala de Bombas</td>
-                            <td>$1.748.181</td>
-                            <td>$177.480</td>
-                            <td>$-1.570.701</td>
-                            <td>-89.85%</td>
-                        </tr>
-
-                        <tr>
-                            <td>Mantención Ascensores</td>
-                            <td>$2.188.424</td>
-                            <td>$2.827.143</td>
-                            <td>$638.719</td>
-                            <td>29.19%</td>
-                        </tr>
-
-                        <tr>
-                            <td>Mantencion y Emergencia Red de Incendio </td>
-                            <td>$480.760</td>
-                            <td>$904.400</td>
-                            <td>$423.640</td>
-                            <td>88.12%</td>
-                        </tr>
-
+                        
                         <tr>
                             <td>Mantención de Fosas Aguas servidas</td>
                             <td>$117.462</td>
@@ -325,31 +267,23 @@
                             <td>$859</td>
                             <td>0.73%</td>
                         </tr>
-
+                        
                         <tr>
-                            <td>Mantencion Equipos Espacios Comunes</td>
-                            <td>$389.379</td>
-                            <td>$483.954</td>
-                            <td>$94.575</td>
-                            <td>24.29%</td>
+                            <td>Mantencion y Emergencia Red de Incendio </td>
+                            <td>$480.760</td>
+                            <td>$904.400</td>
+                            <td>$423.640</td>
+                            <td>88.12%</td>
                         </tr>
-
+                        
                         <tr>
-                            <td>Mantención de Piscina</td>
-                            <td>$150.000</td>
-                            <td>$150.000</td>
-                            <td>$0</td>
-                            <td>0.0%</td>
-                        </tr>
-
-                        <tr>
-                            <td>Mantencion Verticales Agua Fria y Caliente</td>
-                            <td>$234.921</td>
-                            <td>$236.639</td>
-                            <td>$1.718</td>
+                            <td>Mantencion Extractores y VEX</td>
+                            <td>$195.768</td>
+                            <td>$197.200</td>
+                            <td>$1.432</td>
                             <td>0.73%</td>
                         </tr>
-
+                        
                         <tr>
                             <td>Mantención Grupo Electrógeno</td>
                             <td>$77.917</td>
@@ -357,41 +291,93 @@
                             <td>$570</td>
                             <td>0.73%</td>
                         </tr>
-
+                        
+                        <tr>
+                            <td>Mantención de Piscina</td>
+                            <td>$150.000</td>
+                            <td>$150.000</td>
+                            <td>$0</td>
+                            <td>0.0%</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>Mantención de Sala de Bombas</td>
+                            <td>$1.748.181</td>
+                            <td>$177.480</td>
+                            <td>$-1.570.701</td>
+                            <td>-89.85%</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>Mantencion Verticales Agua Fria y Caliente</td>
+                            <td>$234.921</td>
+                            <td>$236.639</td>
+                            <td>$1.718</td>
+                            <td>0.73%</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>Mantención Sala de Calderas</td>
+                            <td>$2.647.286</td>
+                            <td>$3.429.215</td>
+                            <td>$781.929</td>
+                            <td>29.54%</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>Mantención Ascensores</td>
+                            <td>$2.188.424</td>
+                            <td>$1.827.143</td>
+                            <td>$-361.281</td>
+                            <td>-16.51%</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>Mantención de Jardines</td>
+                            <td>$535.500</td>
+                            <td>$606.900</td>
+                            <td>$71.400</td>
+                            <td>13.33%</td>
+                        </tr>
+                        
                     </tbody>
                 </table>
             </div>
+            
 
-
-
+            
             <h4>Ítems Nuevos</h4>
             <ul>
-
+                
                 <li>🆕 Cartificaciones de Caldera — $285.600</li>
-
+                
                 <li>🆕 Mantención Iluminación Espacios Comunes — $402.998</li>
-
+                
                 <li>🆕 Mantención porton — $679.132</li>
-
+                
             </ul>
+            
 
-
-
+            
             <h4>Ítems Faltantes</h4>
             <ul>
-
+                
                 <li>❌ Artículos para espacios comunes — $302.350</li>
-
+                
+                <li>❌ Control de Plagas — $208.250</li>
+                
+                <li>❌ Mantencion Equipos Espacios Comunes — $389.379</li>
+                
                 <li>❌ Mantención alarma incendio — $186.383</li>
-
+                
             </ul>
-
+            
         </details>
-
+        
         <details>
             <summary><strong>4. Remuneraciones</strong> – aumento moderada del 10.78% ($1.026.770)</summary>
 
-
+            
             <h4>Ítems Comunes</h4>
             <div style="overflow-x:auto">
                 <table class="simple-table">
@@ -405,47 +391,7 @@
                         </tr>
                     </thead>
                     <tbody>
-
-                        <tr>
-                            <td>Anticipo Ilona Estefania Pérez Santillan</td>
-                            <td>$50.000</td>
-                            <td>$50.000</td>
-                            <td>$0</td>
-                            <td>0.0%</td>
-                        </tr>
-
-                        <tr>
-                            <td>Anticipo Raul Enrique Santiago Rangel</td>
-                            <td>$300.000</td>
-                            <td>$300.000</td>
-                            <td>$0</td>
-                            <td>0.0%</td>
-                        </tr>
-
-                        <tr>
-                            <td>Remuneraciones Juan Carlos Cadena </td>
-                            <td>$938.454</td>
-                            <td>$994.815</td>
-                            <td>$56.361</td>
-                            <td>6.01%</td>
-                        </tr>
-
-                        <tr>
-                            <td>Remuneraciones OSCAR JUVENAL SILVA</td>
-                            <td>$1.192.755</td>
-                            <td>$1.052.264</td>
-                            <td>$-140.491</td>
-                            <td>-11.78%</td>
-                        </tr>
-
-                        <tr>
-                            <td>Anticipo Carmen Adela Aillapan  Cardenas</td>
-                            <td>$150.000</td>
-                            <td>$150.000</td>
-                            <td>$0</td>
-                            <td>0.0%</td>
-                        </tr>
-
+                        
                         <tr>
                             <td>Remuneraciones Dairo Andres Yanguas Tovar</td>
                             <td>$370.440</td>
@@ -453,79 +399,7 @@
                             <td>$326.525</td>
                             <td>88.15%</td>
                         </tr>
-
-                        <tr>
-                            <td>Remuneraciones Carmen Adela Aillapan  Cardenas</td>
-                            <td>$465.133</td>
-                            <td>$515.630</td>
-                            <td>$50.497</td>
-                            <td>10.86%</td>
-                        </tr>
-
-                        <tr>
-                            <td>Remuneraciones Santiago Ignacio Patiño Alvear</td>
-                            <td>$872.901</td>
-                            <td>$847.440</td>
-                            <td>$-25.461</td>
-                            <td>-2.92%</td>
-                        </tr>
-
-                        <tr>
-                            <td>Remuneraciones Raul Enrique Santiago Rangel</td>
-                            <td>$652.119</td>
-                            <td>$726.492</td>
-                            <td>$74.373</td>
-                            <td>11.4%</td>
-                        </tr>
-
-                        <tr>
-                            <td>Remuneraciones Joaquin Alonso Montecinos Ugarte</td>
-                            <td>$459.709</td>
-                            <td>$430.430</td>
-                            <td>$-29.279</td>
-                            <td>-6.37%</td>
-                        </tr>
-
-                        <tr>
-                            <td>Remuneraciones SURLEY ESTER  POLO MUÑOZ</td>
-                            <td>$389.843</td>
-                            <td>$399.870</td>
-                            <td>$10.027</td>
-                            <td>2.57%</td>
-                        </tr>
-
-                        <tr>
-                            <td>Anticipo OSCAR JUVENAL SILVA</td>
-                            <td>$50.000</td>
-                            <td>$50.000</td>
-                            <td>$0</td>
-                            <td>0.0%</td>
-                        </tr>
-
-                        <tr>
-                            <td>Anticipo Joaquin Alonso Montecinos Ugarte</td>
-                            <td>$300.000</td>
-                            <td>$300.000</td>
-                            <td>$0</td>
-                            <td>0.0%</td>
-                        </tr>
-
-                        <tr>
-                            <td>Anticipo Santiago Ignacio Patiño Alvear</td>
-                            <td>$50.000</td>
-                            <td>$50.000</td>
-                            <td>$0</td>
-                            <td>0.0%</td>
-                        </tr>
-
-                        <tr>
-                            <td>Anticipo Juan Carlos Cadena </td>
-                            <td>$150.000</td>
-                            <td>$150.000</td>
-                            <td>$0</td>
-                            <td>0.0%</td>
-                        </tr>
-
+                        
                         <tr>
                             <td>Leyes sociales</td>
                             <td>$1.882.414</td>
@@ -533,7 +407,63 @@
                             <td>$170.592</td>
                             <td>9.06%</td>
                         </tr>
-
+                        
+                        <tr>
+                            <td>Anticipo Juan Carlos Cadena </td>
+                            <td>$150.000</td>
+                            <td>$150.000</td>
+                            <td>$0</td>
+                            <td>0.0%</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>Anticipo OSCAR JUVENAL SILVA</td>
+                            <td>$50.000</td>
+                            <td>$50.000</td>
+                            <td>$0</td>
+                            <td>0.0%</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>Remuneraciones Santiago Ignacio Patiño Alvear</td>
+                            <td>$872.901</td>
+                            <td>$847.440</td>
+                            <td>$-25.461</td>
+                            <td>-2.92%</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>Anticipo Santiago Ignacio Patiño Alvear</td>
+                            <td>$50.000</td>
+                            <td>$50.000</td>
+                            <td>$0</td>
+                            <td>0.0%</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>Anticipo Raul Enrique Santiago Rangel</td>
+                            <td>$300.000</td>
+                            <td>$300.000</td>
+                            <td>$0</td>
+                            <td>0.0%</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>Remuneraciones Carmen Adela Aillapan  Cardenas</td>
+                            <td>$465.133</td>
+                            <td>$515.630</td>
+                            <td>$50.497</td>
+                            <td>10.86%</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>Remuneraciones OSCAR JUVENAL SILVA</td>
+                            <td>$1.192.755</td>
+                            <td>$1.052.264</td>
+                            <td>$-140.491</td>
+                            <td>-11.78%</td>
+                        </tr>
+                        
                         <tr>
                             <td>Remuneraciones Ilona Estefania Pérez Santillan</td>
                             <td>$516.002</td>
@@ -541,7 +471,63 @@
                             <td>$55.953</td>
                             <td>10.84%</td>
                         </tr>
-
+                        
+                        <tr>
+                            <td>Anticipo Carmen Adela Aillapan  Cardenas</td>
+                            <td>$150.000</td>
+                            <td>$150.000</td>
+                            <td>$0</td>
+                            <td>0.0%</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>Remuneraciones Juan Carlos Cadena </td>
+                            <td>$938.454</td>
+                            <td>$994.815</td>
+                            <td>$56.361</td>
+                            <td>6.01%</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>Remuneraciones SURLEY ESTER  POLO MUÑOZ</td>
+                            <td>$389.843</td>
+                            <td>$399.870</td>
+                            <td>$10.027</td>
+                            <td>2.57%</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>Remuneraciones Raul Enrique Santiago Rangel</td>
+                            <td>$652.119</td>
+                            <td>$726.492</td>
+                            <td>$74.373</td>
+                            <td>11.4%</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>Anticipo Joaquin Alonso Montecinos Ugarte</td>
+                            <td>$300.000</td>
+                            <td>$300.000</td>
+                            <td>$0</td>
+                            <td>0.0%</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>Remuneraciones Joaquin Alonso Montecinos Ugarte</td>
+                            <td>$459.709</td>
+                            <td>$430.430</td>
+                            <td>$-29.279</td>
+                            <td>-6.37%</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>Anticipo Ilona Estefania Pérez Santillan</td>
+                            <td>$50.000</td>
+                            <td>$50.000</td>
+                            <td>$0</td>
+                            <td>0.0%</td>
+                        </tr>
+                        
                         <tr>
                             <td>Anticipo SURLEY ESTER  POLO MUÑOZ</td>
                             <td>$200.000</td>
@@ -549,64 +535,64 @@
                             <td>$0</td>
                             <td>0.0%</td>
                         </tr>
-
+                        
                     </tbody>
                 </table>
             </div>
+            
 
-
-
+            
             <h4>Ítems Nuevos</h4>
             <ul>
-
+                
                 <li>🆕 Anticipo Dairo Andres Yanguas Tovar — $50.000</li>
-
+                
                 <li>🆕 Bono Carmen Adela Aillapan  Cardenas — $60.000</li>
-
+                
                 <li>🆕 Bono Dairo Andres Yanguas Tovar — $60.000</li>
-
+                
                 <li>🆕 Bono Ilona Estefania Pérez Santillan — $60.000</li>
-
+                
                 <li>🆕 Bono Joaquin Alonso Montecinos Ugarte — $60.000</li>
-
+                
                 <li>🆕 Bono Juan Carlos Cadena  — $60.000</li>
-
+                
                 <li>🆕 Bono OSCAR JUVENAL SILVA — $60.000</li>
-
+                
                 <li>🆕 Bono Paulina Alejandra Morales Muñoz — $60.000</li>
-
+                
                 <li>🆕 Bono Raul Enrique Santiago Rangel — $60.000</li>
-
+                
                 <li>🆕 Bono SURLEY ESTER  POLO MUÑOZ — $60.000</li>
-
+                
                 <li>🆕 Bono Santiago Ignacio Patiño Alvear — $60.000</li>
-
+                
                 <li>🆕 Turnos de Reemplazo — $360.000</li>
-
+                
             </ul>
+            
 
-
-
+            
             <h4>Ítems Faltantes</h4>
             <ul>
-
+                
                 <li>❌ Anticipo CARLOS IGNACIO DEL PORTILLO VALENZUELA — $100.000</li>
-
+                
                 <li>❌ Remuneraciones CARLOS IGNACIO DEL PORTILLO VALENZUELA — $258.770</li>
-
+                
                 <li>❌ Remuneraciones Germán Francisco González Salgado — $173.557</li>
-
+                
             </ul>
-
+            
         </details>
-
+        
     </section>
 
     <section>
         <h2>Análisis Agua Caliente</h2>
         <p>En Septiembre-2025, el costo total en agua caliente fue de $3,91, correspondiente a un valor de $3,10 por litro de gas y $0,82 por litro de agua. Se estima un consumo total de 1.452.352 litros.</p>
 
-
+        
         <table class="datatable">
             <thead>
                 <tr>
@@ -619,7 +605,7 @@
                 </tr>
             </thead>
             <tbody>
-
+                
                 <tr>
                     <td style="display:none;">13</td> <!-- nueva celda -->
                     <td>Septiembre-2025</td>
@@ -628,7 +614,7 @@
                     <td>$3,91</td>
                     <td>1.452.352</td>
                 </tr>
-
+                
                 <tr>
                     <td style="display:none;">12</td> <!-- nueva celda -->
                     <td>Agosto-2025</td>
@@ -637,7 +623,7 @@
                     <td>$3,14</td>
                     <td>1.443.645</td>
                 </tr>
-
+                
                 <tr>
                     <td style="display:none;">11</td> <!-- nueva celda -->
                     <td>Julio-2025</td>
@@ -646,7 +632,7 @@
                     <td>$3,82</td>
                     <td>1.024.056</td>
                 </tr>
-
+                
                 <tr>
                     <td style="display:none;">10</td> <!-- nueva celda -->
                     <td>Junio-2025</td>
@@ -655,7 +641,7 @@
                     <td>$3,00</td>
                     <td>1.417.315</td>
                 </tr>
-
+                
                 <tr>
                     <td style="display:none;">9</td> <!-- nueva celda -->
                     <td>Mayo-2025</td>
@@ -664,7 +650,7 @@
                     <td>$3,49</td>
                     <td>1.212.475</td>
                 </tr>
-
+                
                 <tr>
                     <td style="display:none;">8</td> <!-- nueva celda -->
                     <td>Abril-2025</td>
@@ -673,7 +659,7 @@
                     <td>$3,47</td>
                     <td>1.134.870</td>
                 </tr>
-
+                
                 <tr>
                     <td style="display:none;">7</td> <!-- nueva celda -->
                     <td>Marzo-2025</td>
@@ -682,7 +668,7 @@
                     <td>$4,73</td>
                     <td>637.000</td>
                 </tr>
-
+                
                 <tr>
                     <td style="display:none;">6</td> <!-- nueva celda -->
                     <td>Febrero-2025</td>
@@ -691,7 +677,7 @@
                     <td>$6,29</td>
                     <td>466.565</td>
                 </tr>
-
+                
                 <tr>
                     <td style="display:none;">5</td> <!-- nueva celda -->
                     <td>Enero-2025</td>
@@ -700,7 +686,7 @@
                     <td>$2,95</td>
                     <td>972.524</td>
                 </tr>
-
+                
                 <tr>
                     <td style="display:none;">4</td> <!-- nueva celda -->
                     <td>Diciembre-2024</td>
@@ -709,7 +695,7 @@
                     <td>$2,70</td>
                     <td>1.065.444</td>
                 </tr>
-
+                
                 <tr>
                     <td style="display:none;">3</td> <!-- nueva celda -->
                     <td>Noviembre-2024</td>
@@ -718,7 +704,7 @@
                     <td>$5,23</td>
                     <td>935.143</td>
                 </tr>
-
+                
                 <tr>
                     <td style="display:none;">2</td> <!-- nueva celda -->
                     <td>Octubre-2024</td>
@@ -727,28 +713,13 @@
                     <td>$4,97</td>
                     <td>1.068.233</td>
                 </tr>
-
+                
             </tbody>
         </table>
-
+        
     </section>
 
-
-    <section>
-        <h2>Facturas en Cuotas</h2>
-        <ul>
-
-            <li><strong>Mantención Sala de Calderas</strong> (Gastos de mantención) — $995.594</li>
-
-            <li><strong>Mantención Sala de Calderas</strong> (Gastos de mantención) — $1.261.301</li>
-
-            <li><strong>Software Reloj Control</strong> (Gastos de Administración) — $41.695</li>
-
-            <li><strong>Honorarios Administración</strong> (Gastos de Administración) — $117.017</li>
-
-        </ul>
-    </section>
-
+    
 </main>
 
 <footer>
@@ -756,7 +727,7 @@
 </footer>
 
 <script>
-    const pieConfig = {"type": "pie", "data": {"labels": ["Gastos de Administraci\u00f3n", "Gastos de uso y consumo", "Gastos de mantenci\u00f3n", "Remuneraciones"], "datasets": [{"label": "Distribuci\u00f3n por Subfondo", "data": [3281916.0, 9990004.8952, 10928519.0, 10548867.0], "backgroundColor": ["#4e79a7", "#f28e2b", "#e15759", "#76b7b2"]}]}, "options": {"responsive": true, "maintainAspectRatio": true, "plugins": {"tooltip": {}}}};
+    const pieConfig = {"type": "pie", "data": {"labels": ["Gastos de Administraci\u00f3n", "Gastos de uso y consumo", "Gastos de mantenci\u00f3n", "Remuneraciones"], "datasets": [{"label": "Distribuci\u00f3n por Subfondo", "data": [1773960.0, 9294146.8952, 9093515.0, 10548867.0], "backgroundColor": ["#4e79a7", "#f28e2b", "#e15759", "#76b7b2"]}]}, "options": {"responsive": true, "maintainAspectRatio": true, "plugins": {"tooltip": {}}}};
 
     // Personaliza el tooltip manualmente
     pieConfig.options.plugins.tooltip.callbacks = {
@@ -787,10 +758,10 @@
 </script>
 
 <script>
-    //const pie = new Chart(document.getElementById('pieChart'), {"type": "pie", "data": {"labels": ["Gastos de Administraci\u00f3n", "Gastos de uso y consumo", "Gastos de mantenci\u00f3n", "Remuneraciones"], "datasets": [{"label": "Distribuci\u00f3n por Subfondo", "data": [3281916.0, 9990004.8952, 10928519.0, 10548867.0], "backgroundColor": ["#4e79a7", "#f28e2b", "#e15759", "#76b7b2"]}]}, "options": {"responsive": true, "maintainAspectRatio": true, "plugins": {"tooltip": {}}}});
-    const line = new Chart(document.getElementById('lineChart'), {"type": "line", "data": {"labels": ["Septiembre-2024", "Octubre-2024", "Noviembre-2024", "Diciembre-2024", "Enero-2025", "Febrero-2025", "Marzo-2025", "Abril-2025", "Mayo-2025", "Junio-2025", "Julio-2025", "Agosto-2025", "Septiembre-2025"], "datasets": [{"label": "Total Mensual", "data": [27722809.0, 26451422.0, 26273593.0, 26336396.0, 24635236.0, 26929546.0, 27389905.0, 28766883.0, 28542994.0, 28573096.0, 28987175.0, 31470259.0, 35936991.3], "borderColor": "rgba(75, 192, 192, 1)", "tension": 0.1}]}, "options": {"responsive": true, "maintainAspectRatio": true}});
+    //const pie = new Chart(document.getElementById('pieChart'), {"type": "pie", "data": {"labels": ["Gastos de Administraci\u00f3n", "Gastos de uso y consumo", "Gastos de mantenci\u00f3n", "Remuneraciones"], "datasets": [{"label": "Distribuci\u00f3n por Subfondo", "data": [1773960.0, 9294146.8952, 9093515.0, 10548867.0], "backgroundColor": ["#4e79a7", "#f28e2b", "#e15759", "#76b7b2"]}]}, "options": {"responsive": true, "maintainAspectRatio": true, "plugins": {"tooltip": {}}}});
+    const line = new Chart(document.getElementById('lineChart'), {"type": "line", "data": {"labels": ["Septiembre-2024", "Octubre-2024", "Noviembre-2024", "Diciembre-2024", "Enero-2025", "Febrero-2025", "Marzo-2025", "Abril-2025", "Mayo-2025", "Junio-2025", "Julio-2025", "Agosto-2025", "Septiembre-2025"], "datasets": [{"label": "Total Mensual", "data": [27722809.0, 26451422.0, 26273593.0, 26336396.0, 24635236.0, 26929546.0, 27389905.0, 28766883.0, 28542994.0, 28573096.0, 28987175.0, 31470259.0, 32246013.45], "borderColor": "rgba(75, 192, 192, 1)", "tension": 0.1}]}, "options": {"responsive": true, "maintainAspectRatio": true}});
     const agua = new Chart(document.getElementById('hotWaterChart'), {"type": "line", "data": {"labels": ["Octubre-2024", "Noviembre-2024", "Diciembre-2024", "Enero-2025", "Febrero-2025", "Marzo-2025", "Abril-2025", "Mayo-2025", "Junio-2025", "Julio-2025", "Agosto-2025", "Septiembre-2025"], "datasets": [{"label": "Costo Agua (Aguas Andinas)", "data": [0.583, 0.654, 0.595, 0.41218, 0.8156599999999999, 0.9475, 0.56275, 0.631, 0.5296, 0.85, 0.5599, 0.8174], "borderColor": "blue", "backgroundColor": "blue", "tension": 0.3, "pointRadius": 3, "yAxisID": "y"}, {"label": "Costo Gas (Metrogas)", "data": [4.386, 4.575, 2.105, 2.53856, 5.47884, 3.78098, 2.9117100000000002, 2.86, 2.4662, 2.966, 2.584, 3.095], "borderColor": "red", "backgroundColor": "red", "tension": 0.3, "pointRadius": 3, "yAxisID": "y"}, {"label": "Consumo Total Agua Caliente (L)", "data": [1068233, 935143, 1065444, 972524, 466565, 637000, 1134870, 1212475, 1417315, 1024056, 1443645, 1452352], "borderColor": "green", "backgroundColor": "green", "tension": 0.3, "pointRadius": 3, "yAxisID": "y1"}]}, "options": {"responsive": true, "maintainAspectRatio": true, "scales": {"y": {"type": "linear", "position": "left", "title": {"display": true, "text": "Costo por Litro ($)"}}, "y1": {"type": "linear", "position": "right", "grid": {"drawOnChartArea": false}, "title": {"display": true, "text": "Litros Totales"}}}}});
-    const subfondo = new Chart(document.getElementById('areaBySubfondo'), {"type": "line", "data": {"labels": ["Enero-2025", "Febrero-2025", "Marzo-2025", "Abril-2025", "Mayo-2025", "Junio-2025", "Julio-2025", "Agosto-2025", "Septiembre-2025"], "datasets": [{"label": "Remuneraciones", "data": [1120782.0, 200000.0, 130000.0, 40000.0, 150000.0, 200000.0, 150000.0, 173557.0, 60000.0], "fill": true, "borderColor": "#4e79a7", "backgroundColor": "#4e79a780", "tension": 0.3}, {"label": "Gastos de mantenci\u00f3n", "data": [151620.0, 200000.0, 92365.0, 892500.0, 1000000.0, 56000.0, 535500.0, 176191.0, 93979.0], "fill": true, "borderColor": "#f28e2b", "backgroundColor": "#f28e2b80", "tension": 0.3}, {"label": "Gastos de uso y consumo", "data": [31345.0, 247846.0, 63840.0, 3304413.5, 31752.0, 8112.0, 613000.0, 3730447.8533999994, 3414923.3952], "fill": true, "borderColor": "#e15759", "backgroundColor": "#e1575980", "tension": 0.3}, {"label": "Gastos de Administraci\u00f3n", "data": [15000.0, 1404199.0, 1486897.0, 60000.0, 23257.0, 60000.0, 1404199.0, 1404199.0, 23439.0], "fill": true, "borderColor": "#76b7b2", "backgroundColor": "#76b7b280", "tension": 0.3}, {"label": "Gastos Extraordinarios", "data": [156700.0, 0, 665374.0, 409147.0, 26990.0, 0, 0, 0, 0], "fill": true, "borderColor": "#59a14f", "backgroundColor": "#59a14f80", "tension": 0.3}]}, "options": {"responsive": true, "maintainAspectRatio": true, "plugins": {"title": {"display": true, "text": "Evoluci\u00f3n Mensual por Subfondo"}}, "scales": {"y": {"title": {"display": true, "text": "Monto ($)"}, "stacked": true}, "x": {"title": {"display": true, "text": "Mes"}}}}});
+    const subfondo = new Chart(document.getElementById('areaBySubfondo'), {"type": "line", "data": {"labels": ["Enero-2025", "Febrero-2025", "Marzo-2025", "Abril-2025", "Mayo-2025", "Junio-2025", "Julio-2025", "Agosto-2025", "Septiembre-2025"], "datasets": [{"label": "Remuneraciones", "data": [1120782.0, 200000.0, 130000.0, 40000.0, 200000.0, 200000.0, 150000.0, 1882414.0, 300000.0], "fill": true, "borderColor": "#4e79a7", "backgroundColor": "#4e79a780", "tension": 0.3}, {"label": "Gastos de mantenci\u00f3n", "data": [151620.0, 200000.0, 92365.0, 892500.0, 1000000.0, 56000.0, 535500.0, 176191.0, 332801.0], "fill": true, "borderColor": "#f28e2b", "backgroundColor": "#f28e2b80", "tension": 0.3}, {"label": "Gastos de uso y consumo", "data": [31345.0, 247846.0, 63840.0, 3304413.5, 31752.0, 8112.0, 613000.0, 97624.0, 4495059.0], "fill": true, "borderColor": "#e15759", "backgroundColor": "#e1575980", "tension": 0.3}, {"label": "Gastos de Administraci\u00f3n", "data": [15000.0, 1404199.0, 1486897.0, 60000.0, 41695.0, 60000.0, 1404199.0, 1404199.0, 1404199.0], "fill": true, "borderColor": "#76b7b2", "backgroundColor": "#76b7b280", "tension": 0.3}, {"label": "Gastos Extraordinarios", "data": [156700.0, 0, 665374.0, 409147.0, 26990.0, 0, 0, 0, 0], "fill": true, "borderColor": "#59a14f", "backgroundColor": "#59a14f80", "tension": 0.3}]}, "options": {"responsive": true, "maintainAspectRatio": true, "plugins": {"title": {"display": true, "text": "Evoluci\u00f3n Mensual por Subfondo"}}, "scales": {"y": {"title": {"display": true, "text": "Monto ($)"}, "stacked": true}, "x": {"title": {"display": true, "text": "Mes"}}}}});
 </script>
 
 </body>
