@@ -54,7 +54,145 @@ const parseMes = (mesLabel, fallbackDate) => {
     return fallbackDate;
 };
 
-const crearFila = ({ mesLabel, indicador, causa, url }) => {
+const CURRENCY_FORMATTER = new Intl.NumberFormat("es-CL", {
+    style: "currency",
+    currency: "CLP",
+    maximumFractionDigits: 0
+});
+
+const PERCENTAGE_FORMATTER = new Intl.NumberFormat("es-CL", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+});
+
+const formatCurrency = value =>
+    value === null || value === undefined || Number.isNaN(value) ? "Sin dato" : CURRENCY_FORMATTER.format(value);
+
+const modalContainer = document.getElementById("detalleVariacionModal");
+const modalElements = modalContainer
+    ? {
+          dialog: modalContainer.querySelector(".detalle-modal__dialog"),
+          periodo: modalContainer.querySelector("[data-modal-periodo]"),
+          variacion: modalContainer.querySelector("[data-modal-variacion]"),
+          variacionMonto: modalContainer.querySelector("[data-modal-variacion-monto]"),
+          totalActual: modalContainer.querySelector("[data-modal-total-actual]"),
+          totalAnterior: modalContainer.querySelector("[data-modal-total-anterior]"),
+          causa: modalContainer.querySelector("[data-modal-causa]"),
+          subfondo: modalContainer.querySelector("[data-modal-subfondo]"),
+          items: modalContainer.querySelector("[data-modal-items]"),
+          closeBtn: modalContainer.querySelector(".detalle-modal__close")
+      }
+    : {};
+
+let lastFocusedElement = null;
+
+const renderItemsList = items => {
+    if (!modalElements.items) {
+        return;
+    }
+
+    modalElements.items.innerHTML = "";
+    const validItems = items.filter(item => item && item.trim());
+
+    if (!validItems.length) {
+        const li = document.createElement("li");
+        li.textContent = "Sin ítems destacados.";
+        modalElements.items.appendChild(li);
+        return;
+    }
+
+    validItems.forEach(item => {
+        const li = document.createElement("li");
+        li.textContent = item;
+        modalElements.items.appendChild(li);
+    });
+};
+
+const closeDetalleModal = () => {
+    if (!modalContainer) {
+        return;
+    }
+
+    modalContainer.classList.add("hidden");
+    modalContainer.setAttribute("aria-hidden", "true");
+    document.body.classList.remove("modal-open");
+
+    if (lastFocusedElement instanceof HTMLElement) {
+        lastFocusedElement.focus();
+    }
+    lastFocusedElement = null;
+};
+
+const openDetalleModal = data => {
+    if (!modalContainer || !data) {
+        return;
+    }
+
+    lastFocusedElement = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+
+    if (modalElements.periodo) {
+        modalElements.periodo.textContent = data.mesLabel
+            ? `Periodo analizado: ${data.mesLabel}`
+            : "Periodo no disponible";
+    }
+    if (modalElements.variacion) {
+        modalElements.variacion.textContent = data.indicador?.etiqueta ?? "Sin dato";
+    }
+    if (modalElements.variacionMonto) {
+        const variacionMontoTexto =
+            data.variacionMontoTexto ??
+            (data.variacionMontoValor !== null && data.variacionMontoValor !== undefined
+                ? CURRENCY_FORMATTER.format(data.variacionMontoValor)
+                : "Sin dato");
+        modalElements.variacionMonto.textContent = variacionMontoTexto;
+    }
+    if (modalElements.totalActual) {
+        modalElements.totalActual.textContent = formatCurrency(data.totalActual);
+    }
+    if (modalElements.totalAnterior) {
+        modalElements.totalAnterior.textContent = formatCurrency(data.totalAnterior);
+    }
+    if (modalElements.causa) {
+        modalElements.causa.textContent = data.causa ?? "Sin detalle disponible.";
+    }
+    if (modalElements.subfondo) {
+        modalElements.subfondo.textContent = data.subfondoPrincipal
+            ? data.subfondoPrincipal
+            : "No se identificó un subfondo principal.";
+    }
+
+    renderItemsList([data.itemPrincipalUno, data.itemPrincipalDos]);
+
+    modalContainer.classList.remove("hidden");
+    modalContainer.setAttribute("aria-hidden", "false");
+    document.body.classList.add("modal-open");
+    modalElements.dialog?.focus();
+};
+
+if (modalContainer) {
+    modalContainer.querySelectorAll("[data-modal-dismiss]").forEach(btn =>
+        btn.addEventListener("click", () => closeDetalleModal())
+    );
+
+    modalContainer.addEventListener("click", event => {
+        const target = event.target;
+        if (
+            target === modalContainer ||
+            (target instanceof HTMLElement && target.hasAttribute("data-modal-dismiss"))
+        ) {
+            closeDetalleModal();
+        }
+    });
+
+    document.addEventListener("keydown", event => {
+        if (event.key === "Escape" && !modalContainer.classList.contains("hidden")) {
+            closeDetalleModal();
+        }
+    });
+}
+
+const crearFila = (fila, detalleHandler) => {
+    const { mesLabel, indicador, causa, url } = fila;
     const tr = document.createElement("tr");
     tr.innerHTML = `
         <td>${mesLabel}</td>
@@ -65,8 +203,17 @@ const crearFila = ({ mesLabel, indicador, causa, url }) => {
             </span>
         </td>
         <td>${causa}</td>
-        <td><a href="${url}" class="btn-reporte" target="_blank">Ver</a></td>
+        <td>
+            <div class="reporte-acciones">
+                <a href="${url}" class="btn-reporte" target="_blank" rel="noopener">Ver</a>
+                <button type="button" class="btn-detalle">Detalle</button>
+            </div>
+        </td>
     `;
+    const detalleBtn = tr.querySelector(".btn-detalle");
+    if (detalleBtn && typeof detalleHandler === "function") {
+        detalleBtn.addEventListener("click", () => detalleHandler(fila));
+    }
     return tr;
 };
 
@@ -112,17 +259,6 @@ const renderChart = (year, datasetsPorAnio) => {
         variacionChartInstance.destroy();
     }
 
-    const currencyFormatter = new Intl.NumberFormat("es-CL", {
-        style: "currency",
-        currency: "CLP",
-        maximumFractionDigits: 0
-    });
-
-    const percentageFormatter = new Intl.NumberFormat("es-CL", {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2
-    });
-
     variacionChartInstance = new Chart(chartCanvas, {
         type: "bar",
         data: {
@@ -164,7 +300,7 @@ const renderChart = (year, datasetsPorAnio) => {
                     type: "linear",
                     position: "left",
                     ticks: {
-                        callback: value => currencyFormatter.format(value)
+                        callback: value => CURRENCY_FORMATTER.format(value)
                     },
                     grid: {
                         drawOnChartArea: true
@@ -174,7 +310,7 @@ const renderChart = (year, datasetsPorAnio) => {
                     type: "linear",
                     position: "right",
                     ticks: {
-                        callback: value => `${percentageFormatter.format(value)}%`
+                        callback: value => `${PERCENTAGE_FORMATTER.format(value)}%`
                     },
                     grid: {
                         drawOnChartArea: false
@@ -188,9 +324,9 @@ const renderChart = (year, datasetsPorAnio) => {
                     callbacks: {
                         label: context => {
                             if (context.dataset.yAxisID === "totales") {
-                                return `${context.dataset.label}: ${currencyFormatter.format(context.parsed.y)}`;
+                                return `${context.dataset.label}: ${CURRENCY_FORMATTER.format(context.parsed.y)}`;
                             }
-                            return `${context.dataset.label}: ${percentageFormatter.format(context.parsed.y)}%`;
+                            return `${context.dataset.label}: ${PERCENTAGE_FORMATTER.format(context.parsed.y)}%`;
                         }
                     }
                 },
@@ -240,7 +376,10 @@ fetch("reports/index.json")
                             ? `${variacionValor > 0 ? "+" : ""}${variacionValor.toFixed(2)}`
                             : card?.dataset?.variacion ?? "0";
                         const tipo = (card?.dataset?.tipo ?? "neutra").toLowerCase();
-                        const causa = card?.innerText?.trim() ?? "Sin detalle";
+                        const causaTexto = card?.innerText
+                            ? card.innerText.replace(/\s+/g, " ").trim()
+                            : "";
+                        const causa = causaTexto || "Sin detalle";
                         const esPositivo = Number.isFinite(variacionValor) ? variacionValor > 0 : tipo === "alza";
                         const totalActual =
                             parseNumberFromCurrency(card?.dataset?.totalActual) ??
@@ -249,6 +388,29 @@ fetch("reports/index.json")
                                 const match = texto.match(/Total\s+mes\s+actual:\s*\$?([\d\.\,]+)/i);
                                 return match ? parseNumberFromCurrency(match[1]) : null;
                             })();
+                        const totalAnterior =
+                            parseNumberFromCurrency(card?.dataset?.totalAnterior) ??
+                            (() => {
+                                const texto = card?.innerText ?? "";
+                                const match = texto.match(/Total\s+mes\s+anterior:\s*\$?([\d\.\,]+)/i);
+                                return match ? parseNumberFromCurrency(match[1]) : null;
+                            })();
+                        let variacionMontoValor = parseNumberFromCurrency(card?.dataset?.variacionMonto);
+                        if (
+                            (variacionMontoValor === null || Number.isNaN(variacionMontoValor)) &&
+                            totalActual !== null &&
+                            totalAnterior !== null
+                        ) {
+                            variacionMontoValor = totalActual - totalAnterior;
+                        }
+                        const variacionMontoTexto =
+                            card?.dataset?.variacionMontoFormateado ??
+                            (variacionMontoValor !== null && variacionMontoValor !== undefined
+                                ? CURRENCY_FORMATTER.format(variacionMontoValor)
+                                : null);
+                        const subfondoPrincipal = (card?.dataset?.subfondoPrincipal ?? "").trim();
+                        const itemPrincipalUno = (card?.dataset?.itemPrincipalUno ?? "").trim();
+                        const itemPrincipalDos = (card?.dataset?.itemPrincipalDos ?? "").trim();
 
                         const indicador = (() => {
                             if (tipo === "baja") {
@@ -267,7 +429,13 @@ fetch("reports/index.json")
                             url,
                             sortDate: parseMes(mesLabel, date),
                             variacionValor: Number.isFinite(variacionValor) ? variacionValor : null,
-                            totalActual
+                            totalActual,
+                            totalAnterior,
+                            variacionMontoValor: Number.isFinite(variacionMontoValor) ? variacionMontoValor : null,
+                            variacionMontoTexto,
+                            subfondoPrincipal,
+                            itemPrincipalUno,
+                            itemPrincipalDos
                         };
                     });
             })
@@ -313,15 +481,21 @@ fetch("reports/index.json")
             let activeYear = years[0];
 
             const renderYearRows = year => {
+                if (modalContainer && !modalContainer.classList.contains("hidden")) {
+                    lastFocusedElement = null;
+                    closeDetalleModal();
+                }
+
                 tbody.innerHTML = "";
                 const rows = agrupado.get(year) ?? [];
 
                 if (!rows.length) {
                     renderVacio(tbody);
+                    renderChart(year, datasetsPorAnio);
                     return;
                 }
 
-                rows.forEach(fila => tbody.appendChild(crearFila(fila)));
+                rows.forEach(fila => tbody.appendChild(crearFila(fila, openDetalleModal)));
                 renderChart(year, datasetsPorAnio);
             };
 

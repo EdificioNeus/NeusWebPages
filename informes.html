@@ -51,6 +51,46 @@
             </table>
         </div>
     </section>
+
+    <div id="detalleVariacionModal" class="detalle-modal hidden" aria-hidden="true">
+        <div class="detalle-modal__overlay" data-modal-dismiss></div>
+        <div class="detalle-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="detalleVariacionTitulo" tabindex="-1">
+            <div class="detalle-modal__header">
+                <h3 class="detalle-modal__title" id="detalleVariacionTitulo">Detalle de variación</h3>
+                <button type="button" class="detalle-modal__close" aria-label="Cerrar detalle" data-modal-dismiss>&times;</button>
+            </div>
+            <div class="detalle-modal__body">
+                <p class="detalle-modal__periodo" data-modal-periodo></p>
+                <div class="detalle-modal__stats">
+                    <div class="detalle-modal__stat">
+                        <h4>Variación %</h4>
+                        <span data-modal-variacion></span>
+                    </div>
+                    <div class="detalle-modal__stat">
+                        <h4>Variación $</h4>
+                        <span data-modal-variacion-monto></span>
+                    </div>
+                    <div class="detalle-modal__stat">
+                        <h4>Total mes actual</h4>
+                        <span data-modal-total-actual></span>
+                    </div>
+                    <div class="detalle-modal__stat">
+                        <h4>Total mes anterior</h4>
+                        <span data-modal-total-anterior></span>
+                    </div>
+                </div>
+                <div class="detalle-modal__section">
+                    <h4>¿Qué explica la variación?</h4>
+                    <p class="detalle-modal__causa" data-modal-causa></p>
+                </div>
+                <div class="detalle-modal__section">
+                    <h4>Subfondo protagonista</h4>
+                    <p class="detalle-modal__subfondo" data-modal-subfondo></p>
+                    <ul class="detalle-modal__list" data-modal-items></ul>
+                </div>
+            </div>
+        </div>
+    </div>
   </main>
 
   <footer>
