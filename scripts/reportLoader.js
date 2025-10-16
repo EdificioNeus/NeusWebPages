@@ -408,9 +408,29 @@ fetch("reports/index.json")
                             (variacionMontoValor !== null && variacionMontoValor !== undefined
                                 ? CURRENCY_FORMATTER.format(variacionMontoValor)
                                 : null);
-                        const subfondoPrincipal = (card?.dataset?.subfondoPrincipal ?? "").trim();
-                        const itemPrincipalUno = (card?.dataset?.itemPrincipalUno ?? "").trim();
-                        const itemPrincipalDos = (card?.dataset?.itemPrincipalDos ?? "").trim();
+                        let subfondoPrincipal = (card?.dataset?.subfondoPrincipal ?? "").trim();
+                        let itemPrincipalUno = (card?.dataset?.itemPrincipalUno ?? "").trim();
+                        let itemPrincipalDos = (card?.dataset?.itemPrincipalDos ?? "").trim();
+
+                        if ((!subfondoPrincipal || !itemPrincipalUno || !itemPrincipalDos) && card) {
+                            const detalleParrafo = Array.from(card.querySelectorAll("p")).find(p =>
+                                /Este cambio se debe/i.test(p.textContent ?? "")
+                            );
+                            if (detalleParrafo) {
+                                const destacados = Array.from(detalleParrafo.querySelectorAll("strong"))
+                                    .map(el => el.textContent.trim())
+                                    .filter(Boolean);
+                                if (!subfondoPrincipal && destacados.length >= 1) {
+                                    subfondoPrincipal = destacados[0];
+                                }
+                                if (!itemPrincipalUno && destacados.length >= 2) {
+                                    itemPrincipalUno = destacados[1];
+                                }
+                                if (!itemPrincipalDos && destacados.length >= 3) {
+                                    itemPrincipalDos = destacados[2];
+                                }
+                            }
+                        }
 
                         const indicador = (() => {
                             if (tipo === "baja") {
