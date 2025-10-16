@@ -534,6 +534,33 @@ body:not(.light-mode) .btn-reporte:hover {
     overflow-x: auto;
 }
 
+.variacion-chart-section {
+    margin: 2rem auto 1.5rem;
+    max-width: 960px;
+    padding: 1.5rem;
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.04);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+}
+
+.variacion-chart-title {
+    margin: 0 0 1rem;
+    font-size: 1.4rem;
+    font-weight: 700;
+    text-align: center;
+}
+
+.variacion-chart-wrapper {
+    position: relative;
+    width: 100%;
+    min-height: 280px;
+}
+
+body.light-mode .variacion-chart-section {
+    background: rgba(0, 0, 0, 0.04);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
 .year-tabs-container {
     display: flex;
     justify-content: center;
@@ -653,6 +680,15 @@ body.light-mode .variacion-baja .variacion-icono {
 }
 
 @media (max-width: 768px) {
+    .variacion-chart-section {
+        padding: 1rem;
+        margin: 1.5rem 0 1rem;
+    }
+
+    .variacion-chart-wrapper {
+        min-height: 220px;
+    }
+
     .reporte-table {
         font-size: 0.8rem;
         min-width: 600px; /* fuerza scroll horizontal */
