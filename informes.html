@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Informes de Gastos Comunes – Edificio Neus</title>
+  <title>Informes de Gastos Comunes &ndash; Edificio Neus</title>
   <link rel="stylesheet" href="css/indexstyles.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 </head>
@@ -18,20 +18,20 @@
   <main>
     <section>
         <p class="reporte-descripcion">
-            Aquí puedes consultar los informes mensuales de gastos comunes generados por la administración del Edificio Neus.
+            Aqu&iacute; puedes consultar los informes mensuales de gastos comunes generados por la administraci&oacute;n del Edificio Neus.
             Haz clic en <strong>Ver</strong> para acceder al desglose detallado.
         </p>
 
-        <section class="variacion-chart-section" aria-label="Visualización de variaciones mensuales">
-            <h2 class="variacion-chart-title">Evolución del gasto común</h2>
+        <section class="variacion-chart-section" aria-label="Visualizaci&oacute;n de variaciones mensuales">
+            <h2 class="variacion-chart-title">Evoluci&oacute;n del gasto com&uacute;n</h2>
             <div class="variacion-chart-wrapper">
-                <canvas id="variacionChart" aria-label="Gráfico de barras con la variación mensual del gasto común" role="img"></canvas>
+                <canvas id="variacionChart" aria-label="Gr&aacute;fico de barras con la variaci&oacute;n mensual del gasto com&uacute;n" role="img"></canvas>
             </div>
         </section>
 
         <div class="year-tabs-container">
-            <nav class="year-tabs" aria-label="Selector de años de reportes">
-                <!-- Las pestañas de años se agregan dinámicamente -->
+            <nav class="year-tabs" aria-label="Selector de a&ntilde;os de reportes">
+                <!-- Las pesta&ntilde;as de a&ntilde;os se agregan din&aacute;micamente -->
             </nav>
         </div>
 
@@ -39,14 +39,14 @@
             <table class="reporte-table">
                 <thead>
                     <tr>
+                        <th>Acciones</th>
                         <th>Mes</th>
-                        <th>Variación</th>
+                        <th>Variaci&oacute;n</th>
                         <th>Resumen</th>
-                        <th>Acceso</th>
                     </tr>
                 </thead>
                 <tbody>
-                <!-- Aquí se insertarán dinámicamente las filas desde reportLoader.js -->
+                <!-- Aqu&iacute; se insertar&aacute;n din&aacute;micamente las filas desde reportLoader.js -->
                 </tbody>
             </table>
         </div>
@@ -56,18 +56,18 @@
         <div class="detalle-modal__overlay" data-modal-dismiss></div>
         <div class="detalle-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="detalleVariacionTitulo" tabindex="-1">
             <div class="detalle-modal__header">
-                <h3 class="detalle-modal__title" id="detalleVariacionTitulo">Detalle de variación</h3>
+                <h3 class="detalle-modal__title" id="detalleVariacionTitulo">Detalle de variaci&oacute;n</h3>
                 <button type="button" class="detalle-modal__close" aria-label="Cerrar detalle" data-modal-dismiss>&times;</button>
             </div>
             <div class="detalle-modal__body">
                 <p class="detalle-modal__periodo" data-modal-periodo></p>
                 <div class="detalle-modal__stats">
                     <div class="detalle-modal__stat">
-                        <h4>Variación %</h4>
+                        <h4>Variaci&oacute;n %</h4>
                         <span data-modal-variacion></span>
                     </div>
                     <div class="detalle-modal__stat">
-                        <h4>Variación $</h4>
+                        <h4>Variaci&oacute;n $</h4>
                         <span data-modal-variacion-monto></span>
                     </div>
                     <div class="detalle-modal__stat">
@@ -80,7 +80,7 @@
                     </div>
                 </div>
                 <div class="detalle-modal__section">
-                    <h4>¿Qué explica la variación?</h4>
+                    <h4>&iquest;Qu&eacute; explica la variaci&oacute;n?</h4>
                     <p class="detalle-modal__causa" data-modal-causa></p>
                 </div>
                 <div class="detalle-modal__section">
@@ -94,7 +94,7 @@
   </main>
 
   <footer>
-    <p>&copy; 2025 Administración del Edificio NEUS. Todos los derechos reservados.</p>
+    <p>&copy; 2025 Administraci&oacute;n del Edificio NEUS. Todos los derechos reservados.</p>
   </footer>
 
   <!-- Script que carga los reportes desde /reports/*.html -->
