@@ -534,6 +534,124 @@ body:not(.light-mode) .btn-reporte:hover {
     overflow-x: auto;
 }
 
+.year-tabs-container {
+    display: flex;
+    justify-content: center;
+    margin: 1.5rem 0 0.5rem;
+}
+
+.year-tabs {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: center;
+}
+
+.year-tab {
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    background: rgba(255, 255, 255, 0.06);
+    color: inherit;
+    padding: 0.5rem 1rem;
+    border-radius: 999px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+.year-tab:hover {
+    background: rgba(255, 255, 255, 0.12);
+}
+
+.year-tab.is-active {
+    background: #005599;
+    border-color: #0077cc;
+    color: #ffffff;
+    box-shadow: 0 0 0 2px rgba(0, 119, 204, 0.25);
+}
+
+body.light-mode .year-tab {
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    background: rgba(0, 0, 0, 0.04);
+}
+
+body.light-mode .year-tab:hover {
+    background: rgba(0, 0, 0, 0.08);
+}
+
+body.light-mode .year-tab.is-active {
+    background: #005599;
+    border-color: #003f73;
+    color: #ffffff;
+}
+
+.year-tab .year-count {
+    display: inline-block;
+    margin-left: 0.35rem;
+    font-weight: 400;
+    font-size: 0.78rem;
+    opacity: 0.8;
+}
+
+.no-reportes {
+    text-align: center;
+    padding: 1.5rem 1rem;
+    font-style: italic;
+}
+
+.variacion-indicador {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-weight: 600;
+}
+
+.variacion-icono {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 999px;
+    background-color: rgba(128, 128, 128, 0.18);
+    color: #808080;
+    font-size: 0.95rem;
+}
+
+.variacion-valor {
+    font-size: 0.95rem;
+}
+
+.variacion-alza .variacion-icono {
+    background-color: rgba(214, 51, 132, 0.18);
+    color: #ff3b7f;
+}
+
+.variacion-baja .variacion-icono {
+    background-color: rgba(46, 204, 113, 0.18);
+    color: #2ecc71;
+}
+
+.variacion-neutra .variacion-icono {
+    background-color: rgba(128, 128, 128, 0.18);
+    color: #808080;
+}
+
+body.light-mode .variacion-icono {
+    background-color: rgba(128, 128, 128, 0.15);
+    color: #5c5c5c;
+}
+
+body.light-mode .variacion-alza .variacion-icono {
+    background-color: rgba(214, 51, 132, 0.12);
+    color: #c71d69;
+}
+
+body.light-mode .variacion-baja .variacion-icono {
+    background-color: rgba(46, 204, 113, 0.12);
+    color: #1b8e4a;
+}
+
 @media (max-width: 768px) {
     .reporte-table {
         font-size: 0.8rem;
