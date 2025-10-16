@@ -195,6 +195,12 @@ const crearFila = (fila, detalleHandler) => {
     const { mesLabel, indicador, causa, url } = fila;
     const tr = document.createElement("tr");
     tr.innerHTML = `
+        <td>
+            <div class="reporte-acciones">
+                <button type="button" class="btn-detalle">Detalle</button>
+                <a href="${url}" class="btn-reporte" target="_blank" rel="noopener">Ver</a>
+            </div>
+        </td>
         <td>${mesLabel}</td>
         <td>
             <span class="variacion-indicador ${indicador.clase}">
@@ -203,12 +209,6 @@ const crearFila = (fila, detalleHandler) => {
             </span>
         </td>
         <td>${causa}</td>
-        <td>
-            <div class="reporte-acciones">
-                <a href="${url}" class="btn-reporte" target="_blank" rel="noopener">Ver</a>
-                <button type="button" class="btn-detalle">Detalle</button>
-            </div>
-        </td>
     `;
     const detalleBtn = tr.querySelector(".btn-detalle");
     if (detalleBtn && typeof detalleHandler === "function") {
